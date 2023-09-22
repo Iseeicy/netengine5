@@ -30,8 +30,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 
 [node name="Camera3D" type="Camera3D" parent="CameraOrigin"]
 
-[node name="MouseLook3D" type="Node" parent="CameraOrigin"]
+[node name="MouseLook3D" type="Node" parent="CameraOrigin" node_paths=PackedStringArray("model_pivot")]
 script = ExtResource("3_gmmyx")
+sensitivity_x = 0.25
+sensitivity_y = 0.25
+model_pivot = NodePath("../../BodyPivot")
 
 [node name="InteractorRay3D" type="RayCast3D" parent="CameraOrigin"]
 script = ExtResource("4_aevm5")
