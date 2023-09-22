@@ -11,8 +11,27 @@ extends PlayerControllerScript
 @export var acceleration_fall: float = 40
 
 #
+#	Variables
+#
+
+const move_forward_action: String = "player_move_forward"
+const move_back_action: String = "player_move_back"
+const move_left_action: String = "player_move_left"
+const move_right_action: String = "player_move_right"
+const run_action: String = "player_should_run"
+const crouch_action: String = "player_crouch"
+
+#
 #	Functions
 #
+
+func player_ready():
+	self.assert_input_action(move_forward_action)
+	self.assert_input_action(move_back_action)
+	self.assert_input_action(move_left_action)
+	self.assert_input_action(move_right_action)
+	self.assert_input_action(run_action)
+	self.assert_input_action(crouch_action)
 
 func player_physics_process(delta: float) -> void:
 	if not player.is_on_floor():

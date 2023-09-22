@@ -12,13 +12,17 @@ extends PlayerControllerScript
 
 var crouch_current: float = 0
 var crouch_target: float = 0
+const crouch_action: String = "player_crouch"
 
 #
 #	Functions
 #
 
+func player_ready():
+	self.assert_input_action(crouch_action)
+
 func player_physics_process(delta: float):
-	if Input.is_action_pressed("player_crouch"):
+	if Input.is_action_pressed(crouch_action):
 		crouch_target = 0.5
 	else:
 		crouch_target = 1

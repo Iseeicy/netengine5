@@ -9,9 +9,18 @@ extends PlayerControllerScript
 @export var support_wall_jump: bool = false
 
 #
+#	Variables
+#
+
+const jump_action: String = "player_jump"
+
+#
 #	Functions
 #
 
+func player_ready():
+	self.assert_input_action(jump_action)
+		
 func player_physics_process(_delta) -> void:
 	if support_ground_jump:
 		player.velocity += calc_ground_jump_velocity()
@@ -19,13 +28,13 @@ func player_physics_process(_delta) -> void:
 		player.velocity += calc_wall_jump_velocity()
 	
 func calc_ground_jump_velocity() -> Vector3:
-	if not player.is_on_floor() or not Input.is_action_just_pressed("player_jump"):
+	if not player.is_on_floor() or not Input.is_action_just_pressed(jump_action):
 		return Vector3.ZERO
 	else:
 		return Vector3(0, jump_impulse, 0)
 		
 func calc_wall_jump_velocity() -> Vector3:
-	if not player.is_on_wall() or not Input.is_action_just_pressed("player_jump"):
+	if not player.is_on_wall() or not Input.is_action_just_pressed(jump_action):
 		return Vector3.ZERO
 	else:
 		var vert_jump = Vector3(0, jump_impulse, 0)

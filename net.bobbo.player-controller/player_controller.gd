@@ -12,7 +12,8 @@ class_name PlayerController
 #
 
 @onready var script_runner: PlayerControllerScriptRunner = $ScriptRunner
-@onready var mouselook: MouseLook3D = $CameraOrigin
+@onready var mouselook: MouseLook3D = $CameraOrigin/MouseLook3D
+@onready var camera: Camera3D = $CameraOrigin/Camera3D
 @onready var interactor: InteractorRay3D = $CameraOrigin/InteractorRay3D
 @onready var model_pivot: Node3D = $BodyPivot
 @onready var model: PlayerModel = $BodyPivot/PlayerModel
@@ -28,12 +29,14 @@ func _ready():
 	for script_scene in player_scripts:
 		var spawned_script = script_scene.instantiate()
 		script_runner.add_child(spawned_script)
+		spawned_script.owner = self
+	script_runner.initialize()
 	script_runner.scripts_ready()
 
 func _process(delta):
 	camera_offset = Vector3.ZERO
 	script_runner.scripts_process(delta)
-	mouselook.set_offset(camera_offset)
+	camera.position = camera_offset
 	collider.shape.height = height
 	
 func _physics_process(delta):

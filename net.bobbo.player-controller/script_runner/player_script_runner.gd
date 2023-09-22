@@ -2,23 +2,26 @@ extends Node
 class_name PlayerControllerScriptRunner
 
 # The scripts to run. These are usually children of this node
-@onready var scripts: Array[PlayerControllerScript] = _find_scripts_in_children()
+var scripts: Array[PlayerControllerScript]
 
 #
 #	Functions
 #
 
+func initialize() -> void:
+	scripts = _find_scripts_in_children()	
+
 func scripts_ready():
 	for script in scripts:
-		script.player_ready()
+		script.call_player_ready()
 
 func scripts_process(delta):
 	for script in scripts:
-		script.player_process(delta)
+		script.call_player_process(delta)
 		
 func scripts_physics_process(delta):
 	for script in scripts:
-		script.player_physics_process(delta)
+		script.call_player_physics_process(delta)
 
 #
 #	Private Functions
