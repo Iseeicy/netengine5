@@ -27,6 +27,10 @@ const default_model_scene: PackedScene = preload("default_player_model.tscn")
 #
 
 func _ready():
+	# If someone beat us to spawning a model, EXIT EARLY
+	if spawned_model != null:
+		return
+	
 	# If we have no model, use the internal default
 	if initial_model == null:
 		initial_model = default_model_scene
@@ -46,6 +50,7 @@ func set_model(model: PackedScene) -> void:
 	add_child(new_model)
 	new_model.owner = self
 	spawned_model = new_model
+	initial_model = model
 	
 	changed.emit(new_model, model)
 	

@@ -6,6 +6,7 @@ class_name PlayerController
 #
 
 @export var player_scripts: Array[PackedScene] = []
+@export var initial_model: PackedScene = null
 
 #
 #	Variables
@@ -26,6 +27,9 @@ var height: float = 2
 #
 
 func _ready():
+	if initial_model != null:
+		model.set_model(initial_model)
+	
 	for script_scene in player_scripts:
 		var spawned_script = script_scene.instantiate()
 		script_runner.add_child(spawned_script)
