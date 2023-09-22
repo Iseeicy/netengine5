@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bvg5g5iuv5gvc"]
+
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.player-controller/player_scripts/ground_movement.gd" id="1_eu7qi"]
+
+[node name="GroundMovement" type="Node"]
+script = ExtResource("1_eu7qi")

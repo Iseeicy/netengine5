@@ -2,15 +2,21 @@ extends CharacterBody3D
 class_name PlayerController
 
 #
+#	Exported
+#
+
+@export var player_scripts: Array[PackedScene] = []
+
+#
 #	Variables
 #
 
 @onready var script_runner: PlayerControllerScriptRunner = $ScriptRunner
-@onready var mouselook: MouseLook = $CameraOrigin
-@onready var interactor: RayCast3DInteractor = $CameraOrigin/Camera3D/Interactor
-@onready var model_pivot: Node3D = $Pivot
-@onready var model: PlayerModel = $Pivot/PlayerModel
-@onready var collider: CollisionShape3D = $CollisionShape3D
+@onready var mouselook: MouseLook3D = $CameraOrigin
+@onready var interactor: InteractorRay3D = $CameraOrigin/InteractorRay3D
+@onready var model_pivot: Node3D = $BodyPivot
+@onready var model: PlayerModel = $BodyPivot/PlayerModel
+@onready var collider: CollisionShape3D = $Collider
 var camera_offset: Vector3 = Vector3.ZERO
 var height: float = 2
 
@@ -19,6 +25,9 @@ var height: float = 2
 #
 
 func _ready():
+	for script_scene in player_scripts:
+		var spawned_script = script_scene.instantiate()
+		script_runner.add_child(spawned_script)
 	script_runner.scripts_ready()
 
 func _process(delta):

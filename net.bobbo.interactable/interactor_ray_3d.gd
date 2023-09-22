@@ -1,5 +1,5 @@
 extends RayCast3D
-class_name RayCast3DInteractor
+class_name InteractorRay3D
 
 signal interact_hover_changed(bool)
 signal interact_hover_start
