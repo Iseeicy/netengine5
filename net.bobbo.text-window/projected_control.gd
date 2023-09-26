@@ -5,7 +5,7 @@ class_name ProjectedControl
 
 enum OffScreenMode {
 	Hide,
-	FillScreen,
+	FillWhenClose,
 	StickyEdges
 }
 
@@ -24,13 +24,27 @@ enum OffScreenMode {
 # control is off-screen
 @export var sticky_visible: Control = null
 
+@export_group("Fill When Close")
+@export var fill_closeness_threshold: float = 2
+@export var max_fill_distance: float = 10
+
+@export_group("Positioning")
+@export var lerp_position: bool = false
+@export var position_lerp_speed: float = 10
+@export var edge_margin_left = 50
+@export var edge_margin_right = 50
+@export var edge_margin_top = 50
+@export var edge_margin_bottom = 50
+
 #
 #	Variables
 #
 
-const MARGIN = 8	# Used when offsetting off-screen control
 @onready var _camera = get_viewport().get_camera_3d()
 var _focus_target = null 
+var _target_position = Vector2.ZERO
+var _target_visiblity = true
+var _target_scale: float = 1
 var _distance_to_target: float = 0
 
 #
@@ -42,13 +56,25 @@ func _process(delta):
 	if not _camera.current:
 		_camera = get_viewport().get_camera_2d()
 		
-	# Behave differently depending on if we have a target or not
-	if get_focus_target() != null:
-		_process_while_targeting(delta)
-	else:
-		_process_while_no_target(delta)
+	# Do the bulk of the processing in this method.
+	# Sets several variables such as:
+	# - _target_position
+	# - _target_visiblity
+	# - _distance_to_target
+	_update_target_values(delta)
 		
-func _process_while_targeting(delta: float) -> void:
+	if lerp_position:
+		position = lerp(position, _target_position, delta * position_lerp_speed)
+	else:
+		position = _target_position
+		
+	
+	
+	scale = Vector2(_target_scale, _target_scale)
+	visible = _target_visiblity
+		
+		
+func _update_target_values(delta: float) -> void:
 	var target_transform = get_focus_target().global_transform
 	
 	_distance_to_target = _distance_to_cam(target_transform, _camera)
@@ -56,32 +82,70 @@ func _process_while_targeting(delta: float) -> void:
 	
 	# Handle all different offscreen modes
 	match offscreen_mode:
-		
 		OffScreenMode.Hide:
-			# For non-sticky controls, we have all we need. If the target
-			# is off screen we'll just hide this node.
-			position = unprojected_position
-			visible = not _is_transform_behind_cam(
+			_update_offscreen_mode_hide(
+				delta, 
 				target_transform, 
-				_camera
-			)
-		
-		OffScreenMode.StickyEdges:
-			# For sticky controls, we have to correct the unprojected
-			# position in order to address the edges of the screen
-			position = _correct_unprojected_position(
-				target_transform, 
-				_camera, 
 				unprojected_position
 			)
-			_handle_sticky_children(sticky_rotate, sticky_visible)
+		OffScreenMode.FillWhenClose:
+			_update_offscreen_mode_fill_when_close(
+				delta, 
+				target_transform, 
+				unprojected_position
+			)
+		OffScreenMode.StickyEdges:
+			_update_offscreen_mode_sticky_edges(
+				delta, 
+				target_transform, 
+				unprojected_position
+			)
 		
-	# Fade the waypoint when the camera gets close.
-	# modulate.a = clamp(remap(distance, 0, 2, 0, 1), 0, 1 )
+func _update_offscreen_mode_hide(delta, target_transform, unprojected_position):
+	# For non-sticky controls, we have all we need. If the target
+	# is off screen we'll just hide this node.
+	_target_position = unprojected_position
+	_target_visiblity = not _is_transform_behind_cam(
+		target_transform, 
+		_camera
+	)
 	
-func _process_while_no_target(delta: float) -> void:
-	return
-	
+func _update_offscreen_mode_fill_when_close(delta, target_transform, unprojected_position):
+	# If we're further than the max distance,
+	# don't display anything
+	if _distance_to_target > max_fill_distance:
+		_target_visiblity = false
+		_target_position = unprojected_position
+		_target_scale = 0
+		return
+		
+	# If we're under the closeness threshold, then fill
+	# the screen
+	if _distance_to_target <= fill_closeness_threshold:
+		_target_visiblity = true
+		_target_position = _get_viewport_base_size() / 2.0
+		_target_scale = 1
+		return
+		
+	# If we're between max distance and the closeness threshold,
+	# Display normally
+	_target_position = unprojected_position
+	_target_visiblity = not _is_transform_behind_cam(
+		target_transform, 
+		_camera
+	)
+	_target_scale = 1.0 / clamp(_distance_to_target, 1, INF)
+
+func _update_offscreen_mode_sticky_edges(delta, target_transform, unprojected_position):
+	# For sticky controls, we have to correct the unprojected
+	# position in order to address the edges of the screen
+	_target_position = _correct_unprojected_position(
+		target_transform, 
+		_camera, 
+		unprojected_position
+	)
+	_handle_sticky_children(sticky_rotate, sticky_visible)
+	_target_visiblity = true
 
 #
 #	Functions
@@ -125,9 +189,9 @@ func _correct_unprojected_position(target_transform, cam, unprojected_position):
 	# but we need to force it to the side if it's also behind.
 	if is_behind:
 		if unprojected_position.x < viewport_base_size.x / 2:
-			unprojected_position.x = viewport_base_size.x - MARGIN
+			unprojected_position.x = viewport_base_size.x - edge_margin_right
 		else:
-			unprojected_position.x = MARGIN
+			unprojected_position.x = edge_margin_left
 			
 	# For the screen's Y axis, the projected position is NOT useful to us
 	# because we don't want to indicate to the user that they need to look
@@ -135,15 +199,15 @@ func _correct_unprojected_position(target_transform, cam, unprojected_position):
 	# the correct position using difference of the X axis Euler angles
 	# (up/down rotation) and the ratio of that with the camera's FOV.
 	# This will be slightly off from the theoretical "ideal" position.
-	if is_behind or unprojected_position.x < MARGIN or \
-			unprojected_position.x > viewport_base_size.x - MARGIN:
+	if is_behind or unprojected_position.x < edge_margin_left or \
+			unprojected_position.x > viewport_base_size.x - edge_margin_right:
 		var look = cam.global_transform.looking_at(target_transform.origin, Vector3.UP)
 		var diff = _calc_angle_diff(look.basis.get_euler().x, cam.global_transform.basis.get_euler().x)
 		unprojected_position.y = viewport_base_size.y * (0.5 + (diff / deg_to_rad(cam.fov)))
 
 	return Vector2(
-			clamp(unprojected_position.x, MARGIN, viewport_base_size.x - MARGIN),
-			clamp(unprojected_position.y, MARGIN, viewport_base_size.y - MARGIN)
+			clamp(unprojected_position.x, edge_margin_left, viewport_base_size.x - edge_margin_right),
+			clamp(unprojected_position.y, edge_margin_top, viewport_base_size.y - edge_margin_bottom)
 	)
 
 func _calc_angle_diff(from, to):
@@ -156,22 +220,22 @@ func _handle_sticky_children(to_rotate: Control, to_visible: Control):
 	var sticky_is_visible: bool = true
 	var overflow: float = 0
 	
-	if position.x <= MARGIN:
+	if position.x <= edge_margin_left:
 		# Left overflow.
 		overflow = -TAU / 8.0
 		sticky_is_visible = false
 		sticky_rotation = TAU / 4.0
-	elif position.x >= viewport_base_size.x - MARGIN:
+	elif position.x >= viewport_base_size.x - edge_margin_right:
 		# Right overflow.
 		overflow = TAU / 8.0
 		sticky_is_visible = false
 		sticky_rotation = TAU * 3.0 / 4.0
 
-	if position.y <= MARGIN:
+	if position.y <= edge_margin_top:
 		# Top overflow.
 		sticky_is_visible = false
 		sticky_rotation = TAU / 2.0 + overflow
-	elif position.y >= viewport_base_size.y - MARGIN:
+	elif position.y >= viewport_base_size.y - edge_margin_bottom:
 		# Bottom overflow.
 		sticky_is_visible = false
 		sticky_rotation = -overflow
