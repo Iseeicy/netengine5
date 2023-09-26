@@ -1,0 +1,52 @@
+[gd_resource type="Resource" script_class="TextSounds" load_steps=14 format=3 uid="uid://718c4m0voxmk"]
+
+[ext_resource type="AudioStream" uid="uid://dr2gmtiqg3s65" path="res://addons/netengine5/net.bobbo.text-reader/sounds/marvi/comma.ogg" id="1_j7sdf"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.text-reader/text_sounds.gd" id="1_jp2d5"]
+[ext_resource type="AudioStream" uid="uid://dewvvj7rtfjai" path="res://addons/netengine5/net.bobbo.text-reader/sounds/marvi/default.ogg" id="2_flotx"]
+[ext_resource type="AudioStream" uid="uid://boa2gyfcwqj0" path="res://addons/netengine5/net.bobbo.text-reader/sounds/marvi/default2.ogg" id="3_j1eg0"]
+[ext_resource type="AudioStream" uid="uid://84011jccfc3c" path="res://addons/netengine5/net.bobbo.text-reader/sounds/marvi/default3.ogg" id="4_q5fuu"]
+[ext_resource type="AudioStream" uid="uid://b5br7bssolbky" path="res://addons/netengine5/net.bobbo.text-reader/sounds/marvi/exclam.ogg" id="5_2m027"]
+[ext_resource type="AudioStream" uid="uid://y4ag3smk31xw" path="res://addons/netengine5/net.bobbo.text-reader/sounds/marvi/period.ogg" id="6_xn7il"]
+[ext_resource type="AudioStream" uid="uid://b3ninakyi4vbv" path="res://addons/netengine5/net.bobbo.text-reader/sounds/marvi/question.ogg" id="7_55mag"]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_qq5a0"]
+streams_count = 1
+random_pitch = 1.2
+stream_0/stream = ExtResource("1_j7sdf")
+stream_0/weight = 1.0
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_70dnx"]
+streams_count = 3
+random_pitch = 1.2
+stream_0/stream = ExtResource("2_flotx")
+stream_0/weight = 1.0
+stream_1/stream = ExtResource("3_j1eg0")
+stream_1/weight = 1.0
+stream_2/stream = ExtResource("4_q5fuu")
+stream_2/weight = 1.0
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_evyms"]
+streams_count = 1
+random_pitch = 1.2
+stream_0/stream = ExtResource("5_2m027")
+stream_0/weight = 1.0
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_sphkv"]
+streams_count = 1
+random_pitch = 1.2
+stream_0/stream = ExtResource("6_xn7il")
+stream_0/weight = 1.0
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_sba5i"]
+streams_count = 1
+random_pitch = 1.2
+stream_0/stream = ExtResource("7_55mag")
+stream_0/weight = 1.0
+
+[resource]
+script = ExtResource("1_jp2d5")
+default = SubResource("AudioStreamRandomizer_70dnx")
+period = SubResource("AudioStreamRandomizer_sphkv")
+exclam = SubResource("AudioStreamRandomizer_evyms")
+comma = SubResource("AudioStreamRandomizer_qq5a0")
+question = SubResource("AudioStreamRandomizer_sba5i")

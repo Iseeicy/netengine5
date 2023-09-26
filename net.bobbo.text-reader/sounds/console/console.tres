@@ -1,0 +1,46 @@
+[gd_resource type="Resource" script_class="TextSounds" load_steps=12 format=3 uid="uid://cuowl3cfnkix"]
+
+[ext_resource type="AudioStream" uid="uid://bchfv1ntjfhuj" path="res://addons/netengine5/net.bobbo.text-reader/sounds/console/comma.ogg" id="1_jc65d"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.text-reader/text_sounds.gd" id="1_mtm2t"]
+[ext_resource type="AudioStream" uid="uid://b8ntb782gdy3h" path="res://addons/netengine5/net.bobbo.text-reader/sounds/console/default.ogg" id="2_cbgkg"]
+[ext_resource type="AudioStream" uid="uid://cymdetrqulba5" path="res://addons/netengine5/net.bobbo.text-reader/sounds/console/exclam.ogg" id="3_vndge"]
+[ext_resource type="AudioStream" uid="uid://cexle2o8dplpb" path="res://addons/netengine5/net.bobbo.text-reader/sounds/console/period.ogg" id="4_oexu4"]
+[ext_resource type="AudioStream" uid="uid://cngfuhcqm4ky4" path="res://addons/netengine5/net.bobbo.text-reader/sounds/console/question.ogg" id="5_yfgh8"]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_04u1v"]
+streams_count = 1
+random_pitch = 1.2
+stream_0/stream = ExtResource("1_jc65d")
+stream_0/weight = 1.0
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_fslry"]
+streams_count = 1
+random_pitch = 1.2
+stream_0/stream = ExtResource("2_cbgkg")
+stream_0/weight = 1.0
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_sfqaj"]
+streams_count = 1
+random_pitch = 1.2
+stream_0/stream = ExtResource("3_vndge")
+stream_0/weight = 1.0
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_bs1vk"]
+streams_count = 1
+random_pitch = 1.2
+stream_0/stream = ExtResource("4_oexu4")
+stream_0/weight = 1.0
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_oxxo7"]
+streams_count = 1
+random_pitch = 1.2
+stream_0/stream = ExtResource("5_yfgh8")
+stream_0/weight = 1.0
+
+[resource]
+script = ExtResource("1_mtm2t")
+default = SubResource("AudioStreamRandomizer_fslry")
+period = SubResource("AudioStreamRandomizer_bs1vk")
+exclam = SubResource("AudioStreamRandomizer_sfqaj")
+comma = SubResource("AudioStreamRandomizer_04u1v")
+question = SubResource("AudioStreamRandomizer_oxxo7")
