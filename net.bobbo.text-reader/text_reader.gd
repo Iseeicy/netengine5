@@ -67,6 +67,11 @@ func start_reading(new_text: String, settings: TextReaderSettings = null) -> voi
 			settings = TextReaderSettings.new()
 	current_settings = settings
 	
+	# Check if we need to set the sounds too
+	if current_settings.sounds == null:
+		if default_settings != null and default_settings.sounds != null:
+			current_settings.sound = default_settings.sounds
+	
 	_set_visible_chars(0)	# Hide all visible text...
 	_set_text(new_text)		# Update what the text actually is
 	reading_started.emit(get_raw_text(), get_stripped_text(), current_settings)

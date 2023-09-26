@@ -10,3 +10,6 @@ class_name TextReaderSettings
 
 # How many seconds to wait after displaying a punctuation character
 @export var punctuation_show_delay: float = 0.4
+
+# The sounds to use when reading text
+@export var sounds: TextSounds
