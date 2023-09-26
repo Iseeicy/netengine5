@@ -3,12 +3,19 @@
 extends Control
 class_name ProjectedControl
 
+enum OffScreenMode {
+	Hide,
+	FillScreen,
+	StickyEdges
+}
+
 #
 #	Exported
 #
 
-@export var is_sticky: bool = false
+@export var offscreen_mode: OffScreenMode = OffScreenMode.Hide
 
+@export_group("Sticky Edges")
 # If this is sticky, this is the node to rotate when the control
 # is off-screen
 @export var sticky_rotate: Control = null
@@ -47,26 +54,30 @@ func _process_while_targeting(delta: float) -> void:
 	_distance_to_target = _distance_to_cam(target_transform, _camera)
 	var unprojected_position = _camera.unproject_position(target_transform.origin)
 	
-	# For non-sticky controls, we have all we need. If the target
-	# is off screen we'll just hide this node.
-	if not is_sticky:
-		position = unprojected_position
-		visible = not _is_transform_behind_cam(target_transform, _camera)
-	# For sticky controls, we have to correct the unprojected
-	# position in order to address the edges of the screen
-	else:
-		position = _correct_unprojected_position(
-			target_transform, 
-			_camera, 
-			unprojected_position
-		)
-		_handle_sticky_children(sticky_rotate, sticky_visible)
+	# Handle all different offscreen modes
+	match offscreen_mode:
 		
-
-	
+		OffScreenMode.Hide:
+			# For non-sticky controls, we have all we need. If the target
+			# is off screen we'll just hide this node.
+			position = unprojected_position
+			visible = not _is_transform_behind_cam(
+				target_transform, 
+				_camera
+			)
+		
+		OffScreenMode.StickyEdges:
+			# For sticky controls, we have to correct the unprojected
+			# position in order to address the edges of the screen
+			position = _correct_unprojected_position(
+				target_transform, 
+				_camera, 
+				unprojected_position
+			)
+			_handle_sticky_children(sticky_rotate, sticky_visible)
+		
 	# Fade the waypoint when the camera gets close.
 	# modulate.a = clamp(remap(distance, 0, 2, 0, 1), 0, 1 )
-	
 	
 func _process_while_no_target(delta: float) -> void:
 	return
