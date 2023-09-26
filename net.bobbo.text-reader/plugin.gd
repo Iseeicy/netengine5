@@ -3,6 +3,12 @@ extends EditorPlugin
 
 func _enter_tree():
 	add_custom_type(
+		"TextReader",					# Type name
+		"Node", 					# Base type name
+		preload("text_reader.gd"), 		# Script for type
+		preload("icons/text_reader.png")	# Icon for type
+	)
+	add_custom_type(
 		"TextReaderLabel",					# Type name
 		"RichTextLabel", 					# Base type name
 		preload("text_reader_label.gd"), 		# Script for type
@@ -22,6 +28,7 @@ func _enter_tree():
 	)
 
 func _exit_tree():
+	remove_custom_type("TextReader")
 	remove_custom_type("TextReaderLabel")
 	remove_custom_type("TextReaderSettings")
 	remove_custom_type("TextSpeaker")

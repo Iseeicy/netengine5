@@ -11,6 +11,13 @@ enum SpeakType {
 }
 
 #
+#	Exported
+#
+
+# The origin of our audio, and also where to find audio streams
+@export var audio_origin_node: Node
+
+#
 #	Variables
 #
 
@@ -88,9 +95,17 @@ func char_to_speak_type(char: String) -> SpeakType:
 		return SpeakType.None
 
 func get_speak_player(type: SpeakType) -> AudioStreamPlayer:
+	# If we don't have an audio origin, EXIT EARLY
+	if audio_origin_node == null:
+		return null
+	
 	# Turn the type into a string we can use to find the right node
+	# (NOTE: We don't store audio as children under this node becaues
+	# it allows us to keep this behaviour 2D / 3D agnostic. By delegating
+	# another node to hold audio streams, it can have 2D or 3D positioning
+	# while this node can not)
 	var type_string = SpeakType.keys()[type]
-	var potential_node = get_node_or_null(type_string)
+	var potential_node = audio_origin_node.get_node_or_null(type_string)
 	
 	if !(potential_node is AudioStreamPlayer):
 		return null
@@ -106,4 +121,13 @@ func _on_text_reader_label_text_started(read_text: String):
 
 # When a new character is shown, eat it and maybe play a noise
 func _on_text_reader_label_new_character_shown(char):
+	handle_character(char)
+
+# When text starts, force a noise
+func _on_text_reader_reading_started(raw_text, stripped_text, settings):
+	reset_speak_state()
+	handle_character(' ', true)
+
+# When a new character is shown, eat it and maybe play a noise
+func _on_text_reader_visible_chars_changed(visible_count, char):
 	handle_character(char)
