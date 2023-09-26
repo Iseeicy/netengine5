@@ -9,6 +9,14 @@ class_name ProjectedControl
 
 @export var is_sticky: bool = false
 
+# If this is sticky, this is the node to rotate when the control
+# is off-screen
+@export var sticky_rotate: Control = null
+
+# If this is sticky, this is the node to make invisible when the
+# control is off-screen
+@export var sticky_visible: Control = null
+
 #
 #	Variables
 #
@@ -52,6 +60,7 @@ func _process_while_targeting(delta: float) -> void:
 			_camera, 
 			unprojected_position
 		)
+		_handle_sticky_children(sticky_rotate, sticky_visible)
 		
 
 	
@@ -129,3 +138,34 @@ func _correct_unprojected_position(target_transform, cam, unprojected_position):
 func _calc_angle_diff(from, to):
 	var diff = fmod(to - from, TAU)
 	return fmod(2.0 * diff, TAU) - diff
+	
+func _handle_sticky_children(to_rotate: Control, to_visible: Control):
+	var viewport_base_size = _get_viewport_base_size()
+	var sticky_rotation: float = 0
+	var sticky_is_visible: bool = true
+	var overflow: float = 0
+	
+	if position.x <= MARGIN:
+		# Left overflow.
+		overflow = -TAU / 8.0
+		sticky_is_visible = false
+		sticky_rotation = TAU / 4.0
+	elif position.x >= viewport_base_size.x - MARGIN:
+		# Right overflow.
+		overflow = TAU / 8.0
+		sticky_is_visible = false
+		sticky_rotation = TAU * 3.0 / 4.0
+
+	if position.y <= MARGIN:
+		# Top overflow.
+		sticky_is_visible = false
+		sticky_rotation = TAU / 2.0 + overflow
+	elif position.y >= viewport_base_size.y - MARGIN:
+		# Bottom overflow.
+		sticky_is_visible = false
+		sticky_rotation = -overflow
+		
+	if to_rotate:
+		to_rotate.rotation = sticky_rotation
+	if to_visible:
+		to_visible.visible = sticky_is_visible
