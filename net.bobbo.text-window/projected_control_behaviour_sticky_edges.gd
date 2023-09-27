@@ -1,0 +1,106 @@
+extends ProjectedControlBehaviour
+class_name ProjectedControlBehaviourStickyEdges
+
+#
+#	Exported
+#
+
+@export_group("Offscreen Behaviour")
+# Node to make invisible when off screen
+@export var node_invisible_offscreen: Control = null
+# Node to rotate when off screen
+@export var node_rotate_offscreen: Control = null
+
+@export_group("Edge Margin")
+@export var edge_margin_left = 50
+@export var edge_margin_right = 50
+@export var edge_margin_top = 50
+@export var edge_margin_bottom = 50
+
+#
+#	Functions
+#
+
+func behaviour_process(delta: float) -> void:
+	# For sticky controls, we have to correct the unprojected
+	# position in order to address the edges of the screen
+	control.position = _correct_unprojected_position()
+	_handle_sticky_children()
+	control.visible = true
+
+#
+#	Private Functions
+#
+
+func _correct_unprojected_position():
+	var target_transform = control.get_focus_target().global_transform
+	var unprojected_position = control.get_unprojected_position()
+	var viewport_base_size = control.get_viewport_base_size()
+	var cam = control.get_camera()
+	
+	# We need to handle the axes differently.
+		
+	# For the screen's X axis, the projected position is useful to us,
+	# but we need to force it to the side if it's also behind.
+	if control.get_is_target_behind_cam():
+		if unprojected_position.x < viewport_base_size.x / 2:
+			unprojected_position.x = viewport_base_size.x - edge_margin_right
+		else:
+			unprojected_position.x = edge_margin_left
+			
+	# For the screen's Y axis, the projected position is NOT useful to us
+	# because we don't want to indicate to the user that they need to look
+	# up or down to see something behind them. Instead, here we approximate
+	# the correct position using difference of the X axis Euler angles
+	# (up/down rotation) and the ratio of that with the camera's FOV.
+	# This will be slightly off from the theoretical "ideal" position.
+	if control.get_is_target_behind_cam() or \
+			unprojected_position.x < edge_margin_left or \
+			unprojected_position.x > viewport_base_size.x - edge_margin_right:
+		var look = cam.global_transform.looking_at(target_transform.origin, Vector3.UP)
+		var diff = _calc_angle_diff(look.basis.get_euler().x, cam.global_transform.basis.get_euler().x)
+		unprojected_position.y = viewport_base_size.y * (0.5 + (diff / deg_to_rad(cam.fov)))
+
+	return Vector2(
+		clamp(unprojected_position.x, edge_margin_left, 
+			viewport_base_size.x - edge_margin_right
+		),
+		clamp(unprojected_position.y, edge_margin_top, 
+			viewport_base_size.y - edge_margin_bottom
+		)
+	)
+
+func _calc_angle_diff(from, to):
+	var diff = fmod(to - from, TAU)
+	return fmod(2.0 * diff, TAU) - diff
+	
+func _handle_sticky_children():
+	var viewport_base_size = control.get_viewport_base_size()
+	var sticky_rotation: float = 0
+	var sticky_is_visible: bool = true
+	var overflow: float = 0
+	
+	if control.position.x <= edge_margin_left:
+		# Left overflow.
+		overflow = -TAU / 8.0
+		sticky_is_visible = false
+		sticky_rotation = TAU / 4.0
+	elif control.position.x >= viewport_base_size.x - edge_margin_right:
+		# Right overflow.
+		overflow = TAU / 8.0
+		sticky_is_visible = false
+		sticky_rotation = TAU * 3.0 / 4.0
+
+	if control.position.y <= edge_margin_top:
+		# Top overflow.
+		sticky_is_visible = false
+		sticky_rotation = TAU / 2.0 + overflow
+	elif control.position.y >= viewport_base_size.y - edge_margin_bottom:
+		# Bottom overflow.
+		sticky_is_visible = false
+		sticky_rotation = -overflow
+		
+	if node_rotate_offscreen:
+		node_rotate_offscreen.rotation = sticky_rotation
+	if node_invisible_offscreen:
+		node_invisible_offscreen.visible = sticky_is_visible
