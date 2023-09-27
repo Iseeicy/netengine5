@@ -26,6 +26,9 @@ var _distance_to_target: float = 0
 func _ready():
 	if behaviour:
 		behaviour.call_behaviour_init(self)
+	
+	# Set priority so this executes after camera movement
+	set_process_priority(100)
 
 func _process(delta):
 	# Update the camera if it's not the current one

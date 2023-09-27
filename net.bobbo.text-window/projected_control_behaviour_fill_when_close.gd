@@ -11,6 +11,10 @@ enum State {
 #	Exported
 #
 
+@export_group("Filled Layout")
+@export var filled_anchor_pos: Vector2 = Vector2(0.5, 0.5)
+@export var filled_anchor_offset: Vector2 = Vector2(0, 0)
+
 @export_group("Distance")
 @export var closeness_threshold: float = 4
 @export var max_distance: float = 15
@@ -59,8 +63,8 @@ func behaviour_process(delta: float) -> void:
 #
 
 func _state_fill_screen_enter(prev_state: State) -> void:
-	var target_position = control.get_viewport_base_size() / 2.0
-	var target_scale = Vector2.ONE
+	var target_position = _state_fill_screen_calc_target_pos()
+	var target_scale = _state_fill_screen_calc_target_scale()
 	
 	if prev_state == State.TooFar:
 		control.position = target_position
@@ -75,12 +79,27 @@ func _state_fill_screen_enter(prev_state: State) -> void:
 	)
 
 func _state_fill_screen_process(delta: float) -> void:
+	_lerp_end_pos = _state_fill_screen_calc_target_pos()
 	_update_tween(delta * fill_screen_speed)
 	control.visible = true
+	
+func _state_fill_screen_calc_target_pos():
+	var viewport_size = control.get_viewport_base_size()
+	var scaled_base_pos = Vector2(
+		remap(filled_anchor_pos.x, 0.0, 1.0, 0.0, viewport_size.x),
+		remap(filled_anchor_pos.y, 0.0, 1.0, 0.0, viewport_size.y)
+	)
+	
+	return scaled_base_pos + filled_anchor_offset
+	
+func _state_fill_screen_calc_target_scale():
+	return Vector2.ONE
+
+
 
 func _state_in_world_enter(prev_state: State) -> void:
-	var target_position = control.get_unprojected_position()
-	var target_scale = Vector2.ONE / clamp(control.get_distance_to_target(), 1, INF)
+	var target_position = _state_in_world_calc_target_pos()
+	var target_scale = _state_in_world_calc_target_scale()
 	
 	if prev_state == State.TooFar:
 		control.position = target_position
@@ -95,12 +114,19 @@ func _state_in_world_enter(prev_state: State) -> void:
 	)
 
 func _state_in_world_process(delta: float) -> void:
-	_lerp_end_pos = control.get_unprojected_position()
-	_lerp_end_scale = Vector2.ONE / clamp(control.get_distance_to_target(), 1, INF)
+	_lerp_end_pos = _state_in_world_calc_target_pos()
+	_lerp_end_scale = _state_in_world_calc_target_scale()
 	_update_tween(delta * enter_world_speed)
 	
-	
 	control.visible = not control.get_is_target_behind_cam()
+
+func _state_in_world_calc_target_pos():
+	return control.get_unprojected_position()
+	
+func _state_in_world_calc_target_scale():
+	return Vector2.ONE / clamp(control.get_distance_to_target(), 1, INF)
+
+
 
 func _state_too_far_enter(prev_state: State) -> void:
 	return
@@ -109,6 +135,8 @@ func _state_too_far_process(delta: float) -> void:
 	control.visible = false
 	control.position = control.get_unprojected_position()
 	control.scale = Vector2.ONE
+
+
 
 func _calc_state() -> State:
 	var distance = control.get_distance_to_target()
