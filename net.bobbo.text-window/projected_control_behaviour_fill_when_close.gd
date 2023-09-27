@@ -21,6 +21,7 @@ func behaviour_process(delta: float) -> void:
 	if distance > max_distance:
 		control.visible = false
 		control.position = control.get_unprojected_position()
+		control.scale = Vector2.ONE
 		return
 		
 	# If we're under the closeness threshold, then fill
@@ -28,7 +29,7 @@ func behaviour_process(delta: float) -> void:
 	if distance <= closeness_threshold:
 		control.visible = true
 		control.position = control.get_viewport_base_size() / 2.0
-		control.scale = Vector2(0, 0)
+		control.scale = Vector2.ONE
 		return
 		
 	# If we're between max distance and the closeness threshold,
