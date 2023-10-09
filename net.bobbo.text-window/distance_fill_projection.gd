@@ -1,5 +1,5 @@
-extends ProjectedControlBehaviour
-class_name ProjectedControlBehaviourFillWhenClose
+extends ControlProjection
+class_name DistanceFillProjection
 
 enum State {
 	FillScreen,
@@ -42,7 +42,9 @@ var _lerp_progress: float = 0
 #	Functions
 #
 
-func behaviour_process(delta: float) -> void:
+func _process(delta: float) -> void:
+	super(delta)
+
 	# Calculate our state depending on distance, and handle any scenario
 	# where we need to enter a new state
 	var new_state = _calc_state()
@@ -67,24 +69,24 @@ func _state_fill_screen_enter(prev_state: State) -> void:
 	var target_scale = _state_fill_screen_calc_target_scale()
 	
 	if prev_state == State.TooFar:
-		control.position = target_position
-		control.scale = target_scale
+		position = target_position
+		scale = target_scale
 	
 	_start_tween(
 		fill_screen_curve,
-		control.position,
+		position,
 		target_position,
-		control.scale,
+		scale,
 		target_scale
 	)
 
 func _state_fill_screen_process(delta: float) -> void:
 	_lerp_end_pos = _state_fill_screen_calc_target_pos()
 	_update_tween(delta * fill_screen_speed)
-	control.visible = true
+	visible = true
 	
 func _state_fill_screen_calc_target_pos():
-	var viewport_size = control.get_viewport_base_size()
+	var viewport_size = get_viewport_base_size()
 	var scaled_base_pos = Vector2(
 		remap(filled_anchor_pos.x, 0.0, 1.0, 0.0, viewport_size.x),
 		remap(filled_anchor_pos.y, 0.0, 1.0, 0.0, viewport_size.y)
@@ -102,14 +104,14 @@ func _state_in_world_enter(prev_state: State) -> void:
 	var target_scale = _state_in_world_calc_target_scale()
 	
 	if prev_state == State.TooFar:
-		control.position = target_position
-		control.scale = target_scale
+		position = target_position
+		scale = target_scale
 	
 	_start_tween(
 		enter_world_curve,
-		control.position,
+		position,
 		target_position,
-		control.scale,
+		scale,
 		target_scale
 	)
 
@@ -118,13 +120,13 @@ func _state_in_world_process(delta: float) -> void:
 	_lerp_end_scale = _state_in_world_calc_target_scale()
 	_update_tween(delta * enter_world_speed)
 	
-	control.visible = not control.get_is_target_behind_cam()
+	visible = not get_is_target_behind_cam()
 
 func _state_in_world_calc_target_pos():
-	return control.get_unprojected_position()
+	return get_unprojected_position()
 	
 func _state_in_world_calc_target_scale():
-	return Vector2.ONE / clamp(control.get_distance_to_target(), 1, INF)
+	return Vector2.ONE / clamp(get_distance_to_target(), 1, INF)
 
 
 
@@ -132,14 +134,14 @@ func _state_too_far_enter(prev_state: State) -> void:
 	return
 
 func _state_too_far_process(delta: float) -> void:
-	control.visible = false
-	control.position = control.get_unprojected_position()
-	control.scale = Vector2.ONE
+	visible = false
+	position = get_unprojected_position()
+	scale = Vector2.ONE
 
 
 
 func _calc_state() -> State:
-	var distance = control.get_distance_to_target()
+	var distance = get_distance_to_target()
 	# If we're further than the max distance, don't display anything
 	if distance > max_distance:
 		return State.TooFar
@@ -180,12 +182,12 @@ func _update_tween(delta: float):
 		_lerp_progress += delta
 	
 	var clamped_progress = ease(clamp(_lerp_progress, 0, 1), _ease_type)
-	control.position = lerp(
+	position = lerp(
 		_lerp_start_pos, 
 		_lerp_end_pos, 
 		clamped_progress
 	)
-	control.scale = lerp(
+	scale = lerp(
 		_lerp_start_scale, 
 		_lerp_end_scale, 
 		clamped_progress

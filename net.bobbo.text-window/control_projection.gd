@@ -1,13 +1,7 @@
 # This script was heavily inspired by the 3D Waypoints example
 # project. See: https://github.com/godotengine/godot-demo-projects/tree/master/3d/waypoints
 extends Control
-class_name ProjectedControl
-
-#
-#	Exported
-#
-
-@export var behaviour: ProjectedControlBehaviour = ProjectedControlBehaviourHide.new()
+class_name ControlProjection
 
 #
 #	Variables
@@ -23,10 +17,10 @@ var _distance_to_target: float = 0
 #	Godot Functions
 #
 
+func _get_configuration_warnings():
+	return "This does not do anything on it's own! Please use a node that inherits this class."
+
 func _ready():
-	if behaviour:
-		behaviour.call_behaviour_init(self)
-	
 	# Set priority so this executes after camera movement
 	set_process_priority(100)
 
@@ -45,9 +39,6 @@ func _process(delta):
 		_unprojected_position = Vector2.ZERO
 		_is_target_behind_cam = false
 	
-	if behaviour:
-		behaviour.call_behaviour_process(delta)
-		
 #
 #	Functions
 #

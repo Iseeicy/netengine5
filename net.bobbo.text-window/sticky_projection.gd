@@ -1,5 +1,5 @@
-extends ProjectedControlBehaviour
-class_name ProjectedControlBehaviourStickyEdges
+extends ControlProjection
+class_name StickyProjection
 
 #
 #	Exported
@@ -21,28 +21,30 @@ class_name ProjectedControlBehaviourStickyEdges
 #	Functions
 #
 
-func behaviour_process(delta: float) -> void:
+func _process(delta: float) -> void:
+	super(delta)
+	
 	# For sticky controls, we have to correct the unprojected
 	# position in order to address the edges of the screen
-	control.position = _correct_unprojected_position()
+	position = _correct_unprojected_position()
 	_handle_sticky_children()
-	control.visible = true
+	visible = true
 
 #
 #	Private Functions
 #
 
 func _correct_unprojected_position():
-	var target_transform = control.get_focus_target().global_transform
-	var unprojected_position = control.get_unprojected_position()
-	var viewport_base_size = control.get_viewport_base_size()
-	var cam = control.get_camera()
+	var target_transform = get_focus_target().global_transform
+	var unprojected_position = get_unprojected_position()
+	var viewport_base_size = get_viewport_base_size()
+	var cam = get_camera()
 	
 	# We need to handle the axes differently.
 		
 	# For the screen's X axis, the projected position is useful to us,
 	# but we need to force it to the side if it's also behind.
-	if control.get_is_target_behind_cam():
+	if get_is_target_behind_cam():
 		if unprojected_position.x < viewport_base_size.x / 2:
 			unprojected_position.x = viewport_base_size.x - edge_margin_right
 		else:
@@ -54,7 +56,7 @@ func _correct_unprojected_position():
 	# the correct position using difference of the X axis Euler angles
 	# (up/down rotation) and the ratio of that with the camera's FOV.
 	# This will be slightly off from the theoretical "ideal" position.
-	if control.get_is_target_behind_cam() or \
+	if get_is_target_behind_cam() or \
 			unprojected_position.x < edge_margin_left or \
 			unprojected_position.x > viewport_base_size.x - edge_margin_right:
 		var look = cam.global_transform.looking_at(target_transform.origin, Vector3.UP)
@@ -75,27 +77,27 @@ func _calc_angle_diff(from, to):
 	return fmod(2.0 * diff, TAU) - diff
 	
 func _handle_sticky_children():
-	var viewport_base_size = control.get_viewport_base_size()
+	var viewport_base_size = get_viewport_base_size()
 	var sticky_rotation: float = 0
 	var sticky_is_visible: bool = true
 	var overflow: float = 0
 	
-	if control.position.x <= edge_margin_left:
+	if position.x <= edge_margin_left:
 		# Left overflow.
 		overflow = -TAU / 8.0
 		sticky_is_visible = false
 		sticky_rotation = TAU / 4.0
-	elif control.position.x >= viewport_base_size.x - edge_margin_right:
+	elif position.x >= viewport_base_size.x - edge_margin_right:
 		# Right overflow.
 		overflow = TAU / 8.0
 		sticky_is_visible = false
 		sticky_rotation = TAU * 3.0 / 4.0
 
-	if control.position.y <= edge_margin_top:
+	if position.y <= edge_margin_top:
 		# Top overflow.
 		sticky_is_visible = false
 		sticky_rotation = TAU / 2.0 + overflow
-	elif control.position.y >= viewport_base_size.y - edge_margin_bottom:
+	elif position.y >= viewport_base_size.y - edge_margin_bottom:
 		# Bottom overflow.
 		sticky_is_visible = false
 		sticky_rotation = -overflow
