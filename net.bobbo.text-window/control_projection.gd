@@ -18,7 +18,7 @@ var _distance_to_target: float = 0
 #
 
 func _get_configuration_warnings():
-	return "This does not do anything on it's own! Please use a node that inherits this class."
+	return ["This does not do anything on it's own! Please use a node that inherits this class."]
 
 func _ready():
 	# Set priority so this executes after camera movement
