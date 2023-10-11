@@ -79,10 +79,16 @@ func start_reading(new_text: String, settings: TextReaderSettings = null) -> voi
 	reading_started.emit(get_raw_text(), get_stripped_text(), current_settings)
 	
 func skip_to_reading_end() -> void:
+	if _state == State.HasRead:
+		return
+	
 	_set_state(State.HasRead)	
 	reading_finished.emit(ReadFinishReason.Skipped)	# Report finished
 	
 func cancel_reading() -> void:
+	if _state == State.Empty:
+		return
+	
 	_set_state(State.Empty)
 	reading_finished.emit(ReadFinishReason.Canceled)	# Report finihsed
 	
