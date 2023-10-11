@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="TextReaderSettings" load_steps=6 format=3 uid="uid://dommxrfj7yyqi"]
+
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.text-reader/text_reader_settings.gd" id="1_nfmjw"]
+[ext_resource type="AudioStream" uid="uid://dr83vg44l2lkk" path="res://addons/netengine5/net.bobbo.text-reader/sounds/iseeicy/iseeicy.wav" id="2_0cgx5"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.text-reader/text_sounds.gd" id="3_mkjwm"]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_jiw75"]
+streams_count = 1
+stream_0/stream = ExtResource("2_0cgx5")
+stream_0/weight = 1.0
+
+[sub_resource type="Resource" id="Resource_2m1oe"]
+script = ExtResource("3_mkjwm")
+default = SubResource("AudioStreamRandomizer_jiw75")
+
+[resource]
+script = ExtResource("1_nfmjw")
+char_show_delay = 0.03
+punctuation_show_delay = 0.4
+sounds = SubResource("Resource_2m1oe")

@@ -1,5 +1,5 @@
 extends Control
-class_name TextWindow
+class_name TextWindoww
 
 #
 #	Exported
