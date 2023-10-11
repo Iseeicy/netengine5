@@ -14,6 +14,7 @@
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_i5qqf"]
 
 [node name="PlayerController" type="CharacterBody3D"]
+collision_layer = 2
 script = ExtResource("1_f5l1k")
 player_scripts = Array[PackedScene]([ExtResource("2_atrpy"), ExtResource("3_4r1p5"), ExtResource("2_43h2e"), ExtResource("5_5mfos"), ExtResource("6_jkgnv")])
 
@@ -37,6 +38,7 @@ sensitivity_y = 0.25
 model_pivot = NodePath("../../BodyPivot")
 
 [node name="InteractorRay3D" type="RayCast3D" parent="CameraOrigin"]
+target_position = Vector3(0, 0, -2)
 script = ExtResource("4_aevm5")
 
 [node name="ScriptRunner" type="Node" parent="."]
