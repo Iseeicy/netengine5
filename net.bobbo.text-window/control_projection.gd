@@ -27,7 +27,7 @@ func _ready():
 
 func _process(delta):
 	# Update the camera if it's not the current one
-	if not _camera.current:
+	if not _camera or not _camera.current:
 		_camera = get_viewport().get_camera_2d()
 		
 	if is_focusing():
