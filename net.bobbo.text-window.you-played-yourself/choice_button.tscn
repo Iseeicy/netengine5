@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://c3fg1qq2enftu"]
+
+[ext_resource type="Theme" uid="uid://gk51jb1niqbd" path="res://addons/netengine5/net.bobbo.text-window.you-played-yourself/window_theme.tres" id="1_rql32"]
+
+[node name="YouPYChoiceButton" type="RichTextLabel"]
+theme = ExtResource("1_rql32")
+bbcode_enabled = true
+text = "[1] Hello World!"
+fit_content = true
+scroll_active = false

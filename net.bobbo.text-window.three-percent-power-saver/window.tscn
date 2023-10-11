@@ -1,0 +1,145 @@
+[gd_scene load_steps=14 format=3 uid="uid://doly8ed5ktkyo"]
+
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.text-window/text_window.gd" id="1_hvg6g"]
+[ext_resource type="Theme" uid="uid://dmp1ydkjxcqdb" path="res://addons/netengine5/net.bobbo.text-window.three-percent-power-saver/window_theme.tres" id="2_hlk44"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.control-projection/basic_projection.gd" id="2_ua17v"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.text-window/projection_character_focus.gd" id="3_uw53v"]
+[ext_resource type="PackedScene" uid="uid://ghb87k7v67ts" path="res://addons/netengine5/net.bobbo.text-reader/examples/text_reader_label.tscn" id="3_wvldc"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.text-window/text_window_state_machine.gd" id="5_5waq3"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.text-window/states/closed.gd" id="6_uscnr"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.text-window/states/open.gd" id="7_20hci"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.text-window/states/dialog.gd" id="8_5at5w"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.text-window/states/showing.gd" id="9_3x8f3"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.text-window/states/shown.gd" id="10_djlua"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.text-window/states/choices.gd" id="11_2jfjo"]
+[ext_resource type="PackedScene" uid="uid://bgq3fiy6s72en" path="res://addons/netengine5/net.bobbo.text-window.three-percent-power-saver/choice_button.tscn" id="12_2xap6"]
+
+[node name="PowerSaverWindow" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_hvg6g")
+
+[node name="BasicProjection" type="Control" parent="."]
+anchors_preset = 0
+script = ExtResource("2_ua17v")
+
+[node name="ProjectionCharacterFocus" type="Node" parent="BasicProjection"]
+script = ExtResource("3_uw53v")
+
+[node name="NameContainer" type="PanelContainer" parent="BasicProjection"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -55.0
+offset_top = -56.0
+offset_right = 55.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("2_hlk44")
+
+[node name="MarginContainer" type="MarginContainer" parent="BasicProjection/NameContainer"]
+layout_mode = 2
+theme = ExtResource("2_hlk44")
+
+[node name="Label" type="Label" parent="BasicProjection/NameContainer/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+theme = ExtResource("2_hlk44")
+text = "Username"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ChoiceContainer" type="PanelContainer" parent="BasicProjection"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 75.0
+offset_top = -325.0
+offset_right = 325.0
+offset_bottom = -75.0
+grow_vertical = 0
+theme = ExtResource("2_hlk44")
+
+[node name="MarginContainer" type="MarginContainer" parent="BasicProjection/ChoiceContainer"]
+layout_mode = 2
+theme = ExtResource("2_hlk44")
+
+[node name="ChoiceGrid" type="GridContainer" parent="BasicProjection/ChoiceContainer/MarginContainer"]
+visible = false
+layout_mode = 2
+theme = ExtResource("2_hlk44")
+columns = 2
+
+[node name="DialogLabel" parent="BasicProjection/ChoiceContainer/MarginContainer" instance=ExtResource("3_wvldc")]
+visible = false
+layout_mode = 2
+
+[node name="EmotionContainer" type="PanelContainer" parent="BasicProjection"]
+layout_direction = 3
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = -80.0
+offset_top = -285.0
+offset_right = -20.0
+offset_bottom = -225.0
+grow_vertical = 0
+theme = ExtResource("2_hlk44")
+
+[node name="MarginContainer" type="MarginContainer" parent="BasicProjection/EmotionContainer"]
+layout_mode = 2
+theme = ExtResource("2_hlk44")
+
+[node name="Label" type="Label" parent="BasicProjection/EmotionContainer/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+theme = ExtResource("2_hlk44")
+theme_override_font_sizes/font_size = 19
+text = ":O"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StateMachine" type="Node" parent="."]
+script = ExtResource("5_5waq3")
+initial_state = NodePath("Closed")
+
+[node name="Closed" type="Node" parent="StateMachine" node_paths=PackedStringArray("text_reader")]
+script = ExtResource("6_uscnr")
+text_reader = NodePath("../../BasicProjection/ChoiceContainer/MarginContainer/DialogLabel/TextReader")
+
+[node name="Open" type="Node" parent="StateMachine"]
+script = ExtResource("7_20hci")
+
+[node name="Dialog" type="Node" parent="StateMachine/Open" node_paths=PackedStringArray("header_container", "header_label", "text_content", "text_reader")]
+script = ExtResource("8_5at5w")
+header_container = NodePath("../../../BasicProjection/NameContainer")
+header_label = NodePath("../../../BasicProjection/NameContainer/MarginContainer/Label")
+text_content = NodePath("../../../BasicProjection/ChoiceContainer/MarginContainer/DialogLabel")
+text_reader = NodePath("../../../BasicProjection/ChoiceContainer/MarginContainer/DialogLabel/TextReader")
+
+[node name="Showing" type="Node" parent="StateMachine/Open/Dialog"]
+script = ExtResource("9_3x8f3")
+
+[node name="Shown" type="Node" parent="StateMachine/Open/Dialog"]
+script = ExtResource("10_djlua")
+
+[node name="Choices" type="Node" parent="StateMachine/Open" node_paths=PackedStringArray("choice_contents", "choice_button_parent", "text_reader")]
+script = ExtResource("11_2jfjo")
+choice_button_scene = ExtResource("12_2xap6")
+choice_contents = NodePath("../../../BasicProjection/ChoiceContainer/MarginContainer/ChoiceGrid")
+choice_button_parent = NodePath("../../../BasicProjection/ChoiceContainer/MarginContainer/ChoiceGrid")
+text_reader = NodePath("../../../BasicProjection/ChoiceContainer/MarginContainer/DialogLabel/TextReader")
+
+[connection signal="choice_prompt_shown" from="." to="StateMachine/Open/Choices" method="_on_text_window_choice_prompt_shown"]
+[connection signal="closed" from="." to="StateMachine/Closed" method="_on_text_window_closed"]
+[connection signal="dialog_shown" from="." to="BasicProjection/ProjectionCharacterFocus" method="_on_text_window_dialog_shown"]
+[connection signal="dialog_shown" from="." to="StateMachine/Open/Dialog/Showing" method="_on_text_window_dialog_shown"]
+[connection signal="fast_forwarded" from="." to="StateMachine/Open/Dialog/Showing" method="_on_text_window_fast_forwarded"]
+[connection signal="transitioned" from="StateMachine" to="." method="_on_state_machine_transitioned"]
+
+[editable path="BasicProjection/ChoiceContainer/MarginContainer/DialogLabel"]
