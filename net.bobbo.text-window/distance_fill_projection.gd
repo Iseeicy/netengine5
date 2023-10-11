@@ -144,7 +144,10 @@ func _calc_state() -> State:
 	var distance = get_distance_to_target()
 	# If we're further than the max distance, don't display anything
 	if distance > max_distance:
-		return State.TooFar
+		if is_focusing():
+			return State.TooFar
+		else:
+			return State.FillScreen
 	# If we're under the closeness threshold, then fill the screen
 	elif distance <= closeness_threshold:
 		return State.FillScreen
