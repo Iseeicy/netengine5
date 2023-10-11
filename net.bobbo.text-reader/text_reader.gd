@@ -1,6 +1,13 @@
 extends Node
 class_name TextReader
 
+enum State {
+	Empty,		# There is no text being show
+	Reading,	# Text is actively being read
+	Paused,		# Text was being read, but is now paused
+	HasRead		# Text has finished being read and is on screen
+}
+
 enum ReadFinishReason {
 	EndOfText,
 	Skipped,
@@ -10,6 +17,9 @@ enum ReadFinishReason {
 #
 #	Exported
 #
+
+# Called when the state of the text reader is updated
+signal state_changed(new_state: State)
 
 # Called whenever the text being read is changed
 signal text_changed(raw_text: String, stripped_text: String)
@@ -30,8 +40,7 @@ signal reading_finished(reason: ReadFinishReason)
 #	Variables
 #
 
-var running_sequence: bool = false
-var paused: bool = false
+var _state: State
 var time_until_next_char: float = 0
 var current_settings: TextReaderSettings = null
 var _text_raw: String = ""
@@ -45,20 +54,13 @@ var _visible_char: String = ''
 #
 
 func _process(delta):
-	if running_sequence and not paused:
+	if _state == State.Reading:
 		_handle_show_sequence(delta)
 #
 #	Functions
 #
 
 func start_reading(new_text: String, settings: TextReaderSettings = null) -> void:
-	if running_sequence:		# If dialog is already showing...
-		cancel_reading()	# ... un-show it
-	
-	running_sequence = true	# Set our internal state correctly
-	paused = false			# Make sure we're not paused
-	time_until_next_char = 0
-	
 	# Check if we need to use default values, then apply the settings
 	if settings == null:
 		if default_settings != null:
@@ -72,30 +74,27 @@ func start_reading(new_text: String, settings: TextReaderSettings = null) -> voi
 		if default_settings != null and default_settings.sounds != null:
 			current_settings.sound = default_settings.sounds
 	
-	_set_visible_chars(0)	# Hide all visible text...
 	_set_text(new_text)		# Update what the text actually is
+	_set_state(State.Reading)
 	reading_started.emit(get_raw_text(), get_stripped_text(), current_settings)
 	
 func skip_to_reading_end() -> void:
-	running_sequence = false	# Set our internal state correctly
-	paused = false				# Reset pause (we can't be paused if not playing)
-	
-	_set_visible_chars(-1)							# Reveal ALL TEXT
+	_set_state(State.HasRead)	
 	reading_finished.emit(ReadFinishReason.Skipped)	# Report finished
 	
 func cancel_reading() -> void:
-	running_sequence = false	# Set our internal state correctly
-	paused = false				# Reset pause (we can't be paused if not playing)
-	
-	_set_visible_chars(0)								# Hide all text
-	_set_text("")										# Reset our text field
+	_set_state(State.Empty)
 	reading_finished.emit(ReadFinishReason.Canceled)	# Report finihsed
 	
-func set_show_paused(should_pause: bool) -> void:
-	paused = should_pause
+func set_show_paused(should_pause: bool) -> bool:
+	if _state != State.Reading:
+		return false
+	
+	_set_state(State.Paused)
+	return true
 	
 func is_show_paused() -> bool:
-	return paused
+	return _state == State.Paused
 
 func get_raw_text() -> String:
 	return _text_raw
@@ -108,10 +107,30 @@ func get_visible_characters() -> int:
 
 func get_visible_char() -> String:
 	return _visible_char
+	
+func get_state() -> State:
+	return _state
 
 #
 #	Private Functions
 #
+
+func _set_state(new_state: State) -> void:
+	_state = new_state
+	
+	match(new_state):
+		State.Empty:
+			_set_visible_chars(0)	# Hide all text
+			_set_text("")			# Reset our text field
+		State.Reading:
+			_set_visible_chars(0)	# Hide all text
+			time_until_next_char = 0
+		State.Paused:
+			pass
+		State.HasRead:
+			_set_visible_chars(-1)	# Reveal ALL TEXT
+	
+	state_changed.emit(new_state)
 
 func _handle_show_sequence(delta: float) -> void:
 	time_until_next_char -= delta	# Count down the timer...
@@ -138,8 +157,7 @@ func _handle_show_next_char() -> void:
 	)
 	
 func _handle_reached_end_of_dialog() -> void:
-	running_sequence = false
-	paused = false
+	_set_state(State.HasRead)
 	reading_finished.emit(ReadFinishReason.EndOfText)
 	
 func _get_char_display_speed(char: String, dialog_text: String, index: int) -> float:
