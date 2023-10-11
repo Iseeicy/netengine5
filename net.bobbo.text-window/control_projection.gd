@@ -8,7 +8,8 @@ class_name ControlProjection
 #
 
 @onready var _camera = get_viewport().get_camera_3d()
-var _focus_target = null 
+var _is_focusing = false
+var _focus_position = Vector3.ZERO 
 var _unprojected_position = Vector2.ZERO
 var _is_target_behind_cam = false
 var _distance_to_target: float = 0
@@ -29,11 +30,10 @@ func _process(delta):
 	if not _camera.current:
 		_camera = get_viewport().get_camera_2d()
 		
-	if get_focus_target() != null:
-		var target_transform = get_focus_target().global_transform
-		_distance_to_target = _distance_to_cam(target_transform, _camera)
-		_unprojected_position = _camera.unproject_position(target_transform.origin)
-		_is_target_behind_cam = _is_transform_behind_cam(target_transform, _camera)
+	if is_focusing():
+		_distance_to_target = _distance_to_cam(_focus_position, _camera)
+		_unprojected_position = _camera.unproject_position(_focus_position)
+		_is_target_behind_cam = _is_transform_behind_cam(_focus_position, _camera)
 	else:
 		_distance_to_target = INF
 		_unprojected_position = Vector2.ZERO
@@ -43,14 +43,21 @@ func _process(delta):
 #	Functions
 #
 
-func set_focus_target(target_node) -> void:
-	_focus_target = target_node
+func set_focus_position(target_position) -> void:
+	_focus_position = target_position
+	_is_focusing = true
+	
+func reset_focus() -> void:
+	_is_focusing = false
 	
 func get_camera():
 	return _camera
 	
-func get_focus_target():
-	return _focus_target
+func is_focusing() -> bool:
+	return _is_focusing
+	
+func get_focus_position():
+	return _focus_position
 	
 func get_unprojected_position():
 	return _unprojected_position
@@ -75,13 +82,13 @@ func get_viewport_base_size():
 #
 
 # Is the given transform behind the given camera?
-func _is_transform_behind_cam(target_transform, cam) -> bool:
+func _is_transform_behind_cam(pos, cam) -> bool:
 	# We would use "camera.is_position_behind(parent_position)", except
 	# that it also accounts for the near clip plane, which we don't want.
-	return cam.global_transform.basis.z.dot(target_transform.origin - cam.global_transform.origin) > 0
+	return cam.global_transform.basis.z.dot(pos - cam.global_transform.origin) > 0
 	
 # Find the distance between the given transform and the given camera
-func _distance_to_cam(target_transform, cam) -> float:
-	return cam.global_transform.origin.distance_to(target_transform.origin)
+func _distance_to_cam(pos, cam) -> float:
+	return cam.global_transform.origin.distance_to(pos)
 		
 

@@ -35,7 +35,6 @@ func _process(delta: float) -> void:
 #
 
 func _correct_unprojected_position():
-	var target_transform = get_focus_target().global_transform
 	var unprojected_position = get_unprojected_position()
 	var viewport_base_size = get_viewport_base_size()
 	var cam = get_camera()
@@ -59,7 +58,7 @@ func _correct_unprojected_position():
 	if get_is_target_behind_cam() or \
 			unprojected_position.x < edge_margin_left or \
 			unprojected_position.x > viewport_base_size.x - edge_margin_right:
-		var look = cam.global_transform.looking_at(target_transform.origin, Vector3.UP)
+		var look = cam.global_transform.looking_at(get_focus_position(), Vector3.UP)
 		var diff = _calc_angle_diff(look.basis.get_euler().x, cam.global_transform.basis.get_euler().x)
 		unprojected_position.y = viewport_base_size.y * (0.5 + (diff / deg_to_rad(cam.fov)))
 
