@@ -5,11 +5,17 @@ extends TextWindowState
 #
 
 @export_group("Required Scenes")
+## The scene to instantiate for each choice, when a ChoicePrompt
+## is shown on this TextWindow
 @export var choice_button_scene: PackedScene
 
 @export_group("Required References")
+## The node that contains Controls relating to choices
+## This is made visible/invisible when relevant.
 @export var choice_contents: Control
+## The node to spawn choice buttons underneath.
 @export var choice_button_parent: Control
+## The TextReader to cancel when choices are displayed.
 @export var text_reader: TextReader
 
 #

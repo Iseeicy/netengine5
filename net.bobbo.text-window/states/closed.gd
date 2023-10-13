@@ -5,6 +5,7 @@ extends TextWindowState
 #
 
 @export_group("Required References")
+## The TextReader to cancel whenever this window closes.
 @export var text_reader: TextReader
 
 #

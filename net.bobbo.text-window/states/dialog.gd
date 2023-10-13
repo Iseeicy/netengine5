@@ -5,9 +5,15 @@ extends TextWindowState
 #
 
 @export_group("Required References")
+## (OPTIONAL) The node containing the window's header label.
+## This is made visible/invisible when relevant
 @export var header_container: Control
+## A label used to display the current character name if relevant
 @export var header_label: Control
+## The node containing the main text content used for dialog
+## This is made visible/invisible when relevant
 @export var text_content: Control
+## The TextReader to use when displaying dialog text
 @export var text_reader: TextReader
 
 #
