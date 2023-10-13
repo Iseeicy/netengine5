@@ -1,5 +1,6 @@
 # net.bobbo.character
 
+A Godot plugin made for BOBBO-NET's netengine5 framework.
 This plugin provides the ability to define a character and properties about them via a resource.
 
 ## Dependencies

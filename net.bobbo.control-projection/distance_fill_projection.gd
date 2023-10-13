@@ -15,6 +15,9 @@ enum State {
 #	Exported
 #
 
+## Emitted when the state of this projection changes
+signal state_changed(new_state: State)
+
 @export_group("Filled Layout")
 ## Where the Control should go when filling the screen (in normalized screen
 ## coordinates)
@@ -183,6 +186,8 @@ func _set_state(new_state: State):
 			_state_in_world_enter(prev_state)
 		State.TooFar:
 			_state_too_far_enter(prev_state)
+			
+	state_changed.emit(new_state)
 			
 func _start_tween(ease_curve: float, start_pos, end_pos, start_scale, end_scale):
 	_is_lerping = true

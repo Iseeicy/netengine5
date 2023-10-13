@@ -9,11 +9,12 @@ class_name StickyProjection
 #	Exported
 #
 
+## Called when the visibility of the sticky projection is changed.
+signal sticky_visibility_changed(is_visible: bool)
+
 @export_group("Offscreen Behaviour")
-## (OPTIONAL) Node to make invisible when off screen
-@export var node_invisible_offscreen: Control = null
 ## (OPTIONAL) Node to rotate when off screen
-@export var node_rotate_offscreen: Control = null
+@export var node_rotate_offscreen: Node = null
 
 @export_group("Edge Margin")
 @export var edge_margin_left = 50
@@ -22,8 +23,18 @@ class_name StickyProjection
 @export var edge_margin_bottom = 50
 
 #
+#	Variables
+#
+
+var _last_sticky_is_visible: bool = false
+
+#
 #	Functions
 #
+
+func _ready() -> void:
+	super()
+	sticky_visibility_changed.emit(false)
 
 func _process(delta: float) -> void:
 	super(delta)
@@ -107,5 +118,7 @@ func _handle_sticky_children():
 		
 	if node_rotate_offscreen:
 		node_rotate_offscreen.rotation = sticky_rotation
-	if node_invisible_offscreen:
-		node_invisible_offscreen.visible = sticky_is_visible
+		
+	if _last_sticky_is_visible != sticky_is_visible:
+		_last_sticky_is_visible = sticky_is_visible
+		sticky_visibility_changed.emit(sticky_is_visible)
