@@ -1,4 +1,4 @@
-# net.bobbo.control-projcetion
+# net.bobbo.control-projection
 
 A Godot plugin made for BOBBO-NET's netengine5 framework.
 This plugin provides a set of Control nodes that allow you to anchor 2D UI elements over objects in-game.
