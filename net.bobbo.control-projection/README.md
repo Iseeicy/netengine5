@@ -17,7 +17,7 @@ The BasicProjection node projects a Control into 3D space, following an assigned
 
 ### StickyProjection
 
-![A video example of how the StickyProjection node functions](docs/sticky_example.mp4)
+![A video example of how the StickyProjection node functions](docs/sticky_example_2.mp4)
 
 The StickyProjection node projects a Control into 3D space, following an assigned target, but sticks to the edges of the screen. When the target is offscreen, the node will stay within a margin of the screen edges to indicate the general direction of the target.
 
