@@ -1,10 +1,14 @@
+## This node projects a Control node so that it anchors on screen when
+## the camera is close, but eases to world space when the camera is far.
+## It scales the node properly with distance
 extends ControlProjection
 class_name DistanceFillProjection
 
+## The state of this projection node.
 enum State {
-	FillScreen,
-	InWorld,
-	TooFar
+	FillScreen,	## Anchor this node to the screen (screen space)
+	InWorld,	## Anchor this node over a target (world space)
+	TooFar		## This anchor is too far to display (hidden)
 }
 
 #
@@ -12,18 +16,31 @@ enum State {
 #
 
 @export_group("Filled Layout")
+## Where the Control should go when filling the screen (in normalized screen
+## coordinates)
 @export var filled_anchor_pos: Vector2 = Vector2(0.5, 0.5)
+## How much to offset the Control from `filled_anchor_pos` when filling the
+## screen (in pixels)
 @export var filled_anchor_offset: Vector2 = Vector2(0, 0)
 
 @export_group("Distance")
+## When a focus target is set, and it's distance is less than this, the node 
+## will enter screen space. When the distance is larger than this, the node 
+## will enter world space. 
 @export var closeness_threshold: float = 4
+## When a focus target is set, and it's distance is larger than this, the
+## node will stop displaying.
 @export var max_distance: float = 15
 
 @export_group("Time")
+## How long it takes (in seconds) to transition from world space to screen space
 @export var fill_screen_speed: float = 4
-@export var fill_screen_curve: float = 0.2
+## The easing curve to use when transitioning from world space to screen space
+@export_exp_easing var fill_screen_curve: float = 0.2
+## How long it takes (in seconds) to transition from screen space to world space
 @export var enter_world_speed: float = 2
-@export var enter_world_curve: float = 0.2
+## The easing curve to use when transitioning from screen space to world space
+@export_exp_easing var enter_world_curve: float = 0.2
 
 #
 #	Variables

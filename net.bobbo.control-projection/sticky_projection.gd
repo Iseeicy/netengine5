@@ -1,3 +1,7 @@
+## This node projects a Control so that when it's offscreen, the control sticks
+## to the edges of the screen.
+## This is ideal for things like waypoints, maps, or indicators showing where 
+## objects are relative to you.
 extends ControlProjection
 class_name StickyProjection
 
@@ -6,9 +10,9 @@ class_name StickyProjection
 #
 
 @export_group("Offscreen Behaviour")
-# Node to make invisible when off screen
+## (OPTIONAL) Node to make invisible when off screen
 @export var node_invisible_offscreen: Control = null
-# Node to rotate when off screen
+## (OPTIONAL) Node to rotate when off screen
 @export var node_rotate_offscreen: Control = null
 
 @export_group("Edge Margin")

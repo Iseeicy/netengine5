@@ -1,6 +1,11 @@
+## This node projects a Control node in a basic manner.
+## It doesn't scale the node at all.
+## It places the Control over the visible position of the focus target.
+## When the focus target is offscreen, this node is hidden.
 extends ControlProjection
 class_name BasicProjection
 
+## Extends the base ControlProjection `_process()` function
 func _process(delta: float) -> void:
 	super(delta)
 
