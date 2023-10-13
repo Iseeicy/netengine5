@@ -1,0 +1,252 @@
+[gd_scene load_steps=19 format=3 uid="uid://b61qm4pa2ri2"]
+
+[ext_resource type="Theme" uid="uid://gk51jb1niqbd" path="res://addons/netengine5/net.bobbo.text-window.you-played-yourself/window_theme.tres" id="1_godsv"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.text-window/text_window.gd" id="2_4237u"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.control-projection/distance_fill_projection.gd" id="2_h1k1r"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.text-window/projection_character_focus.gd" id="3_ojdvd"]
+[ext_resource type="PackedScene" uid="uid://ghb87k7v67ts" path="res://addons/netengine5/net.bobbo.text-reader/examples/text_reader_label.tscn" id="3_w7m5j"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.text-window.you-played-yourself/finish_indicator.gd" id="4_2b3w8"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.text-window/text_window_state_machine.gd" id="5_pq7yy"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.text-window/states/closed.gd" id="6_ftsfi"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.text-window/states/open.gd" id="7_ktoue"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.text-window/states/dialog.gd" id="8_fujcn"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.text-window/states/showing.gd" id="9_3psml"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.text-window/states/shown.gd" id="10_as67r"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.text-window/states/choices.gd" id="11_fd3pg"]
+[ext_resource type="PackedScene" uid="uid://c3fg1qq2enftu" path="res://addons/netengine5/net.bobbo.text-window.you-played-yourself/choice_button.tscn" id="12_aqlub"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_etd7i"]
+
+[sub_resource type="Animation" id="Animation_723dj"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_17xyh"]
+resource_name = "dob_window_finish"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1, 1.5, 2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [0.0, 0.349066, 0.0, -0.349066, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ytj5q"]
+_data = {
+"RESET": SubResource("Animation_723dj"),
+"dob_window_finish": SubResource("Animation_17xyh")
+}
+
+[node name="YouPYWindow" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_godsv")
+script = ExtResource("2_4237u")
+
+[node name="DistanceFillProjection" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_h1k1r")
+filled_anchor_pos = Vector2(0, 1)
+filled_anchor_offset = Vector2(250, -150)
+max_distance = 10.0
+
+[node name="ProjectionCharacterFocus" type="Node" parent="DistanceFillProjection"]
+script = ExtResource("3_ojdvd")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="DistanceFillProjection"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -225.0
+offset_top = -125.0
+offset_right = 225.0
+offset_bottom = 125.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_godsv")
+theme_override_constants/separation = 0
+alignment = 2
+
+[node name="HeaderContainer" type="PanelContainer" parent="DistanceFillProjection/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme = ExtResource("1_godsv")
+theme_type_variation = &"header"
+
+[node name="MarginContainer" type="MarginContainer" parent="DistanceFillProjection/VBoxContainer/HeaderContainer"]
+layout_mode = 2
+theme = ExtResource("1_godsv")
+theme_type_variation = &"header"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="DistanceFillProjection/VBoxContainer/HeaderContainer/MarginContainer"]
+layout_mode = 2
+theme = ExtResource("1_godsv")
+theme_type_variation = &"header"
+bbcode_enabled = true
+text = "This is a dialog box."
+fit_content = true
+autowrap_mode = 0
+
+[node name="ContentsContainer" type="Panel" parent="DistanceFillProjection/VBoxContainer"]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+theme = ExtResource("1_godsv")
+
+[node name="DialogContents" type="Control" parent="DistanceFillProjection/VBoxContainer/ContentsContainer"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_godsv")
+
+[node name="MarginContainer" type="MarginContainer" parent="DistanceFillProjection/VBoxContainer/ContentsContainer/DialogContents"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_godsv")
+
+[node name="TextReaderLabel" parent="DistanceFillProjection/VBoxContainer/ContentsContainer/DialogContents/MarginContainer" instance=ExtResource("3_w7m5j")]
+layout_mode = 2
+theme = ExtResource("1_godsv")
+text = "This is basic text for the dialog box!"
+scroll_following = true
+
+[node name="FinishIndicator" type="Control" parent="DistanceFillProjection/VBoxContainer/ContentsContainer/DialogContents"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -16.0
+offset_top = -16.0
+offset_right = -16.0
+offset_bottom = -16.0
+grow_horizontal = 0
+grow_vertical = 0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme = ExtResource("1_godsv")
+script = ExtResource("4_2b3w8")
+
+[node name="TextureRect" type="TextureRect" parent="DistanceFillProjection/VBoxContainer/ContentsContainer/DialogContents/FinishIndicator"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -8.0
+offset_top = -8.0
+offset_right = 8.0
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_godsv")
+texture = SubResource("PlaceholderTexture2D_etd7i")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="DistanceFillProjection/VBoxContainer/ContentsContainer/DialogContents/FinishIndicator"]
+autoplay = "dob_window_finish"
+libraries = {
+"": SubResource("AnimationLibrary_ytj5q")
+}
+
+[node name="ChoiceContents" type="MarginContainer" parent="DistanceFillProjection/VBoxContainer/ContentsContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_godsv")
+
+[node name="ScrollArea" type="ScrollContainer" parent="DistanceFillProjection/VBoxContainer/ContentsContainer/ChoiceContents"]
+layout_mode = 2
+theme = ExtResource("1_godsv")
+horizontal_scroll_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="DistanceFillProjection/VBoxContainer/ContentsContainer/ChoiceContents/ScrollArea"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("1_godsv")
+alignment = 1
+
+[node name="StateMachine" type="Node" parent="."]
+script = ExtResource("5_pq7yy")
+initial_state = NodePath("Closed")
+
+[node name="Closed" type="Node" parent="StateMachine" node_paths=PackedStringArray("text_reader")]
+script = ExtResource("6_ftsfi")
+text_reader = NodePath("../../DistanceFillProjection/VBoxContainer/ContentsContainer/DialogContents/MarginContainer/TextReaderLabel/TextReader")
+
+[node name="Open" type="Node" parent="StateMachine"]
+script = ExtResource("7_ktoue")
+
+[node name="Dialog" type="Node" parent="StateMachine/Open" node_paths=PackedStringArray("header_container", "header_label", "text_content", "text_reader")]
+script = ExtResource("8_fujcn")
+header_container = NodePath("../../../DistanceFillProjection/VBoxContainer/HeaderContainer")
+header_label = NodePath("../../../DistanceFillProjection/VBoxContainer/HeaderContainer/MarginContainer/RichTextLabel")
+text_content = NodePath("../../../DistanceFillProjection/VBoxContainer/ContentsContainer/DialogContents")
+text_reader = NodePath("../../../DistanceFillProjection/VBoxContainer/ContentsContainer/DialogContents/MarginContainer/TextReaderLabel/TextReader")
+
+[node name="Showing" type="Node" parent="StateMachine/Open/Dialog"]
+script = ExtResource("9_3psml")
+
+[node name="Shown" type="Node" parent="StateMachine/Open/Dialog"]
+script = ExtResource("10_as67r")
+
+[node name="Choices" type="Node" parent="StateMachine/Open" node_paths=PackedStringArray("choice_contents", "choice_button_parent", "text_reader")]
+script = ExtResource("11_fd3pg")
+choice_button_scene = ExtResource("12_aqlub")
+choice_contents = NodePath("../../../DistanceFillProjection/VBoxContainer/ContentsContainer/ChoiceContents")
+choice_button_parent = NodePath("../../../DistanceFillProjection/VBoxContainer/ContentsContainer/ChoiceContents/ScrollArea/VBoxContainer")
+text_reader = NodePath("../../../DistanceFillProjection/VBoxContainer/ContentsContainer/DialogContents/MarginContainer/TextReaderLabel/TextReader")
+
+[connection signal="choice_prompt_shown" from="." to="StateMachine/Open/Choices" method="_on_text_window_choice_prompt_shown"]
+[connection signal="closed" from="." to="StateMachine/Closed" method="_on_text_window_closed"]
+[connection signal="dialog_shown" from="." to="DistanceFillProjection/ProjectionCharacterFocus" method="_on_text_window_dialog_shown"]
+[connection signal="dialog_shown" from="." to="StateMachine/Open/Dialog/Showing" method="_on_text_window_dialog_shown"]
+[connection signal="fast_forwarded" from="." to="StateMachine/Open/Dialog/Showing" method="_on_text_window_fast_forwarded"]
+[connection signal="reading_finished" from="DistanceFillProjection/VBoxContainer/ContentsContainer/DialogContents/MarginContainer/TextReaderLabel/TextReader" to="DistanceFillProjection/VBoxContainer/ContentsContainer/DialogContents/FinishIndicator" method="_on_text_reader_reading_finished"]
+[connection signal="reading_started" from="DistanceFillProjection/VBoxContainer/ContentsContainer/DialogContents/MarginContainer/TextReaderLabel/TextReader" to="DistanceFillProjection/VBoxContainer/ContentsContainer/DialogContents/FinishIndicator" method="_on_text_reader_reading_started"]
+
+[editable path="DistanceFillProjection/VBoxContainer/ContentsContainer/DialogContents/MarginContainer/TextReaderLabel"]

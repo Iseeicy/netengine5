@@ -25,7 +25,8 @@ func _process(delta):
 	
 
 func _physics_process(_delta):
-	if get_collider() == focused_interactable:
+	var cur_collider = get_collider()
+	if cur_collider == focused_interactable:
 		return
 		
 	# We're colliding with a NEW THING
@@ -40,7 +41,7 @@ func _physics_process(_delta):
 			call_interact_stop(focused_interactable)
 		
 	# If this is an interactable object...
-	if is_collider_interactable(get_collider()):
+	if is_collider_interactable(cur_collider):
 		# Save this collider
 		new_interactable = get_collider()
 		

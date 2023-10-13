@@ -1,0 +1,117 @@
+[gd_scene load_steps=14 format=3 uid="uid://datg8ahd8chkh"]
+
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.text-window/text_window.gd" id="1_11fhr"]
+[ext_resource type="Theme" uid="uid://57oygov2t8kg" path="res://addons/netengine5/net.bobbo.text-window.a-weeks-passing/window_theme.tres" id="2_bn8st"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.text-reader/examples/text_reader_label.gd" id="3_i6xhs"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.text-reader/text_reader.gd" id="4_hrnn7"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.text-reader/text_speaker.gd" id="5_6el60"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.text-window/text_window_state_machine.gd" id="6_ns5ew"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.text-window/states/closed.gd" id="7_vtjkc"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.text-window/states/open.gd" id="8_f4plh"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.text-window/states/dialog.gd" id="9_twnp7"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.text-window/states/choices.gd" id="10_nppdv"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.text-window/states/showing.gd" id="10_vuy3h"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.text-window/states/shown.gd" id="11_jihw4"]
+[ext_resource type="PackedScene" uid="uid://ceyek4s0m7tm0" path="res://addons/netengine5/net.bobbo.text-window.a-weeks-passing/choice_button.tscn" id="13_2pxwv"]
+
+[node name="WeeksPassingWindow" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_11fhr")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -250.0
+offset_top = -240.0
+offset_right = 250.0
+offset_bottom = -40.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("2_bn8st")
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+layout_mode = 2
+theme = ExtResource("2_bn8st")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="TextHeader" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 0
+theme = ExtResource("2_bn8st")
+theme_override_font_sizes/normal_font_size = 25
+text = "This is a test"
+fit_content = true
+
+[node name="TextContent" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("2_bn8st")
+bbcode_enabled = true
+text = "Wow! This is a good test."
+visible_characters_behavior = 1
+script = ExtResource("3_i6xhs")
+
+[node name="TextReader" type="Node" parent="PanelContainer/MarginContainer/VBoxContainer/TextContent"]
+script = ExtResource("4_hrnn7")
+
+[node name="TextSpeaker" type="Node" parent="PanelContainer/MarginContainer/VBoxContainer/TextContent"]
+script = ExtResource("5_6el60")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 1
+
+[node name="StateMachine" type="Node" parent="."]
+script = ExtResource("6_ns5ew")
+initial_state = NodePath("Closed")
+
+[node name="Closed" type="Node" parent="StateMachine" node_paths=PackedStringArray("text_reader")]
+script = ExtResource("7_vtjkc")
+text_reader = NodePath("../../PanelContainer/MarginContainer/VBoxContainer/TextContent/TextReader")
+
+[node name="Open" type="Node" parent="StateMachine"]
+script = ExtResource("8_f4plh")
+
+[node name="Dialog" type="Node" parent="StateMachine/Open" node_paths=PackedStringArray("header_label", "text_content", "text_reader")]
+script = ExtResource("9_twnp7")
+header_label = NodePath("../../../PanelContainer/MarginContainer/VBoxContainer/TextHeader")
+text_content = NodePath("../../../PanelContainer/MarginContainer/VBoxContainer/TextContent")
+text_reader = NodePath("../../../PanelContainer/MarginContainer/VBoxContainer/TextContent/TextReader")
+
+[node name="Showing" type="Node" parent="StateMachine/Open/Dialog"]
+script = ExtResource("10_vuy3h")
+
+[node name="Shown" type="Node" parent="StateMachine/Open/Dialog"]
+script = ExtResource("11_jihw4")
+
+[node name="Choices" type="Node" parent="StateMachine/Open" node_paths=PackedStringArray("choice_contents", "choice_button_parent", "text_reader")]
+script = ExtResource("10_nppdv")
+choice_button_scene = ExtResource("13_2pxwv")
+choice_contents = NodePath("../../../PanelContainer/MarginContainer/VBoxContainer/HBoxContainer")
+choice_button_parent = NodePath("../../../PanelContainer/MarginContainer/VBoxContainer/HBoxContainer")
+text_reader = NodePath("../../../PanelContainer/MarginContainer/VBoxContainer/TextContent/TextReader")
+
+[connection signal="choice_prompt_shown" from="." to="StateMachine/Open/Choices" method="_on_text_window_choice_prompt_shown"]
+[connection signal="closed" from="." to="StateMachine/Closed" method="_on_text_window_closed"]
+[connection signal="dialog_shown" from="." to="StateMachine/Open/Dialog/Showing" method="_on_text_window_dialog_shown"]
+[connection signal="fast_forwarded" from="." to="StateMachine/Open/Dialog/Showing" method="_on_text_window_fast_forwarded"]
+[connection signal="reading_started" from="PanelContainer/MarginContainer/VBoxContainer/TextContent/TextReader" to="PanelContainer/MarginContainer/VBoxContainer/TextContent/TextSpeaker" method="_on_text_reader_reading_started" flags=18]
+[connection signal="text_changed" from="PanelContainer/MarginContainer/VBoxContainer/TextContent/TextReader" to="PanelContainer/MarginContainer/VBoxContainer/TextContent" method="_on_text_reader_text_changed" flags=18]
+[connection signal="visible_chars_changed" from="PanelContainer/MarginContainer/VBoxContainer/TextContent/TextReader" to="PanelContainer/MarginContainer/VBoxContainer/TextContent" method="_on_text_reader_visible_chars_changed" flags=18]
+[connection signal="visible_chars_changed" from="PanelContainer/MarginContainer/VBoxContainer/TextContent/TextReader" to="PanelContainer/MarginContainer/VBoxContainer/TextContent/TextSpeaker" method="_on_text_reader_visible_chars_changed" flags=18]
+[connection signal="transitioned" from="StateMachine" to="." method="_on_state_machine_transitioned"]

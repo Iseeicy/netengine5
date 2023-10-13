@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://ghb87k7v67ts"]
+
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.text-reader/text_reader.gd" id="1_82n36"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.text-reader/examples/text_reader_label.gd" id="1_imxh2"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.text-reader/text_speaker.gd" id="2_sk7g3"]
+
+[node name="TextReaderLabel" type="RichTextLabel"]
+bbcode_enabled = true
+visible_characters_behavior = 1
+script = ExtResource("1_imxh2")
+
+[node name="TextReader" type="Node" parent="."]
+script = ExtResource("1_82n36")
+
+[node name="TextSpeaker" type="Node" parent="."]
+script = ExtResource("2_sk7g3")
+
+[connection signal="reading_started" from="TextReader" to="TextSpeaker" method="_on_text_reader_reading_started"]
+[connection signal="text_changed" from="TextReader" to="." method="_on_text_reader_text_changed"]
+[connection signal="visible_chars_changed" from="TextReader" to="." method="_on_text_reader_visible_chars_changed"]
+[connection signal="visible_chars_changed" from="TextReader" to="TextSpeaker" method="_on_text_reader_visible_chars_changed"]
