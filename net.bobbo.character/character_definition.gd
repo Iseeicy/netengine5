@@ -1,5 +1,5 @@
 extends Resource
-class_name CharacterSpeaker
+class_name CharacterDefinition
 
 #
 #	Exported

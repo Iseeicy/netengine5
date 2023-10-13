@@ -2,7 +2,7 @@ extends Node
 class_name ProjectionCharacterFocus
 
 @onready var _projection = get_parent() as ControlProjection
-var current_character: CharacterSpeaker = null
+var current_character: CharacterDefinition = null
 
 #
 #	Godot Functions
@@ -18,7 +18,7 @@ func _process(delta):
 #	Private Functions
 #
 
-func _set_target_character(character: CharacterSpeaker) -> void:
+func _set_target_character(character: CharacterDefinition) -> void:
 	if character and character.is_physical():
 		current_character = character
 	else:

@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bdfus87yrj7np"
-path="res://.godot/imported/character_speaker.png-94a3c77149e3058bda633318604a00a5.ctex"
+path="res://.godot/imported/character_definition.png-0dc4841855d0b4668612626177b3bff3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/netengine5/net.bobbo.character/icons/character_speaker.png"
-dest_files=["res://.godot/imported/character_speaker.png-94a3c77149e3058bda633318604a00a5.ctex"]
+source_file="res://addons/netengine5/net.bobbo.character/icons/character_definition.png"
+dest_files=["res://.godot/imported/character_definition.png-0dc4841855d0b4668612626177b3bff3.ctex"]
 
 [params]
 

@@ -6,7 +6,7 @@ class_name TextWindowDialog
 #
 
 @export var text: String = ""
-@export var character: CharacterSpeaker = null
+@export var character: CharacterDefinition = null
 
 #
 #	Static Functions
