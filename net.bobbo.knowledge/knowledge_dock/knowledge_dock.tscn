@@ -1,0 +1,65 @@
+[gd_scene load_steps=3 format=3 uid="uid://cy4bv350o580n"]
+
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.knowledge/knowledge_dock/knowledge_dock_tree.gd" id="1_oloiw"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.knowledge/knowledge_dock/knowledge_dock_label_value.gd" id="2_h1846"]
+
+[node name="KnowledgeDock" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 488.0
+offset_top = 256.0
+offset_right = 757.0
+offset_bottom = 606.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HeaderBar" type="HBoxContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HeaderBar"]
+layout_mode = 2
+text = "Knowledge"
+
+[node name="Contents" type="PanelContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="KnowledgeDockTree" type="Tree" parent="VBoxContainer/Contents"]
+layout_mode = 2
+hide_root = true
+script = ExtResource("1_oloiw")
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+text = "Value:"
+
+[node name="Value" type="Label" parent="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer" node_paths=PackedStringArray("tree")]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+autowrap_mode = 3
+script = ExtResource("2_h1846")
+tree = NodePath("../../../../Contents/KnowledgeDockTree")
+
+[connection signal="item_selected" from="VBoxContainer/Contents/KnowledgeDockTree" to="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/Value" method="_on_knowledge_dock_tree_item_selected"]
