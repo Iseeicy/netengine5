@@ -1,3 +1,8 @@
+## A base class for resource-based knowledge. Not meant
+## to be used on it's own.
+##
+## Created resources have their knowledge values tracked at runtime,
+## so that many systems can interact with them.
 extends Resource
 class_name Knowledge
 
@@ -6,7 +11,7 @@ class_name Knowledge
 #
 
 var _default_value = null
-		
+
 #
 #	Public Functions
 #

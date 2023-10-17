@@ -114,27 +114,3 @@ func _get_default(resource_path: String):
 		return null
 
 	return locator.get_default_value()
-
-## Given an instance of Knowlege, get it's class name.
-## We need to manually perform this because Godot does not
-## allow us to access the name of the custom class as of writing.
-func _knowledge_to_class_name(knowledge: Knowledge) -> String:
-	if knowledge is KnowledgeBool:
-		return "KnowledgeBool"
-	elif knowledge is KnowledgeFloat:
-		return "KnowledgeFloat"
-	elif knowledge is KnowledgeInteger:
-		return "KnowledgeInteger"
-	elif knowledge is KnowledgeString:
-		return "KnowledgeString"
-	elif knowledge is Knowledge:
-		return "Knowledge"
-	else:
-		return ""
-		
-func _knowledge_from_class_name(name: String):
-	match(name):
-		"KnowledgeBool":
-			return KnowledgeBool.new()
-	
-	return null

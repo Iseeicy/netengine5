@@ -1,12 +1,22 @@
 extends Tree
 
+#
+#	Godot Functions
+#
+
 func _enter_tree():
-	KnowledgeDB.amount_updated.connect(_on_knowledge_db_updated.bind())
+	KnowledgeDB.amount_updated.connect(_update_tree.bind())
 	
 func _exit_tree():
-	KnowledgeDB.amount_updated.disconnect(_on_knowledge_db_updated.bind())
+	KnowledgeDB.amount_updated.disconnect(_update_tree.bind())
 	
-func update_tree():
+#
+#	Private Functions
+#
+
+## Refreshes the contents of the tree to match the currently
+## known knowledge.
+func _update_tree():
 	clear()
 	var tree_root = create_item()
 	tree_root.set_text(0, "All Knowledge")
@@ -22,10 +32,8 @@ func update_tree():
 			tree_info, 
 			resource_path
 		)
-		
-func _on_knowledge_db_updated():
-	update_tree()
 
+## Given a path string, removes the protocol at the start
 func _remove_protocol_from_path(path: String) -> String:
 	var index = path.find("://")
 	if index < 0:
@@ -33,6 +41,9 @@ func _remove_protocol_from_path(path: String) -> String:
 		
 	return path.substr(index + 3)
 
+## Creates the branch of a tree given info about the
+## leaf that we should be making branches for. This will
+## re-use previously created branches if they match!
 func _create_tree_branch(parent_node: TreeItem, info: Dictionary, resource_path: String) -> void:
 	var split_path = _remove_protocol_from_path(resource_path).split("/")
 	
@@ -55,13 +66,11 @@ func _create_tree_branch(parent_node: TreeItem, info: Dictionary, resource_path:
 		if '.' in end_of_path:
 			end_of_path = end_of_path.split('.')[0]
 			new_node.set_selectable(0, true)
-			new_node.set_icon(0, preload("res://addons/netengine5/net.bobbo.knowledge/icons/knowledge_icon.png"))
+			new_node.set_icon(0, preload("../icons/knowledge_icon.png"))
 			new_node.set_icon_max_width(0, 32)
 		else:
 			new_node.set_selectable(0, false)
 			
 		new_node.set_text(0, end_of_path)
 		parent_node = new_node
-	
-	
 	
