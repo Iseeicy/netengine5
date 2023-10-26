@@ -1,3 +1,4 @@
+@tool
 extends RichTextLabel
 
 func _on_text_reader_text_changed(raw_text, stripped_text):

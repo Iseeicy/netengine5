@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://ckoiwe8aelbix"]
+[gd_scene load_steps=14 format=3 uid="uid://ckoiwe8aelbix"]
 
 [ext_resource type="Script" path="res://dialog_graph_editor.gd" id="1_h20jw"]
 [ext_resource type="Script" path="res://nodes/change_character/change_character_node.gd" id="2_kcr8m"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://nodes/forwarder/forwarder_node.gd" id="7_fnh60"]
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.dialog-graph/dialog_graph_edit.gd" id="8_e3uds"]
 [ext_resource type="Script" path="res://right_click_menu.gd" id="8_nqsv5"]
+[ext_resource type="PackedScene" uid="uid://ghb87k7v67ts" path="res://addons/netengine5/net.bobbo.text-reader/examples/text_reader_label.tscn" id="9_lvedv"]
 
 [sub_resource type="PackedScene" id="PackedScene_lyh33"]
 _bundled = {
@@ -68,6 +69,25 @@ script = ExtResource("8_e3uds")
 
 [node name="TODO - Create knowledge junction resource, then a node for those" type="Node" parent="GraphEdit"]
 
+[node name="PreviewTextWindow" type="PanelContainer" parent="GraphEdit"]
+visible = false
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -400.0
+offset_bottom = 150.0
+grow_horizontal = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="GraphEdit/PreviewTextWindow"]
+layout_mode = 2
+
+[node name="TextReaderLabel" parent="GraphEdit/PreviewTextWindow/MarginContainer" instance=ExtResource("9_lvedv")]
+layout_mode = 2
+
+[node name="TextSpeaker" parent="GraphEdit/PreviewTextWindow/MarginContainer/TextReaderLabel" index="2" node_paths=PackedStringArray("audio_origin_node")]
+audio_origin_node = NodePath("@Node@18680")
+
 [node name="RightClickMenu" type="PopupMenu" parent="."]
 size = Vector2i(28, 8)
 submenu_popup_delay = 0.2
@@ -79,5 +99,9 @@ script = ExtResource("8_nqsv5")
 [connection signal="connection_to_empty" from="GraphEdit" to="RightClickMenu" method="_on_graph_edit_connection_to_empty"]
 [connection signal="delete_nodes_request" from="GraphEdit" to="." method="_on_graph_edit_delete_nodes_request"]
 [connection signal="disconnection_request" from="GraphEdit" to="." method="_on_graph_edit_disconnection_request"]
+[connection signal="node_deselected" from="GraphEdit" to="." method="_on_graph_edit_node_deselected"]
+[connection signal="node_selected" from="GraphEdit" to="." method="_on_graph_edit_node_selected"]
 [connection signal="popup_request" from="GraphEdit" to="RightClickMenu" method="_on_graph_edit_popup_request"]
 [connection signal="spawn_node" from="RightClickMenu" to="." method="_on_add_node_spawn_node"]
+
+[editable path="GraphEdit/PreviewTextWindow/MarginContainer/TextReaderLabel"]
