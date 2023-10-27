@@ -20,7 +20,7 @@ func state_enter(_message: Dictionary = {}) -> void:
 		
 	_parent_state.text_reader.start_reading(
 		dialog.text,
-		dialog.character.text_reader_settings
+		dialog.character.text_reader_settings if dialog.character else null
 	)
 	
 	# Get the character name
