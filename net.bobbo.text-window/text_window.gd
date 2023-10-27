@@ -1,3 +1,4 @@
+@tool
 ## A node that controls generic TextWindow behavior, such
 ## as showing dialog and prompting the player with a choice.
 ## On it's own this doesn't do much - it just provides a

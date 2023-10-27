@@ -86,7 +86,7 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="TextSpeaker" parent="GraphEdit/PreviewTextWindow/MarginContainer/TextReaderLabel" index="2" node_paths=PackedStringArray("audio_origin_node")]
-audio_origin_node = NodePath("@Node@18680")
+audio_origin_node = NodePath("@Node@18689")
 
 [node name="RightClickMenu" type="PopupMenu" parent="."]
 size = Vector2i(28, 8)
