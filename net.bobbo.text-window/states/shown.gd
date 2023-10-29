@@ -7,6 +7,10 @@ extends TextWindowState
 func state_enter(_message: Dictionary = {}) -> void:
 	_parent_state.state_enter(_message)
 	
+	# If the text reader is still going, skip to the end of it's text
+	if _parent_state.text_reader.get_state() == TextReader.State.Reading:
+		_parent_state.text_reader.skip_to_reading_end()
+	
 func state_unhandled_input(event: InputEvent) -> void:
 	_parent_state.state_unhandled_input(event)
 	
