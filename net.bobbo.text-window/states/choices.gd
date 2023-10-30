@@ -93,10 +93,14 @@ func _add_new_button() -> Control:
 	
 func _create_button_signals(button: Control, index: int) -> void:
 	var on_hover_func = func():
-		text_window.hover_choice(index)
+		# Have the text window request to hover this element. It's up
+		# to whatever is controlling it to actually approve this.
+		text_window.request_choice_hover.emit(index)
 	
 	var on_press_func = func():
-		text_window.confirm_choice(index)
+		# Have the text window request to confirm this element. It's up
+		# to whatever is controlling it to actually approve this.
+		text_window.request_choice_confirm.emit(index)
 	
 	if 'focus_entered' in button:
 		button.focus_entered.connect(on_hover_func.bind())

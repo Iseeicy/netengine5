@@ -11,6 +11,14 @@ class_name TextWindow
 #	Exported
 #
 
+## Emitted when this TextWindow is requesting that it's `hover_choice()`
+## method is called.
+signal request_choice_hover(index: int)
+
+## Emitted when this TextWindow is requesting that it's `confirm_choice()`
+## method is called.
+signal request_choice_confirm(index: int)
+
 ## Emitted when the state of this TextWindow's state machine
 ## is updated.
 signal state_changed(state: TextWindowState, path: String)
