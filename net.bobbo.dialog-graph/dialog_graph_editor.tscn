@@ -42,10 +42,11 @@ layout_mode = 2
 [node name="TextSpeaker" parent="GraphEdit/PreviewTextWindow/MarginContainer/TextReaderLabel" index="2" node_paths=PackedStringArray("audio_origin_node")]
 audio_origin_node = NodePath("@Node@18623")
 
-[node name="RightClickMenu" type="PopupMenu" parent="."]
+[node name="RightClickMenu" type="PopupMenu" parent="." node_paths=PackedStringArray("graph_edit")]
 size = Vector2i(28, 8)
 submenu_popup_delay = 0.2
 script = ExtResource("8_nqsv5")
+graph_edit = NodePath("../GraphEdit")
 
 [connection signal="connection_from_empty" from="GraphEdit" to="RightClickMenu" method="_on_graph_edit_connection_from_empty"]
 [connection signal="connection_request" from="GraphEdit" to="." method="_on_graph_edit_connection_request"]
@@ -56,5 +57,7 @@ script = ExtResource("8_nqsv5")
 [connection signal="node_selected" from="GraphEdit" to="." method="_on_graph_edit_node_selected"]
 [connection signal="popup_request" from="GraphEdit" to="RightClickMenu" method="_on_graph_edit_popup_request"]
 [connection signal="spawn_node" from="RightClickMenu" to="." method="_on_add_node_spawn_node"]
+[connection signal="spawn_node_from" from="RightClickMenu" to="." method="_on_right_click_menu_spawn_node_from"]
+[connection signal="spawn_node_to" from="RightClickMenu" to="." method="_on_right_click_menu_spawn_node_to"]
 
 [editable path="GraphEdit/PreviewTextWindow/MarginContainer/TextReaderLabel"]
