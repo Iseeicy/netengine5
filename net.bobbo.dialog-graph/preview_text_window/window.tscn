@@ -124,7 +124,7 @@ text = "This is basic text for the dialog box!"
 scroll_following = true
 
 [node name="TextSpeaker" parent="VBoxContainer/ContentsContainer/DialogContents/MarginContainer/TextReaderLabel" index="2" node_paths=PackedStringArray("audio_origin_node")]
-audio_origin_node = NodePath("@Node@19277")
+audio_origin_node = NodePath("@Node@19252")
 
 [node name="FinishIndicator" type="Control" parent="VBoxContainer/ContentsContainer/DialogContents"]
 layout_mode = 1
