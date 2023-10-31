@@ -1,6 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://ckoiwe8aelbix"]
+[gd_scene load_steps=7 format=3 uid="uid://ckoiwe8aelbix"]
 
 [ext_resource type="Script" path="res://dialog_graph_editor.gd" id="1_h20jw"]
+[ext_resource type="Texture2D" uid="uid://b8rln1ao27me6" path="res://sprites/speaker.png" id="4_hpkj5"]
+[ext_resource type="Texture2D" uid="uid://c1useibvh446a" path="res://sprites/speaker_muted.png" id="5_3eoaw"]
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.dialog-graph/dialog_graph_edit.gd" id="8_e3uds"]
 [ext_resource type="Script" path="res://right_click_menu.gd" id="8_nqsv5"]
 [ext_resource type="PackedScene" uid="uid://ghb87k7v67ts" path="res://addons/netengine5/net.bobbo.text-reader/examples/text_reader_label.tscn" id="9_lvedv"]
@@ -23,8 +25,7 @@ script = ExtResource("8_e3uds")
 
 [node name="TODO - Create knowledge junction resource, then a node for those" type="Node" parent="GraphEdit"]
 
-[node name="PreviewTextWindow" type="PanelContainer" parent="GraphEdit"]
-visible = false
+[node name="PreviewTextWindow" type="Panel" parent="GraphEdit"]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -33,14 +34,34 @@ offset_left = -400.0
 offset_bottom = 150.0
 grow_horizontal = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="GraphEdit/PreviewTextWindow"]
+[node name="VBox" type="VBoxContainer" parent="GraphEdit/PreviewTextWindow"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="GraphEdit/PreviewTextWindow/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TextReaderLabel" parent="GraphEdit/PreviewTextWindow/VBox/MarginContainer" instance=ExtResource("9_lvedv")]
 layout_mode = 2
 
-[node name="TextReaderLabel" parent="GraphEdit/PreviewTextWindow/MarginContainer" instance=ExtResource("9_lvedv")]
-layout_mode = 2
+[node name="TextSpeaker" parent="GraphEdit/PreviewTextWindow/VBox/MarginContainer/TextReaderLabel" index="2" node_paths=PackedStringArray("audio_origin_node")]
+audio_origin_node = NodePath("@Node@26599")
 
-[node name="TextSpeaker" parent="GraphEdit/PreviewTextWindow/MarginContainer/TextReaderLabel" index="2" node_paths=PackedStringArray("audio_origin_node")]
-audio_origin_node = NodePath("@Node@18623")
+[node name="ControlsContainer" type="HBoxContainer" parent="GraphEdit/PreviewTextWindow/VBox"]
+layout_mode = 2
+alignment = 2
+
+[node name="MuteToggle" type="CheckButton" parent="GraphEdit/PreviewTextWindow/VBox/ControlsContainer"]
+texture_filter = 1
+layout_mode = 2
+theme_override_icons/checked = ExtResource("4_hpkj5")
+theme_override_icons/unchecked = ExtResource("5_3eoaw")
+button_pressed = true
 
 [node name="RightClickMenu" type="PopupMenu" parent="." node_paths=PackedStringArray("graph_edit")]
 size = Vector2i(28, 8)
@@ -56,8 +77,9 @@ graph_edit = NodePath("../GraphEdit")
 [connection signal="node_deselected" from="GraphEdit" to="." method="_on_graph_edit_node_deselected"]
 [connection signal="node_selected" from="GraphEdit" to="." method="_on_graph_edit_node_selected"]
 [connection signal="popup_request" from="GraphEdit" to="RightClickMenu" method="_on_graph_edit_popup_request"]
+[connection signal="toggled" from="GraphEdit/PreviewTextWindow/VBox/ControlsContainer/MuteToggle" to="." method="_on_mute_toggle_toggled"]
 [connection signal="spawn_node" from="RightClickMenu" to="." method="_on_add_node_spawn_node"]
 [connection signal="spawn_node_from" from="RightClickMenu" to="." method="_on_right_click_menu_spawn_node_from"]
 [connection signal="spawn_node_to" from="RightClickMenu" to="." method="_on_right_click_menu_spawn_node_to"]
 
-[editable path="GraphEdit/PreviewTextWindow/MarginContainer/TextReaderLabel"]
+[editable path="GraphEdit/PreviewTextWindow/VBox/MarginContainer/TextReaderLabel"]
