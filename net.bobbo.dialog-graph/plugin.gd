@@ -33,6 +33,9 @@ func _save_external_data():
 		
 
 func _enter_tree():
+	# Add the autoload
+	add_autoload_singleton("GraphNodeDB", "res://graph_node_db.tscn")
+	
 	# Spawn the graph editor
 	main_graph_editor_instance = graph_editor_scene.instantiate()
 	get_editor_interface().get_editor_main_screen().add_child(main_graph_editor_instance)
@@ -73,6 +76,9 @@ func _exit_tree():
 		dialog_preview_instance.queue_free()
 		dialog_preview_instance = null
 		
+	# Remove the autoload
+	remove_autoload_singleton("GraphNodeDB")
+	
 
 func _has_main_screen():
 	return true
