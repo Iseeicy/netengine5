@@ -1,12 +1,13 @@
 @tool
-extends Control
+extends VBoxContainer
 class_name DialogPreview
 
 #
 #	Exports
 #
 
-@export var graph_editor: DialogGraphEditor
+## Emitted when the preview would like it's dialog graph reference updated
+signal request_graph_update()
 
 #
 #	Private Variables
@@ -17,12 +18,11 @@ var _selected_nodes: Array[DialogGraphNode] = []
 var _temp_graph: DialogGraph = DialogGraph.new()
 
 #
-#	Private Functions
+#	Public Functions
 #
 
-func _update_selected_nodes() -> void:
-	# Update the internal version of our graph
-	graph_editor.save_to_resource(_temp_graph)
+func update_graph(new_graph: DialogGraph) -> void:
+	_temp_graph = new_graph
 	
 	if _selected_nodes.size() > 0:
 		var data = _selected_nodes[-1].get_node_data()
@@ -38,11 +38,14 @@ func _update_selected_nodes() -> void:
 #
 
 func _on_dialog_graph_editor_node_selected(node: DialogGraphNode):
+	print("selected ", node)
 	_selected_nodes.push_back(node)
-	_update_selected_nodes()
+	request_graph_update.emit()
 
 func _on_dialog_graph_editor_node_deselected(node: DialogGraphNode):
+	print("deselected ", node)
+	
 	_selected_nodes.erase(node)
-	_update_selected_nodes()
+	request_graph_update.emit()
 
 

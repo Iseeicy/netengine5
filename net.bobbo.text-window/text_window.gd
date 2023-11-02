@@ -35,6 +35,8 @@ signal choice_confirmed(index: int, prompt: TextWindowChoicePrompt)
 signal fast_forwarded()
 ## Emitted when this TextWindow is closed
 signal closed()
+## Emitted when the value of `mute` is updated
+signal mute_changed(is_muted: bool)
 
 #
 #	Variables
@@ -43,6 +45,8 @@ signal closed()
 @onready var _state_machine: TextWindowStateMachine = $StateMachine
 var current_choice_prompt: TextWindowChoicePrompt = null
 var current_dialog: TextWindowDialog = null
+## Is this window muted?
+var _mute: bool = false
 
 #
 #	Godot Functions
@@ -106,6 +110,13 @@ func close() -> void:
 ## Get the current active state of this TextWindow's state machine.
 func get_state() -> TextWindowState:
 	return _state_machine.state
+
+func is_muted() -> bool:
+	return _mute
+	
+func set_muted(is_muted: bool) -> void:
+	_mute = is_muted
+	mute_changed.emit(is_muted)
 
 #
 #	Signals

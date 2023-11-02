@@ -123,7 +123,7 @@ text = "This is basic text for the dialog box!"
 scroll_following = true
 
 [node name="TextSpeaker" parent="VBoxContainer/ContentsContainer/DialogContents/MarginContainer/TextReaderLabel" index="2" node_paths=PackedStringArray("audio_origin_node")]
-audio_origin_node = NodePath("@Node@19149")
+audio_origin_node = NodePath("@Node@19115")
 
 [node name="FinishIndicator" type="Control" parent="VBoxContainer/ContentsContainer/DialogContents"]
 layout_mode = 1
@@ -220,6 +220,7 @@ text_reader = NodePath("../../../VBoxContainer/ContentsContainer/DialogContents/
 [connection signal="closed" from="." to="StateMachine/Closed" method="_on_text_window_closed"]
 [connection signal="dialog_shown" from="." to="StateMachine/Open/Dialog/Showing" method="_on_text_window_dialog_shown"]
 [connection signal="fast_forwarded" from="." to="StateMachine/Open/Dialog/Showing" method="_on_text_window_fast_forwarded"]
+[connection signal="mute_changed" from="." to="VBoxContainer/ContentsContainer/DialogContents/MarginContainer/TextReaderLabel/TextSpeaker" method="set_muted"]
 [connection signal="reading_finished" from="VBoxContainer/ContentsContainer/DialogContents/MarginContainer/TextReaderLabel/TextReader" to="VBoxContainer/ContentsContainer/DialogContents/FinishIndicator" method="_on_text_reader_reading_finished"]
 [connection signal="reading_started" from="VBoxContainer/ContentsContainer/DialogContents/MarginContainer/TextReaderLabel/TextReader" to="VBoxContainer/ContentsContainer/DialogContents/FinishIndicator" method="_on_text_reader_reading_started"]
 [connection signal="transitioned" from="StateMachine" to="." method="_on_state_machine_transitioned"]

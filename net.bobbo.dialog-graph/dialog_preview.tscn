@@ -1,0 +1,37 @@
+[gd_scene load_steps=6 format=3 uid="uid://cu5k5jsrkoncs"]
+
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.dialog-graph/dialog_preview.gd" id="1_ibf3d"]
+[ext_resource type="PackedScene" uid="uid://bo807ocm0385q" path="res://dialog_runner/dialog_runner.tscn" id="2_dhjxn"]
+[ext_resource type="PackedScene" uid="uid://coqs1rqlad2mp" path="res://addons/netengine5/net.bobbo.dialog-graph/preview_text_window/window.tscn" id="3_lox7s"]
+[ext_resource type="Texture2D" uid="uid://c1useibvh446a" path="res://sprites/speaker_muted.png" id="4_7tj1j"]
+[ext_resource type="Texture2D" uid="uid://b8rln1ao27me6" path="res://sprites/speaker.png" id="5_sgxc5"]
+
+[node name="DialogPreview" type="VBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_ibf3d")
+
+[node name="DialogRunner" parent="." node_paths=PackedStringArray("text_window") instance=ExtResource("2_dhjxn")]
+text_window = NodePath("../DialogPreviewTextWindow")
+
+[node name="ControlsContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+alignment = 2
+
+[node name="MuteToggle" type="CheckButton" parent="ControlsContainer"]
+texture_filter = 1
+layout_mode = 2
+theme_override_icons/checked = ExtResource("4_7tj1j")
+theme_override_icons/unchecked = ExtResource("5_sgxc5")
+
+[node name="DialogPreviewTextWindow" parent="." instance=ExtResource("3_lox7s")]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+
+[connection signal="toggled" from="ControlsContainer/MuteToggle" to="DialogPreviewTextWindow" method="set_muted"]
