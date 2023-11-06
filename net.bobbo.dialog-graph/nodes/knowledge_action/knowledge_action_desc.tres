@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="DialogGraphNodeDescriptor" load_steps=4 format=3 uid="uid://bbnkiid038ytj"]
+
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.dialog-graph/dialog_graph_node_descriptor.gd" id="1_rfre0"]
+[ext_resource type="PackedScene" uid="uid://bcbts4oynusld" path="res://addons/netengine5/net.bobbo.dialog-graph/nodes/knowledge_action/knowledge_action_node.tscn" id="1_u2s8b"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.dialog-graph/nodes/knowledge_action/knowledge_action_handler.gd" id="2_j1205"]
+
+[resource]
+script = ExtResource("1_rfre0")
+node_name = "KnowledgeAction"
+graph_node_scene = ExtResource("1_u2s8b")
+handler_script = ExtResource("2_j1205")
+is_spawnable = true

@@ -1,3 +1,4 @@
+@tool
 extends Node
 class_name TextSpeaker
 
@@ -20,6 +21,7 @@ var char_counter: int = 0
 var previous_char: String = ''
 var _sounds: TextSounds
 var _players: Dictionary = {}
+var _is_muted: bool = false
 
 #
 #	Godot Functions
@@ -32,6 +34,12 @@ func _ready():
 #
 #	Functions
 #
+
+func set_muted(is_muted: bool) -> void:
+	_is_muted = is_muted
+	
+func get_muted() -> bool:
+	return _is_muted
 
 func reset_speak_state() -> void:
 	char_counter = 0
@@ -137,6 +145,10 @@ func _create_sound_player(type: TextSounds.SoundType, stream: AudioStream):
 	return new_player
 
 func _play_sound_type(type: TextSounds.SoundType) -> void:
+	# If we're currently muted, EXIT
+	if get_muted():
+		return
+	
 	# If we specifically don't want to play anything, EXIT
 	if type == TextSounds.SoundType.None:
 		return

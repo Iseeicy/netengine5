@@ -1,0 +1,40 @@
+[gd_scene load_steps=3 format=3 uid="uid://l1hq7y6bnxic"]
+
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.dialog-graph/nodes/choice_prompt/choice_prompt_node.gd" id="1_idg6k"]
+[ext_resource type="PackedScene" uid="uid://cqqx7k6cprmbq" path="res://addons/netengine5/net.bobbo.dialog-graph/nodes/choice_prompt/choice_option_container.tscn" id="2_52uhx"]
+
+[node name="ChoicePromptNode" type="GraphNode"]
+custom_minimum_size = Vector2(400, 0)
+offset_right = 400.0
+offset_bottom = 87.0
+size_flags_vertical = 0
+mouse_filter = 1
+title = "Choice Prompt"
+show_close = true
+slot/0/left_enabled = true
+slot/0/left_type = 0
+slot/0/left_color = Color(0, 1, 1, 1)
+slot/0/left_icon = null
+slot/0/right_enabled = false
+slot/0/right_type = 0
+slot/0/right_color = Color(1, 1, 0, 1)
+slot/0/right_icon = null
+slot/0/draw_stylebox = true
+script = ExtResource("1_idg6k")
+choice_option_scene = ExtResource("2_52uhx")
+
+[node name="TopButtonContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="RemoveLineButton" type="Button" parent="TopButtonContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "-"
+
+[node name="AddLineButton" type="Button" parent="TopButtonContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "+"
+
+[connection signal="pressed" from="TopButtonContainer/RemoveLineButton" to="." method="_on_remove_line_button_pressed"]
+[connection signal="pressed" from="TopButtonContainer/AddLineButton" to="." method="_on_add_line_button_pressed"]

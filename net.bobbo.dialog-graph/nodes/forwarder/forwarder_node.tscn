@@ -1,0 +1,29 @@
+[gd_scene load_steps=2 format=3 uid="uid://byp3w5m5dfvvv"]
+
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.dialog-graph/nodes/forwarder/forwarder_node.gd" id="1_3h0vu"]
+
+[node name="ForwarderNode" type="GraphNode"]
+offset_left = 493.0
+offset_top = 458.0
+offset_right = 650.0
+offset_bottom = 538.0
+mouse_filter = 1
+title = "Forwarder"
+position_offset = Vector2(493, 458)
+show_close = true
+slot/0/left_enabled = true
+slot/0/left_type = 0
+slot/0/left_color = Color(0, 1, 1, 1)
+slot/0/left_icon = null
+slot/0/right_enabled = true
+slot/0/right_type = 0
+slot/0/right_color = Color(1, 1, 0, 1)
+slot/0/right_icon = null
+slot/0/draw_stylebox = true
+script = ExtResource("1_3h0vu")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+text = "-------------->"
+horizontal_alignment = 1
+vertical_alignment = 1

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cspjwt7dbmx7s"]
+
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.dialog-graph/nodes/forwarder/forwarder_handler.gd" id="1_lp337"]
+
+[node name="Forwarder" type="Node"]
+script = ExtResource("1_lp337")

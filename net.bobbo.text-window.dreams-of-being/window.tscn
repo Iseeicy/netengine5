@@ -126,6 +126,9 @@ theme = ExtResource("1_fxkev")
 text = "This is basic text for the dialog box!"
 scroll_following = true
 
+[node name="TextSpeaker" parent="VBoxContainer/ContentsContainer/DialogContents/MarginContainer/TextReaderLabel" index="2" node_paths=PackedStringArray("audio_origin_node")]
+audio_origin_node = NodePath("@Node@44900")
+
 [node name="FinishIndicator" type="Control" parent="VBoxContainer/ContentsContainer/DialogContents"]
 layout_mode = 1
 anchors_preset = 3

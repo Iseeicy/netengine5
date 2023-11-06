@@ -1,0 +1,44 @@
+[gd_scene load_steps=2 format=3 uid="uid://cqqx7k6cprmbq"]
+
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.dialog-graph/nodes/choice_prompt/choice_option_container.gd" id="1_leofu"]
+
+[node name="ChoiceOptionContainer" type="PanelContainer"]
+script = ExtResource("1_leofu")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="OptionEditContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="LineLabel" type="Label" parent="MarginContainer/VBoxContainer/OptionEditContainer"]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+text = "0:"
+
+[node name="LineEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/OptionEditContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Option text..."
+
+[node name="SettingsButton" type="Button" parent="MarginContainer/VBoxContainer/OptionEditContainer"]
+layout_mode = 2
+text = " v "
+
+[node name="OptionSettingsContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/OptionSettingsContainer"]
+layout_mode = 2
+text = "Visibility condition yadda yadda"
+
+[connection signal="text_changed" from="MarginContainer/VBoxContainer/OptionEditContainer/LineEdit" to="." method="_on_line_edit_text_changed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/OptionEditContainer/SettingsButton" to="." method="_on_settings_button_pressed"]

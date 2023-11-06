@@ -1,0 +1,19 @@
+[gd_scene load_steps=5 format=3 uid="uid://bo807ocm0385q"]
+
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.dialog-graph/dialog_runner/dialog_runner.gd" id="1_4bkn6"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.dialog-graph/dialog_runner/states/inactive.gd" id="2_tkilr"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.dialog-graph/dialog_runner/states/active.gd" id="3_4o1c1"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.dialog-graph/dialog_runner/states/unknown_handler.gd" id="4_co7md"]
+
+[node name="DialogRunner" type="Node"]
+script = ExtResource("1_4bkn6")
+initial_state = NodePath("Inactive")
+
+[node name="Inactive" type="Node" parent="."]
+script = ExtResource("2_tkilr")
+
+[node name="Active" type="Node" parent="."]
+script = ExtResource("3_4o1c1")
+
+[node name="Unknown" type="Node" parent="Active"]
+script = ExtResource("4_co7md")

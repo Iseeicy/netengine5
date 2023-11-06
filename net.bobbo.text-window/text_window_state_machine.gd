@@ -1,3 +1,4 @@
+@tool
 extends BobboStateMachine
 class_name TextWindowStateMachine
 

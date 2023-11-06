@@ -17,6 +17,15 @@ class_name TextWindowChoicePrompt
 #	Static Functions
 #
 
+## Creates a choice prompt with text and text choices
+static func create_prompt_with_text(text: String, text_choices: Array[String]) -> TextWindowChoicePrompt:
+	var prompt = TextWindowChoicePrompt.new()
+	prompt.text = text
+	for choice in text_choices:
+		prompt.choices.append(TextWindowChoice.create_text_choice(choice))
+		
+	return prompt
+
 ## Creates a basic prompt with just a set of text choices
 static func create_basic_prompt(text_choices: Array[String]) -> TextWindowChoicePrompt:
 	var prompt = TextWindowChoicePrompt.new()

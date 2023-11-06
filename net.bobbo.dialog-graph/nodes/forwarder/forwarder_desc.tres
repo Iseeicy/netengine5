@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="DialogGraphNodeDescriptor" load_steps=5 format=3 uid="uid://bck5y5qf4cv2n"]
+
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.dialog-graph/dialog_graph_node_descriptor.gd" id="1_1sg8j"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.dialog-graph/nodes/forwarder/forwarder_node_data.gd" id="1_3dc8y"]
+[ext_resource type="PackedScene" uid="uid://byp3w5m5dfvvv" path="res://addons/netengine5/net.bobbo.dialog-graph/nodes/forwarder/forwarder_node.tscn" id="1_gifil"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.dialog-graph/nodes/forwarder/forwarder_handler.gd" id="3_lmvkm"]
+
+[resource]
+script = ExtResource("1_1sg8j")
+node_name = "Forwarder"
+graph_node_scene = ExtResource("1_gifil")
+handler_script = ExtResource("3_lmvkm")
+data_script = ExtResource("1_3dc8y")
+is_spawnable = true

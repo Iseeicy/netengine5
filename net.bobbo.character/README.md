@@ -7,6 +7,7 @@ This plugin provides the ability to define a character and properties about them
 
 This plugin is made for Godot 4.1. The following plugins must be installed:
 
+- `net.bobbo.resource-field`
 - `net.bobbo.text-reader`
 
 ## Usage

@@ -1,3 +1,4 @@
+@tool
 extends TextWindowState
 
 func _ready():
@@ -16,11 +17,12 @@ func state_enter(_message: Dictionary = {}) -> void:
 	if dialog == null:
 		_parent_state.text_reader.cancel_reading()
 		_parent_state.header_label.text = ""
+		_parent_state.header_container.visible = false
 		return
 		
 	_parent_state.text_reader.start_reading(
 		dialog.text,
-		dialog.character.text_reader_settings
+		dialog.character.text_reader_settings if dialog.character else null
 	)
 	
 	# Get the character name

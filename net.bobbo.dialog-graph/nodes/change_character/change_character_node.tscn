@@ -1,0 +1,42 @@
+[gd_scene load_steps=3 format=3 uid="uid://cnfwhuon6lt30"]
+
+[ext_resource type="PackedScene" uid="uid://dg37jnk72yyc8" path="res://addons/netengine5/net.bobbo.character/resource_field/character_def_resource_field.tscn" id="1_8f12q"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.dialog-graph/nodes/change_character/change_character_node.gd" id="1_ytoo5"]
+
+[node name="ChangeCharacterNode" type="GraphNode"]
+offset_left = 422.0
+offset_top = 434.0
+offset_right = 722.0
+offset_bottom = 547.0
+mouse_filter = 1
+title = "Change Character"
+position_offset = Vector2(422, 434)
+show_close = true
+slot/0/left_enabled = true
+slot/0/left_type = 0
+slot/0/left_color = Color(0, 1, 1, 1)
+slot/0/left_icon = null
+slot/0/right_enabled = true
+slot/0/right_type = 1
+slot/0/right_color = Color(1, 1, 0, 1)
+slot/0/right_icon = null
+slot/0/draw_stylebox = true
+slot/1/left_enabled = false
+slot/1/left_type = 0
+slot/1/left_color = Color(1, 1, 1, 1)
+slot/1/left_icon = null
+slot/1/right_enabled = false
+slot/1/right_type = 0
+slot/1/right_color = Color(1, 1, 1, 1)
+slot/1/right_icon = null
+slot/1/draw_stylebox = true
+script = ExtResource("1_ytoo5")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+text = "Character:"
+
+[node name="CharacterDefResourceField" parent="." instance=ExtResource("1_8f12q")]
+layout_mode = 2
+
+[connection signal="target_resource_updated" from="CharacterDefResourceField" to="." method="_on_character_def_resource_field_target_resource_updated"]
