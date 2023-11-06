@@ -29,6 +29,15 @@ right_disconnects = true
 [node name="RightClickMenu" type="PopupMenu" parent="." node_paths=PackedStringArray("graph_edit")]
 size = Vector2i(28, 8)
 submenu_popup_delay = 0.2
+item_count = 4
+item_0/text = "ChangeCharacter"
+item_0/id = 0
+item_1/text = "ChoicePrompt"
+item_1/id = 1
+item_2/text = "DialogText"
+item_2/id = 2
+item_3/text = "Forwarder"
+item_3/id = 4
 script = ExtResource("2_phymg")
 graph_edit = NodePath("../GraphEdit")
 
