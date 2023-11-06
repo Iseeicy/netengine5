@@ -4,10 +4,9 @@
 [ext_resource type="PackedScene" uid="uid://cqqx7k6cprmbq" path="res://addons/netengine5/net.bobbo.dialog-graph/nodes/choice_prompt/choice_option_container.tscn" id="2_52uhx"]
 
 [node name="ChoicePromptNode" type="GraphNode"]
-offset_left = 344.0
-offset_top = 289.0
-offset_right = 745.0
-offset_bottom = 376.0
+custom_minimum_size = Vector2(400, 0)
+offset_right = 400.0
+offset_bottom = 87.0
 size_flags_vertical = 0
 mouse_filter = 1
 title = "Choice Prompt"
