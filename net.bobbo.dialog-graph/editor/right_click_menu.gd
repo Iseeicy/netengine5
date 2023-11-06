@@ -5,9 +5,17 @@
 @tool
 extends PopupMenu
 
+## An enumerator used to keep track of what kind of node-spawning request
+## the GraphEdit is making. We require this because the act of spawning a node
+## is disjointed by showing this PopupMenu and then waiting on user interaction.
 enum ReqType {
+	## A node should be spawned somewhere.
 	Normal,
+	## A node should be spawned somewhere, and it's output should connect to
+	## some existing node.
 	From,
+	## A node should be spawned somewhere, and it's input should connect to
+	## some existing node.
 	To
 }
 
