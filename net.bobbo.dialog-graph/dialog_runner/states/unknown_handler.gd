@@ -1,3 +1,6 @@
+## If the DialogRunner can't find a handler for a given node, it will
+## use this handler instead. This handler simply tries to skip the node
+## and move on to the next one. The show must go on!
 @tool
 extends DialogRunnerActiveHandlerState
 

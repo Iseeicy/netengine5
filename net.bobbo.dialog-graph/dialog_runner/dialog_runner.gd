@@ -1,3 +1,6 @@
+## A node that allows for navigation through a DialogGraph resource, displaying
+## the current state using a TextWindow. References the GraphNodeDB to figure
+## out how to handle specific kinds of nodes in a graph.
 @tool
 extends BobboStateMachine
 class_name DialogRunner
@@ -30,8 +33,7 @@ func _ready():
 	for desc in GraphNodeDB.descriptors:
 		$Active.add_child(desc.instantiate_handler())
 	
-	super()
-	
+	super() # Call the normal StateMachine _ready() func
 
 #
 #	Public Functions
@@ -113,6 +115,7 @@ func is_running() -> bool:
 		
 	return state.get_state_path().begins_with("Active")
 
+## Returns the current graph if we're running through one.
 func get_graph() -> DialogGraph:
 	if not is_running():
 		return null
