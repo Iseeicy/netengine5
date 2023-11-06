@@ -1,3 +1,8 @@
+## Represents the whole definition of a node that can be used in a
+## DialogGraph. This acts as a reference for all details about a type
+## of node, including it's name, it's visual representation in the graph,
+## what kind of data it stores, and how to handle it when traversing
+## the graph.
 @tool
 extends Resource
 class_name DialogGraphNodeDescriptor
@@ -24,17 +29,13 @@ class_name DialogGraphNodeDescriptor
 @export var is_spawnable: bool = true
 
 #
-#	Private Variables
-#
-
-var _spawned_graph_nodes: Array[DialogGraphNode] = []
-var _spawned_handlers: Array[DialogRunnerActiveHandlerState] = []
-
-#
 #	Functions
 #
 
+## Spawn a new instance of the Control that visually represents this
+## kind of DialogGraph node.
 func instantiate_graph_node() -> DialogGraphNode:
+	# Spawn the GraphNode and make sure it can reference this def
 	var graph_node: DialogGraphNode = graph_node_scene.instantiate()
 	graph_node.descriptor = self
 	
@@ -43,21 +44,13 @@ func instantiate_graph_node() -> DialogGraphNode:
 	new_data.set_script(data_script)
 	graph_node.set_node_data(new_data)
 	
-	# Add this to the list of spawned nodes, and make it
-	# remove itself when it's freed
-	_spawned_graph_nodes.push_back(graph_node)
-	graph_node.tree_exited.connect(func(): _spawned_graph_nodes.erase(graph_node))
-	
 	return graph_node
-	
+
+## Spawn a new instance of the DialogRunnerState that can handle
+## tis kind of DialogGraph node.
 func instantiate_handler() -> DialogRunnerActiveHandlerState:
 	var handler = DialogRunnerActiveHandlerState.new()
 	handler.set_script(handler_script)
 	handler.name = node_name
-	
-	# Add this to the list of spawned handlers, and make it
-	# remove itself when it's freed
-	_spawned_handlers.push_back(handler)
-	handler.tree_exited.connect(func(): _spawned_handlers.erase(handler))
 	
 	return handler
