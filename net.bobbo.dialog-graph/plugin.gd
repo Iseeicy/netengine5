@@ -5,41 +5,34 @@ extends EditorPlugin
 #	Constants
 #
 
+## The scene containing the plugin's Dialog Graph Editor, to display in the
+## main screen.
 const graph_editor_scene = preload("editor/dialog_graph_editor.tscn")
+## The scene containing the plugin's Dialog Preview TextWindow, to display in
+## the bottom panel.
 const dialog_preview_scene = preload("editor/preview_text_window/dialog_preview.tscn")
 
 #
 #	Private Variables
 #
 
-var _graph_editor_instance: DialogGraphEditor
+## The currently spawned instance of the Dialog Graph Editor, if there is one.
+var _graph_editor_instance: DialogGraphEditor = null
+## The currently spawned instance of the Dialog Preview TextWindow, if there is one.
 var _dialog_preview_instance: DialogPreview
+## The currently selected resource.
 var _current_resource = null
+## An internal DialogGraph that is constantly updated / rebuilt based on edits
+## to the graph in the Dialog Graph Editor. This is used to visualize the current
+## state of the live Dialog Graph, and preview navigating it at edit-time.
 var _temp_graph: DialogGraph = DialogGraph.new()
 
-func _handles(object: Object) -> bool:
-	return object is DialogGraph
+#
+#	Entry / Exit
+#
 
-func _edit(object: Object):
-	if _graph_editor_instance == null:
-		return
-		
-	if _current_resource != null:
-		_graph_editor_instance.save_to_resource(_current_resource)
-	
-	_graph_editor_instance.load_from_resource(object)
-	_current_resource = object
-		
-func _save_external_data():
-	if _graph_editor_instance == null:
-		return
-	
-	if _current_resource == null:
-		return
-		
-	_graph_editor_instance.save_to_resource(_current_resource)
-		
-
+## Initialize this plugin. Called when the project is opened, or the plugin is 
+## enabled in ProjectSettings.
 func _enter_tree():
 	# Add the autoload
 	add_autoload_singleton("GraphNodeDB", "autoload/graph_node_db.tscn")
@@ -62,6 +55,8 @@ func _enter_tree():
 	
 	_make_visible(false)
 
+## De-initialize this plugin. Called when the project closes, or the plugin is
+## disabled in ProjectSettings.
 func _exit_tree():
 	# Disconnect the preview from this plugin
 	if _dialog_preview_instance:
@@ -86,29 +81,73 @@ func _exit_tree():
 		
 	# Remove the autoload
 	remove_autoload_singleton("GraphNodeDB")
-	
 
+#
+#	Editor Plugin Getters
+#
+
+## Returns the display name of this plugin, used when drawing a tab for it on the
+## main screen of the Godot editor (alongside 2D, 3D, Script, etc).
+func _get_plugin_name() -> String:
+	return "Dialog Graph"
+
+## Returns the icon representing this plugin, used when drawing a tab for it on
+## the main screen of the Godot editor (alongside 2D, 3D, Script, etc).
+func _get_plugin_icon() -> Texture2D:
+	return get_editor_interface().get_base_control().get_theme_icon("Node", "EditorIcons")
+
+## Does this plugin have a main screen control to draw?
 func _has_main_screen():
-	return true
+	return true # Yes it does! We show the dialog graph editor.
+
+#
+#	Editor Plugin Functions
+#
+
+## Given an unspecified object, does this plugin have a way to handle editing
+## that object?
+## Returns true if the object is a DialogGraph.
+func _handles(object: Object) -> bool:
+	return object is DialogGraph
+
+## Focus on editing an object, or no longer focus on any object.
+func _edit(object: Object):
+	if _graph_editor_instance == null:
+		return
+		
+	if _current_resource != null:
+		_graph_editor_instance.save_to_resource(_current_resource)
 	
+	_graph_editor_instance.load_from_resource(object)
+	_current_resource = object
+
+## Called when the editor wants to save
+func _save_external_data():
+	if _graph_editor_instance == null:
+		return
+	
+	if _current_resource == null:
+		return
+		
+	_graph_editor_instance.save_to_resource(_current_resource)
+
+## Called when the Dialog Graph Editor should become visible / invisible
 func _make_visible(visible):
 	if _graph_editor_instance:
 		_graph_editor_instance.visible = visible
 	
-func _get_plugin_name():
-	return "Dialog Graph"
-	
-func _get_plugin_icon():
-	return get_editor_interface().get_base_control().get_theme_icon("Node", "EditorIcons")
-
 #
 #	Private Functions
 #
 
+## Update our internal cached dialog graph so that we can use it for a dialog
+## preview if possible.
 func _refresh_graph() -> void:
 	if _graph_editor_instance == null or _dialog_preview_instance == null:
 		return
 	
+	# Write the current state of our graph editor control into the cached
+	# dialog graph, then update the dialog preview
 	_graph_editor_instance.save_to_resource(_temp_graph)
 	_dialog_preview_instance.update_graph(_temp_graph)
 
@@ -121,5 +160,7 @@ func _refresh_graph() -> void:
 func _on_preview_request_graph_update() -> void:
 	_refresh_graph()
 
+## When the contents of a node in the graph is updated, update our internal
+## version of the current graph!
 func _on_graph_node_update(node, data) -> void:
 	_refresh_graph()
