@@ -2,6 +2,7 @@
 ## nodes will be spawned underneath this node.
 @tool
 extends DialogRunnerState
+class_name DialogRunnerStateActive
 
 #
 #	Private Variables

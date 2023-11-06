@@ -3,6 +3,7 @@
 ## and move on to the next one. The show must go on!
 @tool
 extends DialogRunnerActiveHandlerState
+class_name DialogRunnerActiveUnknownHandlerState
 
 #
 #	State Functions

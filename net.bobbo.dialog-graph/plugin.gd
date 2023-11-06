@@ -34,6 +34,18 @@ var _temp_graph: DialogGraph = DialogGraph.new()
 ## Initialize this plugin. Called when the project is opened, or the plugin is 
 ## enabled in ProjectSettings.
 func _enter_tree():
+	# Add types
+	add_custom_type("DialogGraph", "Resource", preload("dialog_graph.gd"), preload("icons/dialog_graph.png"))
+	add_custom_type("DialogGraphNode", "Resource", preload("dialog_graph_node.gd"), preload("icons/dialog_graph.png"))
+	add_custom_type("DialogGraphNodeDescriptor", "Resource", preload("dialog_graph_node_descriptor.gd"), preload("icons/dialog_graph.png"))
+	add_custom_type("GraphNodeData", "Resource", preload("graph_node_data.gd"), preload("icons/dialog_graph.png"))
+	add_custom_type("DialogRunner", "Node", preload("dialog_runner/dialog_runner.gd"), preload("icons/dialog_runner.png"))
+	add_custom_type("DialogRunnerState", "Node", preload("dialog_runner/dialog_runner_state.gd"), preload("icons/dialog_runner_state.png"))
+	add_custom_type("DialogRunnerStateActive", "Node", preload("dialog_runner/states/active.gd"), preload("icons/dialog_runner_state.png"))
+	add_custom_type("DialogRunnerActiveHandlerState", "Node", preload("dialog_runner/states/active_handler.gd"), preload("icons/dialog_runner_state.png"))
+	add_custom_type("DialogRunnerStateInactive", "Node", preload("dialog_runner/states/inactive.gd"), preload("icons/dialog_runner_state.png"))
+	add_custom_type("DialogRunnerActiveUnknownHandlerState", "Node", preload("dialog_runner/states/unknown_handler.gd"), preload("icons/dialog_runner_state.png"))
+	
 	# Add the autoload
 	add_autoload_singleton("GraphNodeDB", "autoload/graph_node_db.tscn")
 	
@@ -81,6 +93,18 @@ func _exit_tree():
 		
 	# Remove the autoload
 	remove_autoload_singleton("GraphNodeDB")
+
+	# Remove types
+	remove_custom_type("DialogRunnerActiveUnknownHandlerState")
+	remove_custom_type("DialogRunnerStateInactive")
+	remove_custom_type("DialogRunnerActiveHandlerState")
+	remove_custom_type("DialogRunnerStateActive")
+	remove_custom_type("DialogRunnerState")
+	remove_custom_type("DialogRunner")
+	remove_custom_type("GraphNodeData")
+	remove_custom_type("DialogGraphNodeDescriptor")
+	remove_custom_type("DialogGraphNode")
+	remove_custom_type("DialogGraph")
 
 #
 #	Editor Plugin Getters
