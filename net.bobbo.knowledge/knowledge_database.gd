@@ -106,7 +106,7 @@ func _get_value_updated_signal_key(resource_path: String) -> String:
 	return "updated_%s" % resource_path
 
 func _get_default(resource_path: String):
-	if not FileAccess.file_exists(resource_path):
+	if not ResourceLoader.exists(resource_path):
 		return null
 		
 	var locator = load(resource_path) as Knowledge
