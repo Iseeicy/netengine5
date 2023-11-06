@@ -1,9 +1,9 @@
 [gd_scene load_steps=17 format=3 uid="uid://coqs1rqlad2mp"]
 
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.text-window/text_window.gd" id="1_s3koa"]
-[ext_resource type="Theme" uid="uid://bihpcvl8mgsi2" path="res://addons/netengine5/net.bobbo.dialog-graph/preview_text_window/window_theme.tres" id="2_1ipc1"]
+[ext_resource type="Theme" uid="uid://bihpcvl8mgsi2" path="res://addons/netengine5/net.bobbo.dialog-graph/editor/preview_text_window/window_theme.tres" id="2_1ipc1"]
 [ext_resource type="PackedScene" uid="uid://ghb87k7v67ts" path="res://addons/netengine5/net.bobbo.text-reader/examples/text_reader_label.tscn" id="3_tg2id"]
-[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.dialog-graph/preview_text_window/finish_indicator.gd" id="4_l4q33"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.dialog-graph/editor/preview_text_window/finish_indicator.gd" id="4_l4q33"]
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.text-window/text_window_state_machine.gd" id="5_3skgm"]
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.text-window/states/closed.gd" id="6_xu2pp"]
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.text-window/states/open.gd" id="7_mtips"]
@@ -11,7 +11,7 @@
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.text-window/states/showing.gd" id="9_py51h"]
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.text-window/states/shown.gd" id="10_exass"]
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.text-window/states/choices.gd" id="11_4drq0"]
-[ext_resource type="PackedScene" uid="uid://bnopk8warr7qx" path="res://addons/netengine5/net.bobbo.dialog-graph/preview_text_window/choice_button.tscn" id="12_ww1ni"]
+[ext_resource type="PackedScene" uid="uid://bnopk8warr7qx" path="res://addons/netengine5/net.bobbo.dialog-graph/editor/preview_text_window/choice_button.tscn" id="12_ww1ni"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_etd7i"]
 

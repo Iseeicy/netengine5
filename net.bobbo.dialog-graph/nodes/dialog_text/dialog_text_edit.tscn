@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://c0ansqwt7v3hp"]
+
+[node name="DialogTextEdit" type="TextEdit"]
+size_flags_vertical = 3
+placeholder_text = "Write text here..."
+virtual_keyboard_enabled = false
+wrap_mode = 1
+scroll_fit_content_height = true

@@ -1,0 +1,150 @@
+[gd_scene load_steps=3 format=3 uid="uid://bcbts4oynusld"]
+
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.dialog-graph/nodes/knowledge_action/knowledge_action_node.gd" id="1_hxisw"]
+[ext_resource type="PackedScene" uid="uid://bfh2dxenu4l04" path="res://resource_field/knowledge_resource_field.tscn" id="2_aykx8"]
+
+[node name="KnowledgeActionNode" type="GraphNode"]
+offset_left = 664.0
+offset_top = 337.0
+offset_right = 914.0
+offset_bottom = 458.0
+mouse_filter = 1
+title = "Knowledge Action"
+position_offset = Vector2(664, 337)
+show_close = true
+slot/0/left_enabled = true
+slot/0/left_type = 0
+slot/0/left_color = Color(0, 1, 1, 1)
+slot/0/left_icon = null
+slot/0/right_enabled = true
+slot/0/right_type = 0
+slot/0/right_color = Color(1, 1, 0, 1)
+slot/0/right_icon = null
+slot/0/draw_stylebox = true
+slot/1/left_enabled = false
+slot/1/left_type = 0
+slot/1/left_color = Color(1, 1, 1, 1)
+slot/1/left_icon = null
+slot/1/right_enabled = false
+slot/1/right_type = 0
+slot/1/right_color = Color(1, 1, 1, 1)
+slot/1/right_icon = null
+slot/1/draw_stylebox = true
+slot/2/left_enabled = false
+slot/2/left_type = 0
+slot/2/left_color = Color(1, 1, 1, 1)
+slot/2/left_icon = null
+slot/2/right_enabled = false
+slot/2/right_type = 0
+slot/2/right_color = Color(1, 1, 1, 1)
+slot/2/right_icon = null
+slot/2/draw_stylebox = true
+slot/3/left_enabled = false
+slot/3/left_type = 0
+slot/3/left_color = Color(1, 1, 1, 1)
+slot/3/left_icon = null
+slot/3/right_enabled = false
+slot/3/right_type = 0
+slot/3/right_color = Color(1, 1, 1, 1)
+slot/3/right_icon = null
+slot/3/draw_stylebox = true
+script = ExtResource("1_hxisw")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+text = "Knowledge:"
+
+[node name="KnowledgeResourceField" parent="." instance=ExtResource("2_aykx8")]
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="."]
+layout_mode = 2
+
+[node name="Types" type="PanelContainer" parent="."]
+layout_mode = 2
+
+[node name="Unknown" type="VBoxContainer" parent="Types"]
+visible = false
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Types/Unknown"]
+layout_mode = 2
+text = "This type of knowledge is not supported."
+autowrap_mode = 3
+
+[node name="Bool" type="VBoxContainer" parent="Types"]
+visible = false
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Types/Bool"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Types/Bool/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "New value:"
+
+[node name="CheckBox" type="CheckBox" parent="Types/Bool/HBoxContainer"]
+layout_mode = 2
+alignment = 2
+
+[node name="Integer" type="VBoxContainer" parent="Types"]
+visible = false
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Types/Integer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Types/Integer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "New value:"
+
+[node name="SpinBox" type="SpinBox" parent="Types/Integer/HBoxContainer"]
+layout_mode = 2
+min_value = -1e+14
+max_value = 1e+14
+rounded = true
+allow_greater = true
+allow_lesser = true
+alignment = 2
+
+[node name="Float" type="VBoxContainer" parent="Types"]
+visible = false
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Types/Float"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Types/Float/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "New value:"
+
+[node name="SpinBox" type="SpinBox" parent="Types/Float/HBoxContainer"]
+layout_mode = 2
+min_value = -1e+14
+max_value = 1e+14
+step = 0.1
+allow_greater = true
+allow_lesser = true
+alignment = 2
+
+[node name="String" type="VBoxContainer" parent="Types"]
+visible = false
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Types/String"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Types/String/VBoxContainer"]
+layout_mode = 2
+text = "New value:"
+
+[node name="TextEdit" type="TextEdit" parent="Types/String/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "Write string here..."
+wrap_mode = 1
+scroll_fit_content_height = true
+
+[connection signal="target_resource_updated" from="KnowledgeResourceField" to="." method="_on_knowledge_resource_field_target_resource_updated"]

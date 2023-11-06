@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="DialogGraphNodeDescriptor" load_steps=5 format=3 uid="uid://cpp3y2hlglg5c"]
+
+[ext_resource type="PackedScene" uid="uid://cnfwhuon6lt30" path="res://addons/netengine5/net.bobbo.dialog-graph/nodes/change_character/change_character_node.tscn" id="1_31hwl"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.dialog-graph/dialog_graph_node_descriptor.gd" id="1_73a1t"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.dialog-graph/nodes/change_character/change_character_node_data.gd" id="1_qk04y"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.dialog-graph/nodes/change_character/change_character_handler.gd" id="3_6g3wu"]
+
+[resource]
+script = ExtResource("1_73a1t")
+node_name = "ChangeCharacter"
+graph_node_scene = ExtResource("1_31hwl")
+handler_script = ExtResource("3_6g3wu")
+data_script = ExtResource("1_qk04y")
+is_spawnable = true

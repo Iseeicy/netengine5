@@ -1,8 +1,8 @@
 @tool
 extends EditorPlugin
 
-const graph_editor_scene = preload("dialog_graph_editor.tscn")
-const dialog_preview_scene = preload("dialog_preview.tscn")
+const graph_editor_scene = preload("editor/dialog_graph_editor.tscn")
+const dialog_preview_scene = preload("editor/preview_text_window/dialog_preview.tscn")
 
 var main_graph_editor_instance: DialogGraphEditor
 var dialog_preview_instance: DialogPreview
@@ -34,7 +34,7 @@ func _save_external_data():
 
 func _enter_tree():
 	# Add the autoload
-	add_autoload_singleton("GraphNodeDB", "res://graph_node_db.tscn")
+	add_autoload_singleton("GraphNodeDB", "autoload/graph_node_db.tscn")
 	
 	# Spawn the graph editor
 	main_graph_editor_instance = graph_editor_scene.instantiate()

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="DialogGraphNodeDescriptor" load_steps=5 format=3 uid="uid://cmpfaetr774wm"]
+
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.dialog-graph/dialog_graph_node_descriptor.gd" id="1_0kd4y"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.dialog-graph/nodes/entry/entry_node_data.gd" id="1_arhst"]
+[ext_resource type="PackedScene" uid="uid://caehgygpfnheq" path="res://addons/netengine5/net.bobbo.dialog-graph/nodes/entry/entry_node.tscn" id="1_oxtsq"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.dialog-graph/nodes/entry/entry_handler.gd" id="3_oq2it"]
+
+[resource]
+script = ExtResource("1_0kd4y")
+node_name = "Entry"
+graph_node_scene = ExtResource("1_oxtsq")
+handler_script = ExtResource("3_oq2it")
+data_script = ExtResource("1_arhst")
+is_spawnable = false

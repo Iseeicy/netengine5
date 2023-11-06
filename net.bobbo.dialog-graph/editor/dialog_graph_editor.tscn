@@ -1,8 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://ckoiwe8aelbix"]
+[gd_scene load_steps=3 format=3 uid="uid://ckoiwe8aelbix"]
 
-[ext_resource type="Script" path="res://dialog_graph_editor.gd" id="1_h20jw"]
-[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.dialog-graph/dialog_graph_edit.gd" id="8_e3uds"]
-[ext_resource type="Script" path="res://right_click_menu.gd" id="8_nqsv5"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.dialog-graph/editor/dialog_graph_editor.gd" id="1_rq23c"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.dialog-graph/editor/right_click_menu.gd" id="2_phymg"]
 
 [node name="DialogGraphEditor" type="Control"]
 layout_mode = 3
@@ -13,7 +12,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-script = ExtResource("1_h20jw")
+script = ExtResource("1_rq23c")
 
 [node name="GraphEdit" type="GraphEdit" parent="."]
 layout_mode = 1
@@ -24,14 +23,13 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_vertical = 3
 right_disconnects = true
-script = ExtResource("8_e3uds")
 
 [node name="TODO - Create knowledge junction resource, then a node for those" type="Node" parent="GraphEdit"]
 
 [node name="RightClickMenu" type="PopupMenu" parent="." node_paths=PackedStringArray("graph_edit")]
 size = Vector2i(28, 8)
 submenu_popup_delay = 0.2
-script = ExtResource("8_nqsv5")
+script = ExtResource("2_phymg")
 graph_edit = NodePath("../GraphEdit")
 
 [connection signal="connection_from_empty" from="GraphEdit" to="RightClickMenu" method="_on_graph_edit_connection_from_empty"]
