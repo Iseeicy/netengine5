@@ -20,6 +20,10 @@ var _knowledge_data: Dictionary = {} # Resource Path -> Value
 #
 
 func connect_updated_value(resource_path: String, callable: Callable):
+	if resource_path.is_empty():
+		printerr("Tried to use empty resource path")
+		return
+		
 	var signal_key = _get_value_updated_signal_key(resource_path)
 	
 	if not has_user_signal(signal_key):
@@ -30,6 +34,10 @@ func connect_updated_value(resource_path: String, callable: Callable):
 	connect(signal_key, callable)
 	
 func disconnect_updated_value(resource_path: String, callable: Callable):
+	if resource_path.is_empty():
+		printerr("Tried to use empty resource path")
+		return
+	
 	var signal_key = _get_value_updated_signal_key(resource_path)
 	
 	if not has_user_signal(signal_key):
@@ -38,6 +46,10 @@ func disconnect_updated_value(resource_path: String, callable: Callable):
 	disconnect(signal_key, callable)
 
 func get_knowledge_value(resource_path: String):
+	if resource_path.is_empty():
+		printerr("Tried to use empty resource path")
+		return
+	
 	## If we don't have this knowledge, try to load it's default
 	if not resource_path in _knowledge_data:
 		_set_value(resource_path, _get_default(resource_path))
@@ -45,6 +57,10 @@ func get_knowledge_value(resource_path: String):
 	return _knowledge_data[resource_path]
 	
 func set_knowledge_value(resource_path: String, value):
+	if resource_path.is_empty():
+		printerr("Tried to use empty resource path")
+		return
+	
 	_set_value(resource_path, value)
 
 func get_all() -> Dictionary:
