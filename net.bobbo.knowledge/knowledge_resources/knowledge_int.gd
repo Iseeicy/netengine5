@@ -1,3 +1,4 @@
+@tool
 extends Knowledge
 class_name KnowledgeInteger
 

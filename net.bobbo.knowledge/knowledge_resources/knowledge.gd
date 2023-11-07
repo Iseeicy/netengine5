@@ -1,3 +1,4 @@
+@tool
 ## A base class for resource-based knowledge. Not meant
 ## to be used on it's own.
 ##
