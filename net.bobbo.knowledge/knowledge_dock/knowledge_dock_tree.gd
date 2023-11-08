@@ -24,13 +24,13 @@ func _update_tree():
 	var all_knowledge = KnowledgeDB.get_all()
 	
 	var tree_info: Dictionary = {}
-	for resource_path in all_knowledge:
-		var value = all_knowledge[resource_path]
+	for some_knowledge in all_knowledge:
+		var value = all_knowledge[some_knowledge]
 		
 		_create_tree_branch(
 			tree_root,
 			tree_info, 
-			resource_path
+			some_knowledge.resource_path
 		)
 
 ## Given a path string, removes the protocol at the start
