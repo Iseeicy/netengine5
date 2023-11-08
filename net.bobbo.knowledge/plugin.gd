@@ -4,6 +4,9 @@ extends EditorPlugin
 var knowledge_dock
 
 func _enter_tree():
+	# Add the autoload
+	add_autoload_singleton("KnowledgeDB", "autoload/knowledge_db.tscn")
+	
 	add_custom_type("KnowledgeAgent", "Node", preload("knowledge_agent.gd"), preload("icons/knowledge_icon.png"))
 	add_custom_type("KnowledgeBool", "Resource", preload("knowledge_resources/knowledge_bool.gd"), preload("icons/knowledge_icon.png"))
 	add_custom_type("KnowledgeComparisonCondition", "Resource", preload("knowledge_resources/knowledge_comparison_condition.gd"), preload("icons/knowledge_icon.png"))
@@ -20,3 +23,6 @@ func _exit_tree():
 	remove_custom_type("KnowledgeInteger")
 	remove_custom_type("KnowledgeOperatorCondition")
 	remove_custom_type("KnowledgeString")
+	
+	# Remove the autoload
+	remove_autoload_singleton("KnowledgeDB")
