@@ -21,13 +21,13 @@ func get_default_value():
 	return _default_value
 
 func get_value():
-	return KnowledgeDB.get_knowledge_value(resource_path)
+	return KnowledgeDB.get_knowledge_value(self)
 	
 func set_value(new_value):
-	KnowledgeDB.set_knowledge_value(resource_path, new_value)
+	KnowledgeDB.set_knowledge_value(self, new_value)
 	
 func connect_updated_value(callable: Callable) -> void:
-	KnowledgeDB.connect_updated_value(resource_path, callable)
+	KnowledgeDB.connect_updated_value(self, callable)
 	
 func disconnect_updated_value(callable: Callable) -> void:
-	KnowledgeDB.disconnect_updated_value(resource_path, callable)
+	KnowledgeDB.disconnect_updated_value(self, callable)
