@@ -53,3 +53,4 @@ size_flags_horizontal = 3
 
 [connection signal="text_changed" from="MarginContainer/VBoxContainer/OptionEditContainer/LineEdit" to="." method="_on_line_edit_text_changed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/OptionEditContainer/SettingsButton" to="." method="_on_settings_button_pressed"]
+[connection signal="target_resource_updated" from="MarginContainer/VBoxContainer/OptionSettingsContainer/HBoxContainer/KnowledgeBoolResourceField" to="." method="_on_knowledge_bool_resource_field_target_resource_updated"]
