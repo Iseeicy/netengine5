@@ -36,6 +36,7 @@ flat = true
 icon_alignment = 1
 
 [node name="QuickFindDialog" parent="." instance=ExtResource("3_kdusa")]
+search_list_scene = ExtResource("2_pgoqk")
 
 [connection signal="pressed" from="ArrowButton" to="." method="_on_arrow_button_pressed"]
 [connection signal="confirmed_path" from="QuickFindDialog" to="." method="_on_quick_find_dialog_confirmed_path"]
