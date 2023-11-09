@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://bcbts4oynusld"]
 
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.dialog-graph/nodes/knowledge_action/knowledge_action_node.gd" id="1_hxisw"]
-[ext_resource type="PackedScene" uid="uid://bfh2dxenu4l04" path="res://resource_field/knowledge_resource_field.tscn" id="2_aykx8"]
+[ext_resource type="PackedScene" uid="uid://bfh2dxenu4l04" path="res://addons/netengine5/net.bobbo.knowledge/resource_fields/knowledge/knowledge_resource_field.tscn" id="2_aykx8"]
 
 [node name="KnowledgeActionNode" type="GraphNode"]
 offset_left = 664.0
