@@ -76,6 +76,8 @@ func _should_include_file(absolute_path: String) -> bool:
 		return false
 		
 	var found_resource = load(absolute_path)
+	if found_resource == null:
+		return false
 	if not _is_resource_correct_type(found_resource):
 		return false
 		
