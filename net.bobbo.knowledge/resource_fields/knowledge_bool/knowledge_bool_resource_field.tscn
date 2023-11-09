@@ -1,7 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://c4tb0cbcblddu"]
+[gd_scene load_steps=5 format=3 uid="uid://c4tb0cbcblddu"]
 
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.resource-field/resource_field.gd" id="1_522af"]
-[ext_resource type="PackedScene" uid="uid://tt1dht2c4atn" path="res://addons/netengine5/net.bobbo.knowledge/resource_fields/knowledge/knowledge_search_list.tscn" id="2_5yoga"]
 [ext_resource type="PackedScene" uid="uid://bduml1y1qwppw" path="res://addons/netengine5/net.bobbo.knowledge/resource_fields/knowledge_bool/knowledge_bool_search_list.tscn" id="2_jws8j"]
 [ext_resource type="Texture2D" uid="uid://1pmj4j14vax" path="res://addons/netengine5/net.bobbo.resource-field/icons/down_arrow.png" id="3_rhb82"]
 [ext_resource type="PackedScene" uid="uid://cfekg614yldtd" path="res://addons/netengine5/net.bobbo.resource-field/quick_find_dialog.tscn" id="4_64u4y"]
@@ -37,7 +36,7 @@ flat = true
 icon_alignment = 1
 
 [node name="QuickFindDialog" parent="." instance=ExtResource("4_64u4y")]
-search_list_scene = ExtResource("2_5yoga")
+search_list_scene = ExtResource("2_jws8j")
 
 [connection signal="pressed" from="ArrowButton" to="." method="_on_arrow_button_pressed"]
 [connection signal="confirmed_path" from="QuickFindDialog" to="." method="_on_quick_find_dialog_confirmed_path"]
