@@ -1,3 +1,4 @@
+@tool
 extends ResourceSearchList
 class_name KnowledgeSearchList
 
