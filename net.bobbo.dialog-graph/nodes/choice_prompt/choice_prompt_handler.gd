@@ -10,6 +10,15 @@ var choice_data: ChoicePromptNodeData:
 		return data as ChoicePromptNodeData
 
 #
+#	Private Variables
+#
+
+## Translates between the index of a visible choice, and the choice's actual
+## index in the data it's from. This is to account for potentially non-visible
+## choices.
+var _choice_index_translation: Dictionary = {}
+
+#
 #	State Functions
 #
 
@@ -19,10 +28,28 @@ func state_enter(_message: Dictionary = {}) -> void:
 	text_window.request_choice_confirm.connect(_on_text_window_request_choice_confirm.bind())
 	text_window.choice_confirmed.connect(_on_text_window_choice_confirm.bind())
 	
+	_choice_index_translation.clear()
+	var visible_choices: Array[String] = []
+	
+	for index in range(0, choice_data.choices.size()):
+		# If there's no visibility condition to this choice, then it's always
+		# considered visible.
+		if not (index in choice_data.visibility_conditions.keys()):
+			_choice_index_translation[visible_choices.size()] = index
+			visible_choices.push_back(choice_data.choices[index])
+			continue
+
+		# If there IS a visibility condition, then if it's currently true,
+		# then this condition is visible
+		var condition: KnowledgeBool = choice_data.visibility_conditions[index]
+		if condition.get_value():
+			_choice_index_translation[visible_choices.size()] = index
+			visible_choices.push_back(choice_data.choices[index])
+
 	# Construct the prompt to display in the text window
 	var prompt = TextWindowChoicePrompt.create_prompt_with_text(
 		choice_data.text, 
-		choice_data.choices
+		visible_choices
 	)
 	
 	text_window.show_choice_prompt(prompt)
@@ -50,7 +77,9 @@ func _on_text_window_request_choice_confirm(index: int) -> void:
 	text_window.confirm_choice(index)
 
 ## Called when the text window has confirmed a choice
-func _on_text_window_choice_confirm(index: int, _prompt: TextWindowChoicePrompt) -> void:
+func _on_text_window_choice_confirm(visible_index: int, _prompt: TextWindowChoicePrompt) -> void:
+	var index = _choice_index_translation[visible_index]
+	
 	# Get the connections to this choice node
 	var connections = graph.get_connections_from(id)
 	var translated_index = -1

@@ -60,6 +60,7 @@ func _add_new_option() -> void:
 	var new_option = _new_option_control()
 	_choice_options.push_back(new_option)	
 	_casted_data.choices.push_back("")
+	data_updated.emit(_casted_data)
 
 func _remove_last_option() -> void:
 	if _choice_options.size() == 0:
@@ -71,6 +72,7 @@ func _remove_last_option() -> void:
 	
 	var index = _casted_data.choices.size()
 	_casted_data.visibility_conditions.erase(index)
+	data_updated.emit(_casted_data)
 	
 func _new_option_control() -> ChoicePromptOptionContainer:
 	var new_option = choice_option_scene.instantiate()
@@ -126,6 +128,7 @@ func _on_settings_visibility_changed(_is_visible: bool):
 	
 func _on_text_changed(index: int, new_text: String) -> void:
 	_casted_data.choices[index] = new_text
+	data_updated.emit(_casted_data)
 	
 func _on_visibility_condition_changed(index: int, condition: KnowledgeBool) -> void:
 	# If the resource field cleared it's value, erase this condition from
@@ -136,3 +139,5 @@ func _on_visibility_condition_changed(index: int, condition: KnowledgeBool) -> v
 	# in our data
 	else:
 		_casted_data.visibility_conditions[index] = condition
+	
+	data_updated.emit(_casted_data)
