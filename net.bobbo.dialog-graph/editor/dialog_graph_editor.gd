@@ -185,6 +185,14 @@ func _spawn_node(desc: DialogGraphNodeDescriptor) -> DialogGraphNode:
 		node_data_updated.emit(new_node, new_data)
 	new_node.data_updated.connect(this_node_updated.bind())
 	
+	# Tell the node to call our class' function when the node is requesting to
+	# have some of it's connections removed, so we can actually do it
+	var this_node_remove_conns_req_func = func(side: int, slot: int):
+		_on_node_remove_connections_request(new_node.name, side, slot)
+	new_node.remove_connections_request.connect(
+		this_node_remove_conns_req_func.bind()
+	)
+	
 	$GraphEdit.add_child(new_node)
 	return new_node
 
@@ -241,3 +249,27 @@ func _on_graph_edit_node_deselected(node):
 	
 	node_deselected.emit(node)
 	_selected_nodes.erase(node)
+
+func _on_node_remove_connections_request(node_name: String, side: int, slot: int) -> void:
+	# If side is not set correctly, exit early
+	if not (side == 1 or side == -1):
+		return
+	
+	# Save all connections that reference this node. conn is in the form of
+	# { 
+	#	from_port: 0, 
+	#	from: "GraphNode name 0", 
+	#	to_port: 1, 
+	#	to: "GraphNode name 1" 
+	# }
+	var connections_to_remove = []
+	for conn in $GraphEdit.get_connection_list():
+		if side == -1 and conn.to_port == slot and conn.to == node_name:
+			connections_to_remove.push_back(conn)
+		elif side == 1 and conn.from_port == slot and conn.from == node_name:
+			connections_to_remove.push_back(conn)
+			
+	# Actually remove all of those saved connections
+	for conn in connections_to_remove:
+		$GraphEdit.disconnect_node(conn.from, conn.from_port, conn.to, conn.to_port)
+	
