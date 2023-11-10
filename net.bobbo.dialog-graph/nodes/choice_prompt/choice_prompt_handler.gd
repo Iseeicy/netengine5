@@ -15,8 +15,8 @@ var choice_data: ChoicePromptNodeData:
 
 ## Translates between the index of a visible choice, and the choice's actual
 ## index in the data it's from. This is to account for potentially non-visible
-## choices.
-var _choice_index_translation: Dictionary = {}
+## options.
+var _option_index_translation: Dictionary = {}
 
 #
 #	State Functions
@@ -28,30 +28,25 @@ func state_enter(_message: Dictionary = {}) -> void:
 	text_window.request_choice_confirm.connect(_on_text_window_request_choice_confirm.bind())
 	text_window.choice_confirmed.connect(_on_text_window_choice_confirm.bind())
 	
-	_choice_index_translation.clear()
-	var visible_choices: Array[String] = []
+	_option_index_translation.clear()
+	var visible_options: Array[ChoicePromptNodeDataOption] = []
 	
-	for index in range(0, choice_data.choices.size()):
+	for index in range(0, choice_data.options.size()):
 		# If there's no visibility condition to this choice, then it's always
 		# considered visible.
-		if not (index in choice_data.visibility_conditions.keys()):
-			_choice_index_translation[visible_choices.size()] = index
-			visible_choices.push_back(choice_data.choices[index])
+		if choice_data.options[index].visibility_condition == null:
+			_option_index_translation[visible_options.size()] = index
+			visible_options.push_back(choice_data.options[index])
 			continue
-
+	
 		# If there IS a visibility condition, then if it's currently true,
 		# then this condition is visible
-		var condition: KnowledgeBool = choice_data.visibility_conditions[index]
-		if condition.get_value():
-			_choice_index_translation[visible_choices.size()] = index
-			visible_choices.push_back(choice_data.choices[index])
+		if choice_data.options[index].visibility_condition.get_value():
+			_option_index_translation[visible_options.size()] = index
+			visible_options.push_back(choice_data.options[index])
 
 	# Construct the prompt to display in the text window
-	var prompt = TextWindowChoicePrompt.create_prompt_with_text(
-		choice_data.text, 
-		visible_choices
-	)
-	
+	var prompt = _options_to_choice_prompt(choice_data.text, visible_options)
 	text_window.show_choice_prompt(prompt)
 	
 func state_exit() -> void:
@@ -60,6 +55,20 @@ func state_exit() -> void:
 	text_window.request_choice_hover.disconnect(_on_text_window_request_choice_hover.bind())
 	_get_parent_state().state_exit()
 	
+#
+#	Private Functions
+#
+
+## Given a text prompt and a list of options from this node, convert into a
+## format that a TextWindow can work with.
+func _options_to_choice_prompt(text: String, options: Array[ChoicePromptNodeDataOption]) -> TextWindowChoicePrompt:
+	# Extract the text for each option and store it into an array
+	var text_options: Array[String] = []
+	for option in options:
+		text_options.append(option.text)
+	
+	return TextWindowChoicePrompt.create_prompt_with_text(text, text_options)
+
 #
 #	Signals
 #
@@ -78,7 +87,7 @@ func _on_text_window_request_choice_confirm(index: int) -> void:
 
 ## Called when the text window has confirmed a choice
 func _on_text_window_choice_confirm(visible_index: int, _prompt: TextWindowChoicePrompt) -> void:
-	var index = _choice_index_translation[visible_index]
+	var index = _option_index_translation[visible_index]
 	
 	# Get the connections to this choice node
 	var connections = graph.get_connections_from(id)

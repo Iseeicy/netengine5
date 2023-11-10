@@ -43,12 +43,10 @@ func setup(index: int):
 func get_text() -> String:
 	return _line_edit.text
 	
-func set_text(new_text: String) -> void:
-	_line_edit.set_text(new_text)
+func set_option(new_option: ChoicePromptNodeDataOption) -> void:
+	_line_edit.set_text(new_option.text)
+	_condition_resource_field.set_target_resource(new_option.visibility_condition)
 	
-func set_visibility_condition(condition: KnowledgeBool) -> void:
-	_condition_resource_field.set_target_resource(condition)
-
 #
 #	Private Functions
 #

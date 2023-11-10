@@ -32,23 +32,16 @@ func set_node_data(data: GraphNodeData) -> GraphNodeData:
 		_free_option_control(option)
 	_choice_options.clear()	
 	
-	# Set all of the text choices
-	for choice in casted_data.choices:
+	var result = super(casted_data)
+	
+	# Create controls for every option
+	for option_data in casted_data.options:
 		var new_option = _new_option_control()
 		_choice_options.push_back(new_option)
-		new_option.set_text(choice)
-	
-	# Set all of the visibility conditions
-	for vis_index in casted_data.visibility_conditions.keys():
-		if vis_index >= casted_data.choices.size():
-			continue
-		_choice_options[vis_index].set_visibility_condition(
-			casted_data.visibility_conditions[vis_index]
-		)
+		new_option.set_option(option_data)
 	
 	_update_size()
-	return super(casted_data)
-
+	return result
 #
 #	Private Functions
 #
@@ -59,7 +52,9 @@ func _update_size():
 func _add_new_option() -> void:
 	var new_option = _new_option_control()
 	_choice_options.push_back(new_option)	
-	_casted_data.choices.push_back("")
+	_casted_data.options.push_back(
+		ChoicePromptNodeDataOption.new()
+	)
 	data_updated.emit(_casted_data)
 
 func _remove_last_option() -> void:
@@ -68,10 +63,7 @@ func _remove_last_option() -> void:
 
 	var old_option = _choice_options.pop_back()
 	_free_option_control(old_option)
-	_casted_data.choices.pop_back()
-	
-	var index = _casted_data.choices.size()
-	_casted_data.visibility_conditions.erase(index)
+	_casted_data.options.pop_back()
 	data_updated.emit(_casted_data)
 	
 func _new_option_control() -> ChoicePromptOptionContainer:
@@ -127,17 +119,9 @@ func _on_settings_visibility_changed(_is_visible: bool):
 	_update_size()
 	
 func _on_text_changed(index: int, new_text: String) -> void:
-	_casted_data.choices[index] = new_text
+	_casted_data.options[index].text = new_text
 	data_updated.emit(_casted_data)
 	
 func _on_visibility_condition_changed(index: int, condition: KnowledgeBool) -> void:
-	# If the resource field cleared it's value, erase this condition from
-	# our data
-	if condition == null:
-		_casted_data.visibility_conditions.erase(index)
-	# If the resource field assigned a new value, set this new condition
-	# in our data
-	else:
-		_casted_data.visibility_conditions[index] = condition
-	
+	_casted_data.options[index].visibility_condition = condition
 	data_updated.emit(_casted_data)
