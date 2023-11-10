@@ -66,6 +66,10 @@ func _remove_last_option() -> void:
 	_casted_data.options.pop_back()
 	data_updated.emit(_casted_data)
 	
+	# Request that any connections on the port we just removed be removed as
+	# well, so that there's no invalid connections.
+	remove_connections_request.emit(1, _casted_data.options.size())
+	
 func _new_option_control() -> ChoicePromptOptionContainer:
 	var new_option = choice_option_scene.instantiate()
 	add_child(new_option)

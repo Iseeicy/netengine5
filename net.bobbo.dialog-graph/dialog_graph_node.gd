@@ -8,6 +8,10 @@ class_name DialogGraphNode
 
 ## Emitted when this node's data has been changed in some way
 signal data_updated(data: GraphNodeData)
+## Emitted when this node is requesting that all connections be removed from a
+## specific slot. `side` is which side of the slot to remove from (-1 for left,
+## 1 for right). `slot` is the actual slot index to remove connections from.
+signal remove_connections_request(side: int, slot: int)
 
 #
 #	Public Variables
