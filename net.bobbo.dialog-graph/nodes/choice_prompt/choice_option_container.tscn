@@ -1,8 +1,11 @@
-[gd_scene load_steps=2 format=3 uid="uid://cqqx7k6cprmbq"]
+[gd_scene load_steps=3 format=3 uid="uid://cqqx7k6cprmbq"]
 
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.dialog-graph/nodes/choice_prompt/choice_option_container.gd" id="1_leofu"]
+[ext_resource type="PackedScene" uid="uid://c4tb0cbcblddu" path="res://addons/netengine5/net.bobbo.knowledge/resource_fields/knowledge_bool/knowledge_bool_resource_field.tscn" id="2_pag7q"]
 
 [node name="ChoiceOptionContainer" type="PanelContainer"]
+offset_right = 281.0
+offset_bottom = 41.0
 script = ExtResource("1_leofu")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
@@ -36,9 +39,18 @@ text = " v "
 visible = false
 layout_mode = 2
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/OptionSettingsContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/OptionSettingsContainer"]
 layout_mode = 2
-text = "Visibility condition yadda yadda"
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/OptionSettingsContainer/HBoxContainer"]
+layout_mode = 2
+text = "Visible if: "
+vertical_alignment = 1
+
+[node name="KnowledgeBoolResourceField" parent="MarginContainer/VBoxContainer/OptionSettingsContainer/HBoxContainer" instance=ExtResource("2_pag7q")]
+layout_mode = 2
+size_flags_horizontal = 3
 
 [connection signal="text_changed" from="MarginContainer/VBoxContainer/OptionEditContainer/LineEdit" to="." method="_on_line_edit_text_changed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/OptionEditContainer/SettingsButton" to="." method="_on_settings_button_pressed"]
+[connection signal="target_resource_updated" from="MarginContainer/VBoxContainer/OptionSettingsContainer/HBoxContainer/KnowledgeBoolResourceField" to="." method="_on_knowledge_bool_resource_field_target_resource_updated"]

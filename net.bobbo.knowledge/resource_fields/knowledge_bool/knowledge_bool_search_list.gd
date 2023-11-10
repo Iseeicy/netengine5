@@ -1,9 +1,10 @@
+@tool
 extends ResourceSearchList
-class_name KnowledgeSearchList
+class_name KnowledgeBoolSearchList
 
 #
 #	Virtual Functions
 #
 	
 func _is_resource_correct_type(resource) -> bool:
-	return resource is Knowledge
+	return resource is KnowledgeBool
