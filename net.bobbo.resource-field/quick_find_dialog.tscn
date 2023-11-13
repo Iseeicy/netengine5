@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://cfekg614yldtd"]
+[gd_scene load_steps=4 format=3 uid="uid://cfekg614yldtd"]
 
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.resource-field/quick_find_dialog.gd" id="1_5o6oh"]
 [ext_resource type="Texture2D" uid="uid://cg1yjswmf8wif" path="res://addons/netengine5/net.bobbo.resource-field/icons/search_icon.png" id="2_ptlds"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.resource-field/resource_search_list.gd" id="3_qmyo5"]
 
 [node name="QuickFindDialog" type="ConfirmationDialog"]
 title = "Quick Find..."
@@ -32,3 +33,30 @@ text = "Search:"
 texture_filter = 1
 layout_mode = 2
 right_icon = ExtResource("2_ptlds")
+
+[node name="ResourceSearchList" type="ItemList" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+item_count = 21
+item_0/text = "res://addons/netengine5/net.bobbo.dialog-graph/editor/preview_text_window/window_theme.tres"
+item_1/text = "res://addons/netengine5/net.bobbo.dialog-graph/nodes/change_character/change_character_desc.tres"
+item_2/text = "res://addons/netengine5/net.bobbo.dialog-graph/nodes/choice_prompt/choice_prompt_desc.tres"
+item_3/text = "res://addons/netengine5/net.bobbo.dialog-graph/nodes/dialog_text/dialog_text_desc.tres"
+item_4/text = "res://addons/netengine5/net.bobbo.dialog-graph/nodes/entry/entry_desc.tres"
+item_5/text = "res://addons/netengine5/net.bobbo.dialog-graph/nodes/forwarder/forwarder_desc.tres"
+item_6/text = "res://addons/netengine5/net.bobbo.dialog-graph/nodes/knowledge_action/knowledge_action_desc.tres"
+item_7/text = "res://addons/netengine5/net.bobbo.text-reader/sounds/console/console.tres"
+item_8/text = "res://addons/netengine5/net.bobbo.text-reader/sounds/iseeicy/iseeicy.tres"
+item_9/text = "res://addons/netengine5/net.bobbo.text-reader/sounds/jam/jam.tres"
+item_10/text = "res://addons/netengine5/net.bobbo.text-reader/sounds/marvi/marvi.tres"
+item_11/text = "res://addons/netengine5/net.bobbo.text-window.a-weeks-passing/window_theme.tres"
+item_12/text = "res://addons/netengine5/net.bobbo.text-window.dreams-of-being/window_theme.tres"
+item_13/text = "res://addons/netengine5/net.bobbo.text-window.three-percent-power-saver/window_theme.tres"
+item_14/text = "res://addons/netengine5/net.bobbo.text-window.you-played-yourself/window_theme.tres"
+item_15/text = "res://test_graph.tres"
+item_16/text = "res://test_resources/know_bool.tres"
+item_17/text = "res://test_resources/know_float.tres"
+item_18/text = "res://test_resources/know_int.tres"
+item_19/text = "res://test_resources/know_string.tres"
+item_20/text = "res://test_resources/test_char.tres"
+script = ExtResource("3_qmyo5")

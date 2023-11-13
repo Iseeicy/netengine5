@@ -1,7 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://dsh4d2j8tjfij"]
-
-[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.character/resource_field/character_search_list.gd" id="1_pj5y2"]
-
-[node name="CharacterDefinitionSearchList" type="ItemList"]
-size_flags_vertical = 3
-script = ExtResource("1_pj5y2")

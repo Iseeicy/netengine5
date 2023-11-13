@@ -1,7 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://cnfwhuon6lt30"]
+[gd_scene load_steps=5 format=3 uid="uid://cnfwhuon6lt30"]
 
-[ext_resource type="PackedScene" uid="uid://dg37jnk72yyc8" path="res://addons/netengine5/net.bobbo.character/resource_field/character_def_resource_field.tscn" id="1_8f12q"]
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.dialog-graph/nodes/change_character/change_character_node.gd" id="1_ytoo5"]
+[ext_resource type="PackedScene" uid="uid://bbg1cob3e3bae" path="res://addons/netengine5/net.bobbo.resource-field/resource_field.tscn" id="2_outqy"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.character/resource_field/character_definition_search_filter.gd" id="3_gut2t"]
+
+[sub_resource type="Resource" id="Resource_lwi5y"]
+script = ExtResource("3_gut2t")
 
 [node name="ChangeCharacterNode" type="GraphNode"]
 offset_left = 422.0
@@ -36,7 +40,8 @@ script = ExtResource("1_ytoo5")
 layout_mode = 2
 text = "Character:"
 
-[node name="CharacterDefResourceField" parent="." instance=ExtResource("1_8f12q")]
+[node name="CharacterDefResourceField" parent="." instance=ExtResource("2_outqy")]
 layout_mode = 2
+filter = SubResource("Resource_lwi5y")
 
 [connection signal="target_resource_updated" from="CharacterDefResourceField" to="." method="_on_character_def_resource_field_target_resource_updated"]

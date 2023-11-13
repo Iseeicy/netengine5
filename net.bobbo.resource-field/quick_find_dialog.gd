@@ -9,8 +9,8 @@ class_name QuickFindDialog
 ## Emitted when the path to a resource has been confirmed / picked
 signal confirmed_path(path: String)
 
-## The scene to use for this dialog's resource list.
-@export var search_list_scene: PackedScene = preload("resource_search_list.tscn")
+## The filter to use for this dialog's resource list.
+@export var filter: ResourceSearchFilter = null
 
 #
 #	Private Variables
@@ -19,7 +19,7 @@ signal confirmed_path(path: String)
 ## The currently selected path. This isn't necessarily the confirmed
 ## path, until the `confirmed_path` signal is called.
 var _selected_path: String = ""
-
+## The search list used to display all resource options
 var _search_list: ResourceSearchList = null
 
 #
@@ -35,12 +35,13 @@ func _ready():
 	# our search_list_scene variable :3
 	await get_parent().ready
 	
-	# Spawn the search list and connect it to us
-	_search_list = search_list_scene.instantiate()
-	$VBoxContainer.add_child(_search_list)
+	# Setup the search list and connect it to us
+	_search_list = $VBoxContainer/ResourceSearchList
+	_search_list.filter = filter
 	_search_list.item_selected.connect(
 		_on_resource_search_list_item_selected.bind()
 	)
+	_search_list.scan_filesystem()
 
 #
 #	Public Functions

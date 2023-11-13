@@ -1,7 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://bcbts4oynusld"]
+[gd_scene load_steps=5 format=3 uid="uid://bcbts4oynusld"]
 
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.dialog-graph/nodes/knowledge_action/knowledge_action_node.gd" id="1_hxisw"]
-[ext_resource type="PackedScene" uid="uid://c4tb0cbcblddu" path="res://addons/netengine5/net.bobbo.knowledge/resource_fields/knowledge/knowledge_resource_field.tscn" id="2_aykx8"]
+[ext_resource type="PackedScene" uid="uid://bbg1cob3e3bae" path="res://addons/netengine5/net.bobbo.resource-field/resource_field.tscn" id="2_k25w0"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.knowledge/resource_fields/knowledge/knowledge_search_filter.gd" id="3_vi5vs"]
+
+[sub_resource type="Resource" id="Resource_8dtse"]
+script = ExtResource("3_vi5vs")
 
 [node name="KnowledgeActionNode" type="GraphNode"]
 offset_left = 664.0
@@ -54,10 +58,12 @@ script = ExtResource("1_hxisw")
 layout_mode = 2
 text = "Knowledge:"
 
-[node name="KnowledgeResourceField" parent="." instance=ExtResource("2_aykx8")]
+[node name="KnowledgeResourceField" parent="." instance=ExtResource("2_k25w0")]
 layout_mode = 2
+filter = SubResource("Resource_8dtse")
 
 [node name="HSeparator" type="HSeparator" parent="."]
+visible = false
 layout_mode = 2
 
 [node name="Types" type="PanelContainer" parent="."]
