@@ -50,54 +50,65 @@ func delete_node(node: GraphNode) -> void:
 ## Compile the state of the the visual dialog graph that this editor represents
 ## down to a specific DialogGraph resource so that it can be execute and/or
 ## saved.
-func save_to_resource(dialog_graph: DialogGraph) -> void:
-	# Collect the node data from children, and note what GraphNode child
-	# it belongs to.
-	var data_to_add: Array = []
+func save_to_resource(packed_graph: PackedDialogGraph) -> void:
+	# Collect all data from the graph node children, and store the node's name
+	# as well
+	var data_to_add: Array[GraphNodeData] = []
+	var data_to_add_by_name: Dictionary = {} # String -> GraphNodeData
 	for child in $GraphEdit.get_children():
-		if not (child is DialogGraphNode):
+		if not child is DialogGraphNode:
 			continue
-			
+		# As long as this child is a dialog graph node, we can get it's data!
 		var node_data = child.get_node_data()
 		node_data.position = child.position_offset
-		data_to_add.push_back([child, node_data])
+		data_to_add.push_back(node_data)
+		data_to_add_by_name[child.name] = node_data
 	
-	# Tell the given graph that we have a new list of nodes. This will update
-	# the graph's node list internally and keep IDs correctly
-	var updated_data_to_add: Array[GraphNodeData] = []
+	# Find the largest ID, and find IDs that need to be updated
+	var largest_id: int = -1
+	var data_to_add_ids_for: Array[GraphNodeData] = []
 	for data in data_to_add:
-		updated_data_to_add.push_back(data[1])
-	dialog_graph.update_nodes(updated_data_to_add)
+		if data.id == -1:
+			data_to_add_ids_for.push_back(data)
+		elif data.id > largest_id:
+			largest_id = data.id
 	
-	# Use the dialog graph and our previously cached array of GraphNode children
-	# to create a map that allows us to translate the child name into the
-	# graph's node ID.
-	var name_to_id: Dictionary = {}
-	var data_to_id_map = dialog_graph.create_node_to_index_map()
-	for data_pair in data_to_add:
-		var child = data_pair[0]			# The child graph node
-		var node_data = data_pair[1]		# The data of the node itself
-		var id = data_to_id_map[node_data]	# The id of this data in the graph
-		name_to_id[child.name] = id
+	# Assign IDs to all data that doesn't have an ID yet
+	for data in data_to_add_ids_for:
+		largest_id += 1
+		data.id = largest_id
+	
+	# Clear all connections and nodes from the packed graph
+	packed_graph.clear()
+	
+	# Pack all of the data into the graph, and get a map that let's us find the
+	# new ID for each given data
+	var data_to_index_map = packed_graph.set_nodes(data_to_add)
+	
+	# Ensure that there is at least one entry node
+	packed_graph.ensure_entry_node()
 	
 	# Get connections in the form of:
-	# { from_port: 0, from: "GraphNode name 0", to_port: 1, 
-	# to: "GraphNode name 1" }
-	var new_connections: Array[NodeConnection] = []
-	for connection in $GraphEdit.get_connection_list():
-		new_connections.push_back(
-			NodeConnection.create(
-				name_to_id[connection.from], 
-				connection.from_port, 
-				name_to_id[connection.to], 
-				connection.to_port
-			)
-		)
-	dialog_graph.update_connections(new_connections)
-
+	# { from_port: 0, from: "graphname 0", to_port: 1, to: "Graphname 1" }
+	var current_connections: Array[Dictionary] = $GraphEdit.get_connection_list()
+	
+	# Go through each connection and translate it to use the new set of IDs
+	# instead of node names
+	var translated_connections: Array[Dictionary] = []
+	for conn in current_connections:
+		translated_connections.push_back({
+			"from_id": data_to_index_map[data_to_add_by_name[conn["from"]]],
+			"from_port": conn["from_port"],
+			"to_id": data_to_index_map[data_to_add_by_name[conn["to"]]],
+			"to_port": conn["to_port"]
+		})
+	
+	# Add all of the new connections
+	packed_graph.connect_many_nodes(translated_connections)
+	
 ## Clear the current state and load the state of a previously compiled 
-## DialogGraph.
-func load_from_resource(dialog_graph: DialogGraph) -> void:
+## PackedDialogGraph.
+func load_from_resource(packed_graph: PackedDialogGraph) -> void:
 	# Deselect all nodes
 	for node in _selected_nodes:
 		node_deselected.emit(node)
@@ -110,40 +121,41 @@ func load_from_resource(dialog_graph: DialogGraph) -> void:
 			continue
 		child.queue_free()
 	
-	if dialog_graph == null:
+	if packed_graph == null:
 		return
 	
-	# Stores spawned controls by their ID (int -> DialogGraphNode)
-	var control_by_id: Dictionary = {}
+	# Ensure that this graph at least has an entry node
+	packed_graph.ensure_entry_node()
+	
+	# Unpack the graph into something easy to work with
+	var runtime_graph: RuntimeDialogGraph = RuntimeDialogGraph.new(packed_graph)
+	
+	# Stores spawned controls by their data (GraphNodeData -> DialogGraphNode)
+	var control_by_node_data: Dictionary = {}
 	
 	# Create the controls for each node
-	for id in dialog_graph.all_nodes.keys():
-		var data: GraphNodeData = dialog_graph.all_nodes[id]
-		var desc = GraphNodeDB.find_descriptor_for_data(data)
-		
-		if desc.graph_node_scene == null:
-			printerr("Couldn't find control for %s" % data)
-			continue
-			
+	for node_data in runtime_graph.get_all_nodes():
 		# Spawn the control, add it to the dict, and make it represent
 		# this data
-		var control: DialogGraphNode = _spawn_node(desc)
-		control.position_offset = data.position
-		control_by_id[id] = control
-		control.set_node_data(data)
+		var control: DialogGraphNode = _spawn_node(node_data.descriptor)
+		if not control:
+			continue
+		
+		control.position_offset = node_data.position
+		control_by_node_data[node_data] = control
+		control.set_node_data(node_data)
 		
 	# Actually connect the nodes
-	for conn in dialog_graph.connections:
+	for conn in runtime_graph.get_all_connections():
 		# Get the nodes with these IDs
-		var from_node = control_by_id[conn.from_id]
-		var to_node = control_by_id[conn.to_id]
+		var from_node = control_by_node_data[conn.from_node]
+		var to_node = control_by_node_data[conn.to_node]
 		
 		# ...and connect em in the graph edit!
 		$GraphEdit.connect_node(
 			from_node.name, conn.from_port, 
 			to_node.name, conn.to_port
 		)
-
 
 #
 #	Private Functions

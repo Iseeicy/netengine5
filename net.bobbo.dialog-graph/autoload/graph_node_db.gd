@@ -19,9 +19,25 @@ extends Node
 #	Public Funcitons
 #
 
-## Given some node data, find the descriptor that it belongs to.
-func find_descriptor_for_data(data: GraphNodeData) -> DialogGraphNodeDescriptor:
+func create_data(node_name: String) -> GraphNodeData:
+	var desc = find_descriptor_by_name(node_name)
+	if desc == null:
+		return null
+	return desc.instantiate_data()
+
+func find_descriptor_by_name(node_name: String) -> DialogGraphNodeDescriptor:
 	for desc in descriptors:
-		if desc.data_script == data.get_script():
+		if desc.node_name == node_name:
 			return desc
 	return null
+
+## Given some data script, find the descriptor that it belongs to.
+func find_descriptor_for_data_script(data_script: Script) -> DialogGraphNodeDescriptor:
+	for desc in descriptors:
+		if desc.data_script == data_script:
+			return desc
+	return null
+
+## Given some node data, find the descriptor that it belongs to.
+func find_descriptor_for_data(data: GraphNodeData) -> DialogGraphNodeDescriptor:
+	return find_descriptor_for_data_script(data.get_script())

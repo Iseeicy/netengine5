@@ -29,7 +29,7 @@ func state_enter(_message: Dictionary = {}) -> void:
 	text_window.choice_confirmed.connect(_on_text_window_choice_confirm.bind())
 	
 	_option_index_translation.clear()
-	var visible_options: Array[ChoicePromptNodeDataOption] = []
+	var visible_options: Array[Dictionary] = []
 	
 	for index in range(0, choice_data.options.size()):
 		# If there's no visibility condition to this choice, then it's always
@@ -61,11 +61,11 @@ func state_exit() -> void:
 
 ## Given a text prompt and a list of options from this node, convert into a
 ## format that a TextWindow can work with.
-func _options_to_choice_prompt(text: String, options: Array[ChoicePromptNodeDataOption]) -> TextWindowChoicePrompt:
+func _options_to_choice_prompt(text: String, options: Array[Dictionary]) -> TextWindowChoicePrompt:
 	# Extract the text for each option and store it into an array
 	var text_options: Array[String] = []
 	for option in options:
-		text_options.append(option.text)
+		text_options.append(option.get("text", ""))
 	
 	return TextWindowChoicePrompt.create_prompt_with_text(text, text_options)
 
@@ -90,7 +90,7 @@ func _on_text_window_choice_confirm(visible_index: int, _prompt: TextWindowChoic
 	var index = _option_index_translation[visible_index]
 	
 	# Get the connections to this choice node
-	var connections = graph.get_connections_from(id)
+	var connections = graph.get_connections_from(data)
 	var translated_index = -1
 	
 	# Try to find the connection that uses our chosen index

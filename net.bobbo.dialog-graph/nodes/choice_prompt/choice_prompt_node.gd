@@ -53,7 +53,7 @@ func _add_new_option() -> void:
 	var new_option = _new_option_control()
 	_choice_options.push_back(new_option)	
 	_casted_data.options.push_back(
-		ChoicePromptNodeDataOption.new()
+		{ "text": "", "visibility_condition": null, }
 	)
 	data_updated.emit(_casted_data)
 
