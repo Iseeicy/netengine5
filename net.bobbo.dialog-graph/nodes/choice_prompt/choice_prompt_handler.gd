@@ -34,14 +34,14 @@ func state_enter(_message: Dictionary = {}) -> void:
 	for index in range(0, choice_data.options.size()):
 		# If there's no visibility condition to this choice, then it's always
 		# considered visible.
-		if choice_data.options[index].visibility_condition == null:
+		if choice_data.options[index].get(ChoicePromptNodeData.OPTIONS_VIS_COND_KEY, null) == null:
 			_option_index_translation[visible_options.size()] = index
 			visible_options.push_back(choice_data.options[index])
 			continue
 	
 		# If there IS a visibility condition, then if it's currently true,
 		# then this condition is visible
-		if choice_data.options[index].visibility_condition.get_value():
+		if choice_data.options[index][ChoicePromptNodeData.OPTIONS_VIS_COND_KEY].get_value():
 			_option_index_translation[visible_options.size()] = index
 			visible_options.push_back(choice_data.options[index])
 
@@ -65,7 +65,9 @@ func _options_to_choice_prompt(text: String, options: Array[Dictionary]) -> Text
 	# Extract the text for each option and store it into an array
 	var text_options: Array[String] = []
 	for option in options:
-		text_options.append(option.get("text", ""))
+		text_options.append(
+			option.get(ChoicePromptNodeData.OPTIONS_TEXT_KEY, "")
+		)
 	
 	return TextWindowChoicePrompt.create_prompt_with_text(text, text_options)
 

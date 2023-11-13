@@ -52,9 +52,10 @@ func _update_size():
 func _add_new_option() -> void:
 	var new_option = _new_option_control()
 	_choice_options.push_back(new_option)	
-	_casted_data.options.push_back(
-		{ "text": "", "visibility_condition": null, }
-	)
+	_casted_data.options.push_back({ 
+		ChoicePromptNodeData.OPTIONS_TEXT_KEY: "", 
+		ChoicePromptNodeData.OPTIONS_VIS_COND_KEY: null, 
+	})
 	data_updated.emit(_casted_data)
 
 func _remove_last_option() -> void:
@@ -127,5 +128,5 @@ func _on_text_changed(index: int, new_text: String) -> void:
 	data_updated.emit(_casted_data)
 	
 func _on_visibility_condition_changed(index: int, condition: KnowledgeBool) -> void:
-	_casted_data.options[index].visibility_condition = condition
+	_casted_data.options[index][ChoicePromptNodeData.OPTIONS_VIS_COND_KEY] = condition
 	data_updated.emit(_casted_data)

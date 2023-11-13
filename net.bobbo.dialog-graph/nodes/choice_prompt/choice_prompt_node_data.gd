@@ -4,6 +4,8 @@ class_name ChoicePromptNodeData
 
 const TEXT_KEY: String = "t"
 const OPTIONS_KEY: String = "o"
+const OPTIONS_TEXT_KEY: String = "text"
+const OPTIONS_VIS_COND_KEY: String = "visibility_condition"
 
 ## The text to show when displaying this prompt
 var text: String = "":
