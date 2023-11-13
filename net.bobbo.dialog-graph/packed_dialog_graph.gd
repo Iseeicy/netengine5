@@ -44,7 +44,7 @@ func ensure_entry_node() -> void:
 ## Returns null otherwise
 func get_node_dict(id: int):
 	for node_dict in nodes:
-		if node_dict.get("_i", null) == id:
+		if node_dict.get(GraphNodeData.ID_KEY, null) == id:
 			return node_dict
 	return null
 
@@ -194,7 +194,7 @@ func _sort_connections() -> void:
 
 ## Sort the node array by the ID of each node
 func _sort_nodes() -> void:
-	nodes.sort_custom(func(a, b): return a["_i"] < b["_i"])
+	nodes.sort_custom(func(a, b): return a[GraphNodeData.ID_KEY] < b[GraphNodeData.ID_KEY])
 
 ## Return what the starting state of _last_id should be.
 ## This will either be the largest ID that has previously been used,
@@ -203,12 +203,12 @@ func _init_last_id() -> int:
 	if nodes.size() <= 0:
 		return -1
 		
-	var largest_id: int = nodes[0]["_i"]
+	var largest_id: int = nodes[0][GraphNodeData.ID_KEY]
 	
 	# Find the largest ID in the list of dicts
 	for node_dict in nodes:
-		if node_dict["_i"] > largest_id:
-			largest_id = node_dict["_i"]
+		if node_dict[GraphNodeData.ID_KEY] > largest_id:
+			largest_id = node_dict[GraphNodeData.ID_KEY]
 	return largest_id
 
 ## Generate the next ID for a node. This initializes _last_id if it
@@ -222,6 +222,6 @@ func _get_next_id() -> int:
 
 func _has_node_with_descriptor(descriptor: DialogGraphNodeDescriptor) -> bool:
 	for node_dict in nodes:
-		if node_dict.get("_d", null) == descriptor:
+		if node_dict.get(GraphNodeData.DESCRIPTOR_KEY, null) == descriptor:
 			return true
 	return false

@@ -91,7 +91,7 @@ func get_connections_to(node: GraphNodeData) -> Array[Connection]:
 func _unpack_node_data(node_dict: Dictionary) -> GraphNodeData:
 	# Use the descriptor cached in the node dict to figure out what kind of
 	# data structure to construct
-	var desc: DialogGraphNodeDescriptor = node_dict["_d"]
+	var desc: DialogGraphNodeDescriptor = node_dict[GraphNodeData.DESCRIPTOR_KEY]
 	var data = desc.instantiate_data()
 	
 	# Supply the actual internal data to the data structure
