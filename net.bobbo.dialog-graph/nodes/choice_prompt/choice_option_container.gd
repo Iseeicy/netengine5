@@ -44,8 +44,12 @@ func get_text() -> String:
 	return _line_edit.text
 	
 func set_option(new_option: Dictionary) -> void:
-	_line_edit.set_text(new_option.get("text", ""))
-	_condition_resource_field.set_target_resource(new_option.get("visibility_condition", null))
+	_line_edit.set_text(
+		new_option.get(ChoicePromptNodeData.OPTIONS_TEXT_KEY, "")
+	)
+	_condition_resource_field.set_target_resource(
+		new_option.get(ChoicePromptNodeData.OPTIONS_VIS_COND_KEY, null)
+	)
 	
 #
 #	Private Functions
