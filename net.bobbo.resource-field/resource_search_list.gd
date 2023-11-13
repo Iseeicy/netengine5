@@ -3,19 +3,18 @@ extends ItemList
 class_name ResourceSearchList
 
 #
+#	Exports
+#
+
+@export var filter: ResourceSearchFilter = null
+
+#
 #	Private Variables
 #
 
+var _default_filter: ResourceSearchFilter = ResourceSearchFilter.new()
 var _search_query: String = ""
 var _known_files: Array[String] = []
-
-#
-#	Godot Functions
-#
-
-func _ready():
-	scan_filesystem()
-	refresh_list()
 
 #
 #	Public Functions
@@ -29,6 +28,8 @@ func scan_filesystem() -> void:
 	var result_list: Array[String] = []
 	_scan_dir("res://", result_list)
 	_known_files = result_list
+	
+	refresh_list()
 
 func refresh_list() -> void:
 	clear()
@@ -78,7 +79,9 @@ func _should_include_file(absolute_path: String) -> bool:
 	var found_resource = load(absolute_path)
 	if found_resource == null:
 		return false
-	if not _is_resource_correct_type(found_resource):
+	
+	var filter_to_use = filter if filter != null else _default_filter
+	if not filter_to_use.should_resource_be_included(absolute_path, found_resource):
 		return false
 		
 	return true
@@ -89,14 +92,3 @@ func _file_matches_search(absolute_path: String, query: String) -> bool:
 		
 	return absolute_path.contains(query)
 	
-#
-#	Virtual Functions
-#
-
-## Is the given resource the right class type?
-## We need to make this a virtual function because for SOME
-## reason, Godot doesn't expose custom resource class names
-## when getting the class for a resource - but it DOES work
-## with the `is` keyword. Buh.
-func _is_resource_correct_type(resource) -> bool:
-	return resource is Resource
