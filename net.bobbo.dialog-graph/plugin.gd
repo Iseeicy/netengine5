@@ -16,16 +16,16 @@ const dialog_preview_scene = preload("editor/preview_text_window/dialog_preview.
 #	Private Variables
 #
 
-## The currently spawned instance of the Dialog Graph Editor, if there is one.
+## The currently spawned instance of the Dialog Graph Editor.
 var _graph_editor_instance: DialogGraphEditor = null
-## The currently spawned instance of the Dialog Preview TextWindow, if there is one.
+## The currently spawned instance of the Dialog Preview TextWindow.
 var _dialog_preview_instance: DialogPreview
 ## The currently selected resource.
 var _current_resource = null
 ## An internal DialogGraph that is constantly updated / rebuilt based on edits
 ## to the graph in the Dialog Graph Editor. This is used to visualize the current
 ## state of the live Dialog Graph, and preview navigating it at edit-time.
-var _temp_graph: DialogGraph = DialogGraph.new()
+var _temp_packed_graph: PackedDialogGraph = PackedDialogGraph.new()
 
 #
 #	Entry / Exit
@@ -35,10 +35,10 @@ var _temp_graph: DialogGraph = DialogGraph.new()
 ## enabled in ProjectSettings.
 func _enter_tree():
 	# Add types
-	add_custom_type("DialogGraph", "Resource", preload("dialog_graph.gd"), preload("icons/dialog_graph.png"))
 	add_custom_type("DialogGraphNode", "Resource", preload("dialog_graph_node.gd"), preload("icons/dialog_graph.png"))
 	add_custom_type("DialogGraphNodeDescriptor", "Resource", preload("dialog_graph_node_descriptor.gd"), preload("icons/dialog_graph.png"))
 	add_custom_type("GraphNodeData", "Resource", preload("graph_node_data.gd"), preload("icons/dialog_graph.png"))
+	add_custom_type("PackedDialogGraph", "Resource", preload("packed_dialog_graph.gd"), preload("icons/dialog_graph.png"))
 	add_custom_type("DialogRunner", "Node", preload("dialog_runner/dialog_runner.gd"), preload("icons/dialog_runner.png"))
 	add_custom_type("DialogRunnerState", "Node", preload("dialog_runner/dialog_runner_state.gd"), preload("icons/dialog_runner_state.png"))
 	add_custom_type("DialogRunnerStateActive", "Node", preload("dialog_runner/states/active.gd"), preload("icons/dialog_runner_state.png"))
@@ -102,9 +102,9 @@ func _exit_tree():
 	remove_custom_type("DialogRunnerState")
 	remove_custom_type("DialogRunner")
 	remove_custom_type("GraphNodeData")
+	remove_custom_type("PackedDialogGraph")
 	remove_custom_type("DialogGraphNodeDescriptor")
 	remove_custom_type("DialogGraphNode")
-	remove_custom_type("DialogGraph")
 
 #
 #	Editor Plugin Getters
@@ -130,9 +130,9 @@ func _has_main_screen():
 
 ## Given an unspecified object, does this plugin have a way to handle editing
 ## that object?
-## Returns true if the object is a DialogGraph.
+## Returns true if the object is a PackedDialogGraph.
 func _handles(object: Object) -> bool:
-	return object is DialogGraph
+	return object is PackedDialogGraph
 
 ## Focus on editing an object, or no longer focus on any object.
 func _edit(object: Object):
@@ -172,8 +172,8 @@ func _refresh_graph() -> void:
 	
 	# Write the current state of our graph editor control into the cached
 	# dialog graph, then update the dialog preview
-	_graph_editor_instance.save_to_resource(_temp_graph)
-	_dialog_preview_instance.update_graph(_temp_graph)
+	_graph_editor_instance.save_to_resource(_temp_packed_graph)
+	_dialog_preview_instance.update_graph(_temp_packed_graph)
 
 #
 #	Signals

@@ -32,6 +32,14 @@ class_name DialogGraphNodeDescriptor
 #	Functions
 #
 
+## Spawn a new instance of the GraphNodeData for this kind of DialogGraph node.
+func instantiate_data() -> GraphNodeData:
+	var new_data = GraphNodeData.new()
+	new_data.set_script(data_script)
+	new_data.descriptor = self
+	
+	return new_data
+
 ## Spawn a new instance of the Control that visually represents this
 ## kind of DialogGraph node.
 func instantiate_graph_node() -> DialogGraphNode:
@@ -40,8 +48,7 @@ func instantiate_graph_node() -> DialogGraphNode:
 	graph_node.descriptor = self
 	
 	# Create a new instance of the data script and assign it
-	var new_data = GraphNodeData.new()
-	new_data.set_script(data_script)
+	var new_data = instantiate_data()
 	graph_node.set_node_data(new_data)
 	
 	return graph_node

@@ -2,7 +2,21 @@
 extends GraphNodeData
 class_name ChoicePromptNodeData
 
+const TEXT_KEY: String = "t"
+const OPTIONS_KEY: String = "o"
+const OPTIONS_TEXT_KEY: String = "t"
+const OPTIONS_VIS_COND_KEY: String = "vc"
+
 ## The text to show when displaying this prompt
-@export var text: String = ""
+var text: String = "":
+	get:
+		return _get_internal_data(TEXT_KEY, "")
+	set(new_text):
+		_set_internal_data(TEXT_KEY, new_text)
+
 ## A list of options to present the user
-@export var options: Array[ChoicePromptNodeDataOption] = []
+var options: Array[Dictionary] = []:
+	get:
+		return _get_internal_data(OPTIONS_KEY, [] as Array[Dictionary])
+	set(new_options):
+		_set_internal_data(OPTIONS_KEY, new_options)
