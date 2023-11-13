@@ -6,10 +6,15 @@ class_name RuntimeDialogGraph
 #	Classes
 #
 
+## A structure used to store what nodes are connected to what
 class Connection extends RefCounted:
+	## The node that this connection starts from
 	var from_node: GraphNodeData = null
+	## The port that this connection is coming from, on `from_node`
 	var from_port: int = -1
+	## The node that this connection goes to
 	var to_node: GraphNodeData = null
+	## The port that this connection is going to, on `to_node`
 	var to_port: int = -1
 
 #
@@ -25,6 +30,7 @@ var _connections: Array[Connection] = []
 #	Constructor
 #
 
+## Creates a new RuntimeDialogGraph, given a source packed graph to create from
 func _init(source_graph: PackedDialogGraph) -> void:
 	var new_nodes: Dictionary = {}
 	var new_conns: Array[Connection] = []
@@ -44,25 +50,30 @@ func _init(source_graph: PackedDialogGraph) -> void:
 #	Public Functions
 #
 
+## Does this graph have a node with the given ID?
 func has_id(id: int) -> bool:
 	return id in _nodes.keys()
 
+## Returns a node in the graph with the given ID. Returns null if there is no
+## node with the given ID.
 func get_node(id: int) -> GraphNodeData:
 	return _nodes.get(id, null)
 
+## Returns a list of all nodes in the graph.
 func get_all_nodes() -> Array[GraphNodeData]:
 	var correctly_typed_array: Array[GraphNodeData] = []
 	for data in _nodes.values():
 		correctly_typed_array.append(data)
 	return correctly_typed_array
 
-## Get the entry node. Returns null if there is not an entry node.
+## Returns the entry node. Returns null if there is not an entry node.
 func get_entry_node() -> GraphNodeData:
 	for node in _nodes.values():
 		if node is EntryNodeData:
 			return node
 	return null
 
+## Returns a list of all connections in the graph.
 func get_all_connections() -> Array[Connection]:
 	return _connections
 
@@ -88,6 +99,7 @@ func get_connections_to(node: GraphNodeData) -> Array[Connection]:
 #	Private Functions
 #
 
+## Given some node data's dictionary, unpack it into an actual node data object.
 func _unpack_node_data(node_dict: Dictionary) -> GraphNodeData:
 	# Use the descriptor cached in the node dict to figure out what kind of
 	# data structure to construct
@@ -97,7 +109,8 @@ func _unpack_node_data(node_dict: Dictionary) -> GraphNodeData:
 	# Supply the actual internal data to the data structure
 	data.set_dict(node_dict)
 	return data
-	
+
+## Given a packed connection, unpack it into a connection object we can use.
 func _unpack_connection(conn_dict: Dictionary) -> Connection:
 	var conn: Connection = Connection.new()
 	conn.from_node = get_node(conn_dict["from_id"])

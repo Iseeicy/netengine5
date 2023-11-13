@@ -22,7 +22,9 @@ var _graph_editor_instance: DialogGraphEditor = null
 var _dialog_preview_instance: DialogPreview
 ## The currently selected resource.
 var _current_resource = null
-
+## An internal DialogGraph that is constantly updated / rebuilt based on edits
+## to the graph in the Dialog Graph Editor. This is used to visualize the current
+## state of the live Dialog Graph, and preview navigating it at edit-time.
 var _temp_packed_graph: PackedDialogGraph = PackedDialogGraph.new()
 
 #

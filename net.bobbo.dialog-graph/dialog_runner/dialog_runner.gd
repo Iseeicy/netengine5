@@ -49,8 +49,8 @@ func dialog_interact() -> void:
 func dialog_choice_hover(index: int) -> void:
 	dialog_choice_hovered.emit(index)
 
-## Starts running a given dialog graph. If entry node param is not provided, dialog will start
-## from the graph's entry node.
+## Unpacks and starts running a packed dialog graph. If `entry_node_id` is not 
+## provided, dialog will start from the graph's entry node.
 func run_dialog(packed_graph: PackedDialogGraph, entry_node_id: int = -1) -> void:
 	# Unpack the dialog graph into something we can actually use
 	var runtime_graph: RuntimeDialogGraph = RuntimeDialogGraph.new(packed_graph)
@@ -58,6 +58,8 @@ func run_dialog(packed_graph: PackedDialogGraph, entry_node_id: int = -1) -> voi
 	# Forward all logic to the runtime run method
 	run_runtime_dialog(runtime_graph, entry_node_id)
 
+## Starts running a runtime dialog graph. If `entry_node_id` is not provided,
+## dialog will start from the graph's entry node.
 func run_runtime_dialog(runtime_graph: RuntimeDialogGraph, entry_node_id: int = -1) -> void:
 	# If we can't find the explicitley provided entry node (or if there was no
 	# explicit entry node) then use the graph's entry node

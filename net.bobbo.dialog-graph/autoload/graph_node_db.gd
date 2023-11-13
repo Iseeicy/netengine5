@@ -19,12 +19,16 @@ extends Node
 #	Public Funcitons
 #
 
+## Given the name of a dialog node type, create a new instance of it's data
+## object. Returns null if there is no node by `node_name` found.
 func create_data(node_name: String) -> GraphNodeData:
 	var desc = find_descriptor_by_name(node_name)
 	if desc == null:
 		return null
 	return desc.instantiate_data()
 
+## Given the name of a dialog node type, find the `DialogGraphNodeDescriptor`
+## that it belongs to. Returns null if there is no node by `node_name` found.
 func find_descriptor_by_name(node_name: String) -> DialogGraphNodeDescriptor:
 	for desc in descriptors:
 		if desc.node_name == node_name:

@@ -18,7 +18,7 @@ var text_window: TextWindow:
 	get:
 		return _state_machine.text_window
 
-## The DialogGraph that the dialog runner is currently running through
+## The RuntimeDialogGraph that the dialog runner is currently running through
 var graph: RuntimeDialogGraph:
 	get:
 		return _state_machine.get_graph()
