@@ -37,4 +37,10 @@ class_name ItemDescriptor
 func create_instance() -> ItemInstance:
 	var instance = ItemInstance.new()
 	instance.setup(self)
+	instance.name = "%s_%s" % [item_name, get_instance_id()]
 	return instance
+
+## Returns the name to display to the user, for this item. If display name is
+## not set, this will return the item's internal name
+func get_display_name() -> String:
+	return display_name if not display_name.is_empty() else item_name
