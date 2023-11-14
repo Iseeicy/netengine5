@@ -45,14 +45,44 @@ func get_descriptor() -> ItemDescriptor: return _descriptor
 ## Returns the current SpaceState of this item.
 func get_space_state() -> SpaceState: return _space_state
 
-## Returns how many items are represented by this instance. Typically for equipment
-## this is 1, though for materials this number could increase.
-func get_stack_size() -> int: return _current_stack_size
-
 ## If this instance is in the game world, then this returns the object that
 ## represents it. Otherwise, this returns null
 func get_world_item() -> WorldItem:
 	return _current_world_item if _space_state == SpaceState.IN_WORLD else null
+
+
+## Returns how many items are represented by this instance. Typically for equipment
+## this is 1, though for materials this number could increase.
+func get_stack_size() -> int: return _current_stack_size
+
+## Set how many items are represented by this instance. Will be clamped between
+## 0 and the max stack size.
+func set_stack_size(size: int) -> void: 
+	_current_stack_size = clampi(size, 0, get_max_stack_size())
+
+## Returns how many items can possibly be fit in this instance.
+func get_max_stack_size() -> int: return _descriptor.max_stack_size
+
+## Returns how many items can still fit in this instance
+func get_stack_space_left() -> int: return get_max_stack_size() - get_stack_size()
+
+## Is this stack of items full?
+func is_stack_full() -> bool: return get_stack_size() >= _descriptor.max_stack_size
+
+## Merge our stack of items into another given stack of items. It's up to
+## whatever calls this to interpret the aftermath. This allows our item to
+## go to 0 stack size, which means it should be removed.
+func merge_stack_into(item: ItemInstance) -> void:
+	if item.get_descriptor() != self.get_descriptor():
+		return
+	
+	# Fit as much as we can into the given item
+	var can_fit_count = min(self.get_stack_size(), item.get_stack_space_left())
+	item.set_stack_size(item.get_stack_size() + can_fit_count)
+	
+	# Subtract from our stack size
+	self.set_stack_size(self.get_stack_size() - can_fit_count)
+
 
 ## Spawn and return a new instance of this item's view model, if there is one. 
 ## Returns null if there isn't one
