@@ -118,3 +118,10 @@ func put_in_world() -> bool:
 func put_in_inventory(inventory: ItemInventory) -> bool:
 	# TODO
 	return false
+
+## Places this item back into a limbo state, existing mostly just in memory.
+## If it was in the world, it is removed from the game world. If it was in an
+## inventory, it is removed from that inventory.
+func put_nowhere() -> void:
+	# TODO
+	return
