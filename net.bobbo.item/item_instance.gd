@@ -13,7 +13,17 @@ enum SpaceState {
 	IN_WORLD = 2,		# This item is in the game world somewhere.
 }
 
-
+## Used to indicate if an item instance operation succeeded, or if there was
+## some kind of error.
+enum InstanceError {
+	OK = 0,					# There is no error.
+	UNKNOWN = -1,			# We don't know the error, but there was one.
+	ALREADY_EXISTS = -2,	# This item already exists.
+	SCENE_MISSING = -3,		# The scene is in the descriptor is missing.
+	FILTER_DENIED = -4,		# A filter denied this.
+	NO_FIT = -5,			# This didn't fit.
+	DIFFERENT_TYPES = -6,	# This item isn't the same type.
+}
 
 #
 #	Private Variables
@@ -104,14 +114,15 @@ func instantiate_view_model() -> ItemViewModel:
 ## Places this item instance in the game world. If it was in an inventory, it is
 ## removed from that inventory.
 ## Returns
-## - `true` if the item was placed in the game world
-## - `false` if the item is already in the game world
-## - `false` if there is no scene in the descriptor for a WorldItem
-func put_in_world() -> bool:
+##	`InstanceError.OK` if the item was placed in the game world
+##	`InstanceError.ALREADY_EXISTS` if the item is already in the game world
+##	`InstanceError.SCENE_MISSING` if there is no scene in the descriptor for a
+##		WorldItem
+func put_in_world() -> InstanceError:
 	if _space_state == SpaceState.IN_WORLD:
-		return false
+		return InstanceError.ALREADY_EXISTS
 	if _descriptor.world_item_scene == null:
-		return false
+		return InstanceError.SCENE_MISSING
 	
 	_remove_from_inventory() # Remove from an inventory, if we're in one.
 	
@@ -119,23 +130,24 @@ func put_in_world() -> bool:
 	var world_item: WorldItem = get_descriptor().world_item_scene.instantiate()
 	world_item.setup(self)
 	_current_world_item = world_item
-	return true
+	
+	# Reparent us to the world item to make it easier to visualize where
+	# this item is, in the editor.
+	self.reparent(world_item)
+	
+	_space_state = SpaceState.IN_WORLD
+	return InstanceError.OK
 
 ## Places this item instance in an inventory. If it was in the world, it is
 ## removed from the game world. If it was in a different inventory, it is
 ## removed from that inventory.
 ## Optionally, put it in a specific slot of the inventory.
 ## Returns:
-## - `true` if the item was place in the inventory
-## - `false` if the item was rejected by the inventory's filter
-## - `false` if the entire item could not fit in the inventory
-func put_in_inventory(inventory: ItemInventory, slot: int = -1) -> bool:
-	# TODO
-	# CONTINUE HERE. This will use either put item in slot or push item
-	# depending on what slot is. We need to handle removing object upon push if it
-	# gets totally merged too. Perhaps this func should have an enum return type
-	# for better info?
-	
+##	`InstanceError.OK` if the item was place in the inventory
+##	`InstanceError.FILTER_DENIED` if the item was rejected by the inventory's
+##		filter.
+##	`InstanceError.NO_FIT` if the entire item could not fit in the inventory
+func put_in_inventory(inventory: ItemInventory, slot: int = -1) -> InstanceError:
 	# If we should just put this item anywhere in the inventory....
 	if slot == -1:
 		# Try to push the item in
@@ -143,16 +155,21 @@ func put_in_inventory(inventory: ItemInventory, slot: int = -1) -> bool:
 		
 		# Handle any errors
 		if error == ItemInventory.InventoryError.FILTER_DENIED:
-			return false
+			return InstanceError.FILTER_DENIED
 		if error == ItemInventory.InventoryError.NO_FIT:
-			return false
+			return InstanceError.NO_FIT
 		# Tell us about unhandled errors
 		if error != ItemInventory.InventoryError.OK:
 			printerr("`put_in_inventory` encountered unknown `push_item` error code %s" % error)
-			return false
+			return InstanceError.UNKNOWN
 		
-		_if_empty_free() 	# Free ourselves if we have no stack left
-		return true			# We pushed correctly!
+		# Reparent us to the inventory to make it easier to visualize where
+		# the item is, in the editor
+		self.reparent(inventory)
+		
+		_space_state = SpaceState.IN_INVENTORY
+		_if_empty_free() 		# Free ourselves if we have no stack left
+		return InstanceError.OK	# We pushed correctly!
 	# If we should put this item in a specific slot of the inventory...
 	else:
 		# Try to put the item into the specific slot
@@ -160,24 +177,34 @@ func put_in_inventory(inventory: ItemInventory, slot: int = -1) -> bool:
 		
 		# Handle any errors
 		if error == ItemInventory.InventoryError.FILTER_DENIED:
-			return false
-		if error == ItemInventory.InventoryError.SLOT_OCCUPIED:
-			return false
+			return InstanceError.FILTER_DENIED
+		if error == ItemInventory.InventoryError.DIFFERENT_TYPES:
+			return InstanceError.DIFFERENT_TYPES
+		if error == ItemInventory.InventoryError.NO_FIT:
+			return InstanceError.NO_FIT
 		# Tell us about unhandled errors
 		if error != ItemInventory.InventoryError.OK:
 			printerr("`put_in_inventory` encountered unknown `put_item_in_slot` error code %s" % error)
-			return false
+			return InstanceError.UNKNOWN
 		
-		pass
-	
-	return false
+		# Reparent us to the inventory to make it easier to visualize where
+		# the item is, in the editor
+		self.reparent(inventory)
+		
+		_space_state = SpaceState.IN_INVENTORY
+		_if_empty_free() 		# Free ourselves if we have no stack left
+		return InstanceError.OK	# We put correctly!
 
 ## Places this item back into a limbo state, existing mostly just in memory.
 ## If it was in the world, it is removed from the game world. If it was in an
 ## inventory, it is removed from that inventory.
 func put_nowhere() -> void:
-	# TODO
-	return
+	_remove_from_world()		# Make sure we're no longer in the world
+	_remove_from_inventory()	# Make sure we're no longer in an inventory
+	
+	# Place us into the item VOID plane
+	_space_state = SpaceState.NOWHERE
+	self.reparent(_find_item_voidplane())
 
 #
 #	Private Functions
@@ -195,7 +222,21 @@ func _remove_from_inventory() -> bool:
 	if slot_index != -1:
 		_current_parent_inventory.take_item_from_slot(slot_index)
 	_current_parent_inventory = null
+	_space_state = SpaceState.NOWHERE
 	return slot_index != -1
+
+## Remove this instance from the game world, if it's placed there.
+## Returns:
+##	`true` if it was removed from the world, and the WorldItem was free'd
+##	`false` if there was no WorldItem, and we're not in the game world.
+func _remove_from_world() -> bool:
+	if _current_world_item == null:
+		return false
+		
+	_current_world_item.queue_free()
+	_current_world_item = null
+	_space_state = SpaceState.NOWHERE
+	return true
 
 ## Checks to see if there's any items left in this stack. If there isn't, then
 ## this instance will be free'd.
@@ -208,3 +249,24 @@ func _if_empty_free() -> bool:
 	# If we have no items, then queue up our freeing!
 	queue_free()
 	return true
+
+## Find the VOID plane that items should be put in when they're nowhere. If
+## the VOID plane can not be found, it is created lazily.
+func _find_item_voidplane() -> Node:
+	const void_plane_key = "VOIDPlane"
+	const item_group_key = "Items"
+	
+	# Find or create the VOID plane node.
+	var void_plane = get_window().get_node_or_null(void_plane_key)
+	if void_plane == null:
+		void_plane = Node.new()
+		void_plane.name = void_plane_key
+		get_window().add_child(void_plane)
+	
+	var items_node = void_plane.get_node_or_null(item_group_key)
+	if items_node == null:
+		items_node = Node.new()
+		items_node.name = item_group_key
+		void_plane.add_child(items_node)
+	
+	return items_node
