@@ -179,6 +179,7 @@ func put_in_inventory(inventory: ItemInventory, slot: int = -1) -> InstanceError
 		
 		# Reparent us to the inventory to make it easier to visualize where
 		# the item is, in the editor
+		_remove_from_inventory()
 		_remove_from_world()
 		_change_parent(inventory)
 		
@@ -205,6 +206,7 @@ func put_in_inventory(inventory: ItemInventory, slot: int = -1) -> InstanceError
 		
 		# Reparent us to the inventory to make it easier to visualize where
 		# the item is, in the editor
+		_remove_from_inventory()
 		_remove_from_world()
 		_change_parent(inventory)
 		
