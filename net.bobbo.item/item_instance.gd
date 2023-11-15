@@ -26,6 +26,16 @@ enum InstanceError {
 }
 
 #
+#	Exports
+#
+
+## Emitted just as this item is being free'd.
+signal item_freed()
+
+## Emitted when the item's stack size changes
+signal stack_size_changed(size: int)
+
+#
 #	Private Variables
 #
 
@@ -48,6 +58,7 @@ func _notification(what: int):
 	if what == NOTIFICATION_PREDELETE:
 		# When this object is free'd, remove it from existing anywhere
 		self.put_nowhere()
+		item_freed.emit()
 
 #
 #	Public Functions
@@ -77,6 +88,7 @@ func get_stack_size() -> int: return _current_stack_size
 ## 0 and the max stack size.
 func set_stack_size(size: int) -> void: 
 	_current_stack_size = clampi(size, 0, get_max_stack_size())
+	stack_size_changed.emit(_current_stack_size)
 
 ## Returns how many items can possibly be fit in this instance.
 func get_max_stack_size() -> int: return _descriptor.max_stack_size
@@ -167,6 +179,7 @@ func put_in_inventory(inventory: ItemInventory, slot: int = -1) -> InstanceError
 		
 		# Reparent us to the inventory to make it easier to visualize where
 		# the item is, in the editor
+		_remove_from_world()
 		_change_parent(inventory)
 		
 		_space_state = SpaceState.IN_INVENTORY
@@ -192,6 +205,7 @@ func put_in_inventory(inventory: ItemInventory, slot: int = -1) -> InstanceError
 		
 		# Reparent us to the inventory to make it easier to visualize where
 		# the item is, in the editor
+		_remove_from_world()
 		_change_parent(inventory)
 		
 		_space_state = SpaceState.IN_INVENTORY
