@@ -179,8 +179,8 @@ func find(item: ItemInstance) -> int: return _slots.find(item)
 ## Find the index of the last filled slot in the inventory. Returns -1 if no
 ## slots are filled.
 func find_last_filled_slot() -> int:
-	var index: int = _slots.size()
-	while index > 0:
+	var index: int = _slots.size() - 1
+	while index >= 0:
 		if _slots[index] != null:
 			return index
 		index -= 1
