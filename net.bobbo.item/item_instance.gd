@@ -31,6 +31,14 @@ var _current_parent_inventory: ItemInventory = null
 var _current_stack_size: int = 1
 
 #
+#	Godot Functions
+#
+
+func _exit_tree():
+	# When this object is free'd, remove it from existing anywhere
+	self.put_nowhere()
+
+#
 #	Public Functions
 #
 
@@ -49,7 +57,6 @@ func get_space_state() -> SpaceState: return _space_state
 ## represents it. Otherwise, this returns null
 func get_world_item() -> WorldItem:
 	return _current_world_item if _space_state == SpaceState.IN_WORLD else null
-
 
 ## Returns how many items are represented by this instance. Typically for equipment
 ## this is 1, though for materials this number could increase.
@@ -106,17 +113,63 @@ func put_in_world() -> bool:
 	if _descriptor.world_item_scene == null:
 		return false
 	
-	# TODO
+	_remove_from_inventory() # Remove from an inventory, if we're in one.
+	
+	# Spawn and setup the new world item
+	var world_item: WorldItem = get_descriptor().world_item_scene.instantiate()
+	world_item.setup(self)
+	_current_world_item = world_item
 	return true
 
 ## Places this item instance in an inventory. If it was in the world, it is
 ## removed from the game world. If it was in a different inventory, it is
 ## removed from that inventory.
+## Optionally, put it in a specific slot of the inventory.
 ## Returns:
 ## - `true` if the item was place in the inventory
-## - `false` if the item was rejected by the inventory
-func put_in_inventory(inventory: ItemInventory) -> bool:
+## - `false` if the item was rejected by the inventory's filter
+## - `false` if the entire item could not fit in the inventory
+func put_in_inventory(inventory: ItemInventory, slot: int = -1) -> bool:
 	# TODO
+	# CONTINUE HERE. This will use either put item in slot or push item
+	# depending on what slot is. We need to handle removing object upon push if it
+	# gets totally merged too. Perhaps this func should have an enum return type
+	# for better info?
+	
+	# If we should just put this item anywhere in the inventory....
+	if slot == -1:
+		# Try to push the item in
+		var error = inventory.push_item(self)
+		
+		# Handle any errors
+		if error == ItemInventory.InventoryError.FILTER_DENIED:
+			return false
+		if error == ItemInventory.InventoryError.NO_FIT:
+			return false
+		# Tell us about unhandled errors
+		if error != ItemInventory.InventoryError.OK:
+			printerr("`put_in_inventory` encountered unknown `push_item` error code %s" % error)
+			return false
+		
+		_if_empty_free() 	# Free ourselves if we have no stack left
+		return true			# We pushed correctly!
+	# If we should put this item in a specific slot of the inventory...
+	else:
+		# Try to put the item into the specific slot
+		var error = inventory.put_item_in_slot(slot, self)
+		
+		# Handle any errors
+		if error == ItemInventory.InventoryError.FILTER_DENIED:
+			return false
+		if error == ItemInventory.InventoryError.SLOT_OCCUPIED:
+			return false
+		# Tell us about unhandled errors
+		if error != ItemInventory.InventoryError.OK:
+			printerr("`put_in_inventory` encountered unknown `put_item_in_slot` error code %s" % error)
+			return false
+		
+		pass
+	
 	return false
 
 ## Places this item back into a limbo state, existing mostly just in memory.
@@ -125,3 +178,33 @@ func put_in_inventory(inventory: ItemInventory) -> bool:
 func put_nowhere() -> void:
 	# TODO
 	return
+
+#
+#	Private Functions
+#
+
+## Remove this instance from it's parent inventory, if it's in one.
+## Returns:
+## `true` if it was removed from an inventory
+## `false` if there was nothing to remove it from
+func _remove_from_inventory() -> bool:
+	if _current_parent_inventory == null:
+		return false
+		
+	var slot_index = _current_parent_inventory.find(self)
+	if slot_index != -1:
+		_current_parent_inventory.take_item_from_slot(slot_index)
+	_current_parent_inventory = null
+	return slot_index != -1
+
+## Checks to see if there's any items left in this stack. If there isn't, then
+## this instance will be free'd.
+## Returns:
+## - `true` if there's nothing left and we are being free'd
+## - `false` if there's still items in this stack
+func _if_empty_free() -> bool:
+	if get_stack_size() > 0:
+		return false
+	# If we have no items, then queue up our freeing!
+	queue_free()
+	return true
