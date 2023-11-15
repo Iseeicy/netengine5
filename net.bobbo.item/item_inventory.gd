@@ -46,6 +46,9 @@ func _exit_tree():
 #	Public Functions
 #
 
+## Return how many items slots are stored in this inventory
+func total_used_slots() -> int: return get_all_items().size()
+
 ## Return the item found at slot `index`, if there is one. Returns null if there
 ## is no item there.
 func get_item_at_slot(index: int) -> ItemInstance: return _slots[index]
