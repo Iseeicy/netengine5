@@ -16,7 +16,7 @@ class_name ItemDescriptor
 ## inherit from ItemViewModel.
 @export var view_model_scene: PackedScene
 ## The scene that contans the object to be spawned in the world for this item.
-## Root node should inherit from WorldItem.
+## Root node should inherit from WorldItem2D or WorldItem3D.
 @export var world_item_scene: PackedScene
 
 @export_group("UI")
@@ -39,6 +39,25 @@ func create_instance() -> ItemInstance:
 	instance.setup(self)
 	instance.name = "%s_%s" % [item_name, get_instance_id()]
 	return instance
+
+## Constructs many new stacked instances of this kind of item, respecting max
+## stack size.
+func create_many_instances(count: int) -> Array[ItemInstance]:
+	var result: Array[ItemInstance] = []
+	
+	# While we still have items to stack....
+	while count > 0:
+		var instance = create_instance()
+		
+		# Figure out how much we can fit in this instance, and fit it
+		var stack_size = min(instance.get_max_stack_size(), count)
+		instance.set_stack_size(stack_size)
+		
+		# Keep track of how many we have left to fit
+		count -= stack_size
+		result.append(instance)
+	
+	return result
 
 ## Returns the name to display to the user, for this item. If display name is
 ## not set, this will return the item's internal name

@@ -1,5 +1,5 @@
-extends Node
-class_name WorldItem
+extends RigidBody3D
+class_name WorldItem3D
 
 #
 #	Private Variables

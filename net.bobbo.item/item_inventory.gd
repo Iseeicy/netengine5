@@ -53,6 +53,13 @@ func total_used_slots() -> int: return get_all_items().size()
 ## is no item there.
 func get_item_at_slot(index: int) -> ItemInstance: return _slots[index]
 
+## Return the item found at the last filled slot, if there is any. Returns null
+## if there isn't one.
+func peek_last_filled_slot() -> ItemInstance:
+	var index = find_last_filled_slot()	# Get the last filled index
+	if index == -1: return null			# If there's no item, EXIT EARLY
+	return get_item_at_slot(index)		# If there IS an item, return it!
+
 ## Puts an item into the given slot `index`.
 ## This may modify the stack size of `item` - potentially making it zero if
 ## entirely merged into the desired slot - so make sure to act accordingly.
@@ -168,6 +175,16 @@ func get_items_of_type(desc: ItemDescriptor) -> Dictionary:
 ## Given an item assumed to be in this inventory, return the index of the slot
 ## that it's in. Returns -1 if not found.
 func find(item: ItemInstance) -> int: return _slots.find(item)
+
+## Find the index of the last filled slot in the inventory. Returns -1 if no
+## slots are filled.
+func find_last_filled_slot() -> int:
+	var index: int = _slots.size()
+	while index > 0:
+		if _slots[index] != null:
+			return index
+		index -= 1
+	return -1
 
 ## Is this item in the inventory?
 func contains(item: ItemInstance) -> bool: return item in _slots

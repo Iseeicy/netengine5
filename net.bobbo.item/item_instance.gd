@@ -33,7 +33,7 @@ var _descriptor: ItemDescriptor = null
 ## Generally where is this object spatially?
 var _space_state: SpaceState = SpaceState.NOWHERE
 ## If this instance is IN_WORLD, then this is the WorldItem that represents us.
-var _current_world_item: WorldItem = null
+var _current_world_item = null
 ## If this instance is IN_INVENTORY, then this is the ItemInventory that the
 ## item is currently contained in.
 var _current_parent_inventory: ItemInventory = null
@@ -65,7 +65,7 @@ func get_space_state() -> SpaceState: return _space_state
 
 ## If this instance is in the game world, then this returns the object that
 ## represents it. Otherwise, this returns null
-func get_world_item() -> WorldItem:
+func get_world_item():
 	return _current_world_item if _space_state == SpaceState.IN_WORLD else null
 
 ## Returns how many items are represented by this instance. Typically for equipment
@@ -127,7 +127,7 @@ func put_in_world() -> InstanceError:
 	_remove_from_inventory() # Remove from an inventory, if we're in one.
 	
 	# Spawn and setup the new world item
-	var world_item: WorldItem = get_descriptor().world_item_scene.instantiate()
+	var world_item = get_descriptor().world_item_scene.instantiate()
 	world_item.setup(self)
 	_current_world_item = world_item
 	
