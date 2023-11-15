@@ -68,6 +68,7 @@ func _notification(what: int):
 ## belongs to.
 func setup(desc: ItemDescriptor) -> void:
 	_descriptor = desc
+	put_nowhere()
 
 ## Returns the ItemDescriptor that this item belongs to.
 func get_descriptor() -> ItemDescriptor: return _descriptor
@@ -113,6 +114,24 @@ func merge_stack_into(item: ItemInstance) -> void:
 	# Subtract from our stack size
 	self.set_stack_size(self.get_stack_size() - can_fit_count)
 
+## Split our stack of items into two stacks. This will create a new item
+## instance that is immediately placed nowhere. If the stack can not be split
+## and leave items in both the current item stack and new item stack, this will
+## return null.
+func split_stack(new_stack_size: int) -> ItemInstance:
+	if new_stack_size <= 0: return null		# If they don't want any, EXIT EARLY
+	if get_stack_size() == 0: return null	# If we don't have any, EXIT EARLY
+	
+	# If we would use all of or more than what we have, EXIT EARLY
+	if get_stack_size() - new_stack_size <= 0: return null
+	
+	# OTHERWISE, we can split reasonably. Create a new instance
+	var new_item = get_descriptor().create_instance()
+	self.set_stack_size(self.get_stack_size() - new_stack_size)
+	new_item.set_stack_size(new_stack_size)
+	
+	return new_item
+	
 
 ## Spawn and return a new instance of this item's view model, if there is one. 
 ## Returns null if there isn't one
@@ -131,18 +150,21 @@ func instantiate_view_model() -> ItemViewModel:
 ##	`InstanceError.ALREADY_EXISTS` if the item is already in the game world
 ##	`InstanceError.SCENE_MISSING` if there is no scene in the descriptor for a
 ##		WorldItem
-func put_in_world() -> InstanceError:
+func put_in_world(world_root: Node = null) -> InstanceError:
 	if _space_state == SpaceState.IN_WORLD:
 		return InstanceError.ALREADY_EXISTS
 	if _descriptor.world_item_scene == null:
 		return InstanceError.SCENE_MISSING
+	
+	# Use the window as world root, if not provided
+	if world_root == null: world_root = get_window()
 	
 	_remove_from_inventory() # Remove from an inventory, if we're in one.
 	
 	# Spawn and setup the new world item
 	var world_item = get_descriptor().world_item_scene.instantiate()
 	world_item.setup(self)
-	get_window().add_child(world_item)
+	world_root.add_child(world_item)
 	_current_world_item = world_item
 	
 	# Reparent us to the world item to make it easier to visualize where
@@ -224,7 +246,7 @@ func put_nowhere() -> void:
 	
 	# Place us into the item VOID plane
 	_space_state = SpaceState.NOWHERE
-	_change_parent(_find_item_voidplane())
+	_change_parent(null)
 
 #
 #	Private Functions
@@ -270,32 +292,11 @@ func _if_empty_free() -> bool:
 	queue_free()
 	return true
 
-## Find the VOID plane that items should be put in when they're nowhere. If
-## the VOID plane can not be found, it is created lazily.
-func _find_item_voidplane() -> Node:
-	# If there's no window... then we're truly lost.
-	if get_window() == null: return null
-	
-	const void_plane_key = "VOIDPlane"
-	const item_group_key = "Items"
-	
-	# Find or create the VOID plane node.
-	var void_plane = get_window().get_node_or_null(void_plane_key)
-	if void_plane == null:
-		void_plane = Node.new()
-		void_plane.name = void_plane_key
-		get_window().add_child(void_plane)
-	
-	var items_node = void_plane.get_node_or_null(item_group_key)
-	if items_node == null:
-		items_node = Node.new()
-		items_node.name = item_group_key
-		void_plane.add_child(items_node)
-	
-	return items_node
-
 func _change_parent(new_parent):
 	if get_parent() != null:
-		reparent(new_parent)
+		if new_parent == null:
+			get_parent().remove_child(self)
+		else:
+			reparent(new_parent)
 	elif new_parent != null:
 		new_parent.add_child(self)
