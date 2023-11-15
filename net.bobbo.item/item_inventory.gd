@@ -13,6 +13,7 @@ enum InventoryError {
 	SLOT_OCCUPIED = -1,	## The slot is occupied
 	FILTER_DENIED = -2,	## The filter denied this
 	NO_FIT = -3,		## The entire amount could not fit
+	DIFFERENT_TYPES = -4,	## The two items are different types
 }
 
 #
@@ -36,6 +37,11 @@ var _slots: Array[ItemInstance] = []
 func _ready():
 	_slots.resize(size)	# Allocate enough slots for our size
 
+func _exit_tree():
+	# TODO - how do we handle getting rid of items?
+	for item in get_all_items().keys():
+		item.put_nowhere()
+
 #
 #	Public Functions
 #
@@ -45,17 +51,42 @@ func _ready():
 func get_item_at_slot(index: int) -> ItemInstance: return _slots[index]
 
 ## Puts an item into the given slot `index`.
+## This may modify the stack size of `item` - potentially making it zero if
+## entirely merged into the desired slot - so make sure to act accordingly.
 ## Returns:
-## `InventoryError.OK` if the item was stored in the slot 
-## `InventoryError.SLOT_OCCUPIED` if there is already something in the slot 
-## `InventoryError.FILTER_DENIED` if the item did not pass through the filter
+##	`InventoryError.OK` if the item was stored in the slot 
+##	`InventoryError.FILTER_DENIED` if the item did not pass through the filter
+##	`InventoryError.DIFFERENT_TYPES` if the item was going to be merged, but
+##		but could not be because it's not the same type as the item in the slot.
+##	`InventoryError.NO_FIT` if the item was merged, but some or all of the item
+##		stack could not fit.
 func put_item_in_slot(index: int, item: ItemInstance) -> InventoryError:
-	if get_item_at_slot(index) != null:
-		return InventoryError.SLOT_OCCUPIED
+	# If the item does not pass our filters, EXIT EARLY
 	if not _does_item_pass_filters(item):
 		return InventoryError.FILTER_DENIED
-	_slots[index] = item
-	return InventoryError.OK
+	
+	# Find out what's already in this slot
+	var existing_item = get_item_at_slot(index)
+	
+	# If the item should be merged into the item at this slot...
+	if existing_item != null:
+		# If these items are different types, EXIT EARLY
+		if existing_item.get_descriptor() != item.get_descriptor():
+			return InventoryError.DIFFERENT_TYPES
+		
+		item.merge_stack_into(existing_item) # Merge the items!
+		
+		# If we still have items that aren't merged, EXIT EARLY
+		if item.get_stack_size() > 0:
+			return InventoryError.NO_FIT
+		
+		# OTHERWISE, we merged entirely!
+		return InventoryError.OK
+	# If the item should just be set in the slot...
+	else:
+		# EASY - just set it!
+		_slots[index] = item
+		return InventoryError.OK
 
 ## Takes an item out of the given slot `index`.
 ## Returns the item in the slot, null if there isn't one.
