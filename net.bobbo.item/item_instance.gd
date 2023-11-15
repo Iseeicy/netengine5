@@ -33,7 +33,7 @@ var _descriptor: ItemDescriptor = null
 ## Generally where is this object spatially?
 var _space_state: SpaceState = SpaceState.NOWHERE
 ## If this instance is IN_WORLD, then this is the WorldItem that represents us.
-var _current_world_item = null
+var _current_world_item: Node = null
 ## If this instance is IN_INVENTORY, then this is the ItemInventory that the
 ## item is currently contained in.
 var _current_parent_inventory: ItemInventory = null
@@ -44,9 +44,10 @@ var _current_stack_size: int = 1
 #	Godot Functions
 #
 
-func _exit_tree():
-	# When this object is free'd, remove it from existing anywhere
-	self.put_nowhere()
+func _notification(what: int):
+	if what == NOTIFICATION_PREDELETE:
+		# When this object is free'd, remove it from existing anywhere
+		self.put_nowhere()
 
 #
 #	Public Functions
@@ -129,11 +130,12 @@ func put_in_world() -> InstanceError:
 	# Spawn and setup the new world item
 	var world_item = get_descriptor().world_item_scene.instantiate()
 	world_item.setup(self)
+	get_window().add_child(world_item)
 	_current_world_item = world_item
 	
 	# Reparent us to the world item to make it easier to visualize where
 	# this item is, in the editor.
-	self.reparent(world_item)
+	_change_parent(_current_world_item)
 	
 	_space_state = SpaceState.IN_WORLD
 	return InstanceError.OK
@@ -165,9 +167,10 @@ func put_in_inventory(inventory: ItemInventory, slot: int = -1) -> InstanceError
 		
 		# Reparent us to the inventory to make it easier to visualize where
 		# the item is, in the editor
-		self.reparent(inventory)
+		_change_parent(inventory)
 		
 		_space_state = SpaceState.IN_INVENTORY
+		_current_parent_inventory = inventory
 		_if_empty_free() 		# Free ourselves if we have no stack left
 		return InstanceError.OK	# We pushed correctly!
 	# If we should put this item in a specific slot of the inventory...
@@ -189,9 +192,10 @@ func put_in_inventory(inventory: ItemInventory, slot: int = -1) -> InstanceError
 		
 		# Reparent us to the inventory to make it easier to visualize where
 		# the item is, in the editor
-		self.reparent(inventory)
+		_change_parent(inventory)
 		
 		_space_state = SpaceState.IN_INVENTORY
+		_current_parent_inventory = inventory
 		_if_empty_free() 		# Free ourselves if we have no stack left
 		return InstanceError.OK	# We put correctly!
 
@@ -204,7 +208,7 @@ func put_nowhere() -> void:
 	
 	# Place us into the item VOID plane
 	_space_state = SpaceState.NOWHERE
-	self.reparent(_find_item_voidplane())
+	_change_parent(_find_item_voidplane())
 
 #
 #	Private Functions
@@ -253,6 +257,9 @@ func _if_empty_free() -> bool:
 ## Find the VOID plane that items should be put in when they're nowhere. If
 ## the VOID plane can not be found, it is created lazily.
 func _find_item_voidplane() -> Node:
+	# If there's no window... then we're truly lost.
+	if get_window() == null: return null
+	
 	const void_plane_key = "VOIDPlane"
 	const item_group_key = "Items"
 	
@@ -270,3 +277,9 @@ func _find_item_voidplane() -> Node:
 		void_plane.add_child(items_node)
 	
 	return items_node
+
+func _change_parent(new_parent):
+	if get_parent() != null:
+		reparent(new_parent)
+	elif new_parent != null:
+		new_parent.add_child(self)
