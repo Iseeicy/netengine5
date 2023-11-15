@@ -20,6 +20,9 @@ enum InventoryError {
 #	Exports
 #
 
+## Emitted when the value of a slot is changed
+signal slot_updated(index: int, item: ItemInstance)
+
 ## How many slots are there in this inventory?
 @export var size: int = 64
 
@@ -96,6 +99,7 @@ func put_item_in_slot(index: int, item: ItemInstance) -> InventoryError:
 	else:
 		# EASY - just set it!
 		_slots[index] = item
+		slot_updated.emit(index, item)
 		return InventoryError.OK
 
 ## Takes an item out of the given slot `index`.
@@ -103,6 +107,7 @@ func put_item_in_slot(index: int, item: ItemInstance) -> InventoryError:
 func take_item_from_slot(index: int) -> ItemInstance:
 	var found_item = _slots[index]
 	_slots[index] = null
+	slot_updated.emit(index, null)
 	return found_item
 
 ## Pushes an item into the inventory wherever it will fit. If there are slots
