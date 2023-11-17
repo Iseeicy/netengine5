@@ -1,3 +1,6 @@
+## The physical representation of an ItemInstance when placed into the game
+## world. Has an identical API to WorldItem3D - but this is a 2D rigidbody
+## instead.
 extends RigidBody2D
 class_name WorldItem2D
 

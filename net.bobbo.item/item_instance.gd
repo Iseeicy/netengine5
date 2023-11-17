@@ -39,6 +39,7 @@ signal stack_size_changed(size: int)
 #	Private Variables
 #
 
+## The descriptor that this instance came from.
 var _descriptor: ItemDescriptor = null
 ## Generally where is this object spatially?
 var _space_state: SpaceState = SpaceState.NOWHERE
@@ -55,8 +56,8 @@ var _current_stack_size: int = 1
 #
 
 func _notification(what: int):
+	# When this object is free'd, remove it from existing anywhere
 	if what == NOTIFICATION_PREDELETE:
-		# When this object is free'd, remove it from existing anywhere
 		self.put_nowhere()
 		item_freed.emit()
 

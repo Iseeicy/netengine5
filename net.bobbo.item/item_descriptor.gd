@@ -1,3 +1,5 @@
+## Represents a certain type of item. Acts as a factory for ItemInstances of
+## the item type it represents.
 @tool
 extends Resource
 class_name ItemDescriptor

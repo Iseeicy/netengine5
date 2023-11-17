@@ -1,3 +1,5 @@
+## Represents an item's view model, which acts as a visual representation of
+## an ItemInstance when it is currently being held by a player.
 extends Node
 class_name ItemViewModel
 
