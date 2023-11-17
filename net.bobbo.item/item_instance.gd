@@ -188,7 +188,7 @@ func put_in_inventory(inventory: ItemInventory, slot: int = -1) -> InstanceError
 	# If we should just put this item anywhere in the inventory....
 	if slot == -1:
 		# Try to push the item in
-		var error = inventory.push_item(self)
+		var error = inventory._push_item(self)
 		
 		# Handle any errors
 		if error == ItemInventory.InventoryError.FILTER_DENIED:
@@ -197,7 +197,7 @@ func put_in_inventory(inventory: ItemInventory, slot: int = -1) -> InstanceError
 			return InstanceError.NO_FIT
 		# Tell us about unhandled errors
 		if error != ItemInventory.InventoryError.OK:
-			printerr("`put_in_inventory` encountered unknown `push_item` error code %s" % error)
+			printerr("`put_in_inventory` encountered unknown `_push_item` error code %s" % error)
 			return InstanceError.UNKNOWN
 		
 		# Reparent us to the inventory to make it easier to visualize where
@@ -213,7 +213,7 @@ func put_in_inventory(inventory: ItemInventory, slot: int = -1) -> InstanceError
 	# If we should put this item in a specific slot of the inventory...
 	else:
 		# Try to put the item into the specific slot
-		var error = inventory.put_item_in_slot(slot, self)
+		var error = inventory._put_item_in_slot(slot, self)
 		
 		# Handle any errors
 		if error == ItemInventory.InventoryError.FILTER_DENIED:
@@ -224,7 +224,7 @@ func put_in_inventory(inventory: ItemInventory, slot: int = -1) -> InstanceError
 			return InstanceError.NO_FIT
 		# Tell us about unhandled errors
 		if error != ItemInventory.InventoryError.OK:
-			printerr("`put_in_inventory` encountered unknown `put_item_in_slot` error code %s" % error)
+			printerr("`put_in_inventory` encountered unknown `_put_item_in_slot` error code %s" % error)
 			return InstanceError.UNKNOWN
 		
 		# Reparent us to the inventory to make it easier to visualize where
@@ -263,7 +263,7 @@ func _remove_from_inventory() -> bool:
 		
 	var slot_index = _current_parent_inventory.find(self)
 	if slot_index != -1:
-		_current_parent_inventory.take_item_from_slot(slot_index)
+		_current_parent_inventory._take_item_from_slot(slot_index)
 	_current_parent_inventory = null
 	_space_state = SpaceState.NOWHERE
 	return slot_index != -1

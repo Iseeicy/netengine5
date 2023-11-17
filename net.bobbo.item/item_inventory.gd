@@ -142,7 +142,7 @@ func contains_type(desc: ItemDescriptor) -> bool:
 ## `InventoryError.OK` if the item was pushed into this inventory
 ## `InventoryError.FILTER_DENIED` if the item did not pass through the filter
 ## `InventoryError.NO_FIT` if some or all of the item stack could not fit
-func push_item(item: ItemInstance) -> InventoryError:
+func _push_item(item: ItemInstance) -> InventoryError:
 	# If this item does not pass through the invetory filters, EXIT EARLY
 	if not _does_item_pass_filters(item):
 		return InventoryError.FILTER_DENIED
@@ -169,12 +169,12 @@ func push_item(item: ItemInstance) -> InventoryError:
 	
 	# At this point we for sure have an empty slot to put the rest of this item
 	# in - so do it!
-	return put_item_in_slot(empty_slot_index, item)
+	return _put_item_in_slot(empty_slot_index, item)
 
 ## Meant to only be called by ItemInstance. Takes an item out of the given slot
 ## `index`.
 ## Returns the item in the slot, null if there isn't one.
-func take_item_from_slot(index: int) -> ItemInstance:
+func _take_item_from_slot(index: int) -> ItemInstance:
 	var found_item = _slots[index]
 	_slots[index] = null
 	slot_updated.emit(index, null)
@@ -191,7 +191,7 @@ func take_item_from_slot(index: int) -> ItemInstance:
 ##		but could not be because it's not the same type as the item in the slot.
 ##	`InventoryError.NO_FIT` if the item was merged, but some or all of the item
 ##		stack could not fit.
-func put_item_in_slot(index: int, item: ItemInstance) -> InventoryError:
+func _put_item_in_slot(index: int, item: ItemInstance) -> InventoryError:
 	# If the item does not pass our filters, EXIT EARLY
 	if not _does_item_pass_filters(item):
 		return InventoryError.FILTER_DENIED
