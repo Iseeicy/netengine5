@@ -47,9 +47,7 @@ func player_physics_process(delta: float):
 	#make it so that the crouch can only go as low as regularly crouching and only high enough 
 	#such that the player doesn't get stuck if an object is detected above them
 	player.height = clamp(new_scale, max_player_height / 2, height_above)
-
-#we need the physics thread in order to calculate a raycast
-func _physics_process(delta):
+	
 	#get the 3D physics space from a Node3D like the player_pivot
 	var space_state = player.model_pivot.get_world_3d().direct_space_state
 	
