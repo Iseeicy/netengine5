@@ -13,7 +13,7 @@ signal key_removed(knowledge: Knowledge)
 #	Variables
 #
 
-var _knowledge_data: Dictionary = {} # Resource Path -> Value
+var _knowledge_data: Dictionary = {} # Knowledge Resource -> Value
 
 #
 #	Public Functions
