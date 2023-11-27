@@ -24,13 +24,11 @@ func _update_tree():
 	var all_knowledge = KnowledgeDB.get_all()
 	
 	var tree_info: Dictionary = {}
-	for some_knowledge in all_knowledge:
-		var value = all_knowledge[some_knowledge]
-		
+	for some_knowledge in all_knowledge.keys():
 		_create_tree_branch(
 			tree_root,
 			tree_info, 
-			some_knowledge.resource_path
+			some_knowledge
 		)
 
 ## Given a path string, removes the protocol at the start
@@ -44,8 +42,14 @@ func _remove_protocol_from_path(path: String) -> String:
 ## Creates the branch of a tree given info about the
 ## leaf that we should be making branches for. This will
 ## re-use previously created branches if they match!
-func _create_tree_branch(parent_node: TreeItem, info: Dictionary, resource_path: String) -> void:
-	var split_path = _remove_protocol_from_path(resource_path).split("/")
+func _create_tree_branch(
+	parent_node: TreeItem, 
+	info: Dictionary, 
+	knowledge: Knowledge
+) -> void:
+	var split_path = _remove_protocol_from_path(
+		knowledge.resource_path
+	).split("/")
 	
 	for x in range(1, split_path.size() + 1):
 		var split_slice = split_path.slice(0, x)
@@ -58,7 +62,7 @@ func _create_tree_branch(parent_node: TreeItem, info: Dictionary, resource_path:
 			continue
 			
 		var new_node = create_item(parent_node)
-		new_node.set_metadata(0, resource_path)
+		new_node.set_metadata(0, knowledge)
 		info[path] = new_node
 		
 		var end_of_path = split_slice[-1]
