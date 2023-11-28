@@ -15,9 +15,9 @@ var crouch_target: float = 0
 const crouch_action: String = "player_crouch"
 
 ## default_player_height is needed for proper uncrouching height calculations 
-# if the maximum player height were to change during gameplay at any point this 
-# value would need to somehow be updated to account for that default is 2 
-# because the default height in player_controller is 2
+## if the maximum player height were to change during gameplay at any point this 
+## value would need to somehow be updated to account for that default is 2 
+## because the default height in player_controller is 2
 var _default_player_height: float = 2
 var _should_be_crouched: bool = false
 
