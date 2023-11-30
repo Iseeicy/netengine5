@@ -29,6 +29,10 @@ signal slot_updated(index: int, item: ItemInstance)
 ## How many slots are there in this inventory?
 @export var size: int = 64
 
+## OPTIONAL. The filter that items must pass in order to be added to this
+## inventory.
+@export var filter: ItemFilter = null
+
 #
 #	Private Variables
 #
@@ -144,7 +148,7 @@ func contains_type(desc: ItemDescriptor) -> bool:
 ## `InventoryError.NO_FIT` if some or all of the item stack could not fit
 func _push_item(item: ItemInstance) -> InventoryError:
 	# If this item does not pass through the invetory filters, EXIT EARLY
-	if not _does_item_pass_filters(item):
+	if not _does_item_pass_filter(item):
 		return InventoryError.FILTER_DENIED
 	
 	# Find slots appropriate to merge into
@@ -193,7 +197,7 @@ func _take_item_from_slot(index: int) -> ItemInstance:
 ##		stack could not fit.
 func _put_item_in_slot(index: int, item: ItemInstance) -> InventoryError:
 	# If the item does not pass our filters, EXIT EARLY
-	if not _does_item_pass_filters(item):
+	if not _does_item_pass_filter(item):
 		return InventoryError.FILTER_DENIED
 	
 	# Find out what's already in this slot
@@ -224,6 +228,8 @@ func _put_item_in_slot(index: int, item: ItemInstance) -> InventoryError:
 #	Private Functions
 #
 
-func _does_item_pass_filters(item: ItemInstance) -> bool:
-	## TODO - Implement filters!
-	return true
+## Run this item through the filter if it's defined.
+## If not defined, just returns true.
+func _does_item_pass_filter(item: ItemInstance) -> bool:
+	if filter == null: return true
+	return filter.evaluate(item, self) == ItemFilter.FilterResult.PASS
