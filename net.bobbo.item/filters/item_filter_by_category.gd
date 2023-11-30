@@ -1,3 +1,4 @@
+## Filters items using a RegEx on the category string of an item's descriptor.
 @tool
 extends ItemFilter
 class_name ItemFilterByCategory

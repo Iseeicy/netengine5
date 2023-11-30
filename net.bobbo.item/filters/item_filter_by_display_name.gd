@@ -1,3 +1,5 @@
+## Filters items using a RegEx on the return of `get_display_name()` on an
+## item's descriptor.
 @tool
 extends ItemFilter
 class_name ItemFilterByDisplayName

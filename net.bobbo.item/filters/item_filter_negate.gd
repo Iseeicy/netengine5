@@ -1,3 +1,5 @@
+## Filters items using some filter, but negates the result of the filter's
+## evaluate function.
 @tool
 extends ItemFilter
 class_name ItemFilterNegate

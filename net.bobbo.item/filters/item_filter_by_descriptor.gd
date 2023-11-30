@@ -1,3 +1,5 @@
+## Filters items by trying to match an item's descriptor to a certain
+## descriptor.
 @tool
 extends ItemFilter
 class_name ItemFilterByDescriptor

@@ -1,3 +1,5 @@
+## Filters items by enforcing that any given item may not already have an item
+## of the same type exist already in the given inventory.
 @tool
 extends ItemFilter
 class_name ItemFilterNoDuplicates

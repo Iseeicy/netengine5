@@ -1,3 +1,6 @@
+## Filters items using a list of sub-filters. If an item passes through any of
+## the sub-filters, then it will pass through this filter. If an item fails to
+## pass ALL sub-filters, the item will be rejected.
 @tool
 extends ItemFilter
 class_name ItemFilterOr

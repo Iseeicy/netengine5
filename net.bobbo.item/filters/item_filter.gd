@@ -1,3 +1,4 @@
+## The base class for all item filters. Not meant to be used directly.
 @tool
 extends Resource
 class_name ItemFilter
