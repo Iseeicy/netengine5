@@ -232,4 +232,4 @@ func _put_item_in_slot(index: int, item: ItemInstance) -> InventoryError:
 ## If not defined, just returns true.
 func _does_item_pass_filter(item: ItemInstance) -> bool:
 	if filter == null: return true
-	return filter.evaluate(item, self)
+	return filter.evaluate(item, self) == ItemFilter.FilterResult.PASS

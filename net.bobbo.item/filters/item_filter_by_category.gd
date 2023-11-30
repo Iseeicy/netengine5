@@ -26,5 +26,10 @@ var _compiled_regex: RegEx = null
 
 ## Check to see if the regex pattern matches the given item's category string.
 ## Returns true if there's a match, false otherwise.
-func evaluate(item: ItemInstance, inventory: ItemInventory) -> bool:
-	return _compiled_regex.search(item.get_descriptor().category) != null
+func evaluate(item: ItemInstance, inventory: ItemInventory) -> FilterResult:
+	# Run the regex on the category string
+	var found_match = _compiled_regex.search(
+		item.get_descriptor().category
+	) != null
+	
+	return FilterResult.PASS if found_match else FilterResult.REJECT

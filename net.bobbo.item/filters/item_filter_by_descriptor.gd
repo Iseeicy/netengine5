@@ -16,5 +16,6 @@ class_name ItemFilterByDescriptor
 ## Check to see if the given item's descriptor matches the descriptor that we
 ## are looking for.
 ## Returns true if the item passes the filter, false otherwise.
-func evaluate(item: ItemInstance, inventory: ItemInventory) -> bool:
-	return item.get_descriptor() == descriptor
+func evaluate(item: ItemInstance, inventory: ItemInventory) -> FilterResult:
+	var matches_desc = item.get_descriptor() == descriptor
+	return FilterResult.PASS if matches_desc else FilterResult.REJECT

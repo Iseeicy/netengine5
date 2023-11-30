@@ -16,5 +16,8 @@ class_name ItemFilterNegate
 ## Check to see if the given item passes through the filter, then negates the
 ## result.
 ## Returns false if the item passes the filter, true otherwise.
-func evaluate(item: ItemInstance, inventory: ItemInventory) -> bool:
-	return not filter.evaluate(item, inventory)
+func evaluate(item: ItemInstance, inventory: ItemInventory) -> FilterResult:
+	if filter.evaluate(item, inventory) == FilterResult.PASS:
+		return FilterResult.REJECT
+	
+	return FilterResult.PASS

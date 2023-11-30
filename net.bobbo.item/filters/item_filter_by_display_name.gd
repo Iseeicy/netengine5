@@ -26,7 +26,10 @@ var _compiled_regex: RegEx = null
 
 ## Check to see if the regex pattern matches the given item's display name.
 ## Returns true if there's a match, false otherwise.
-func evaluate(item: ItemInstance, inventory: ItemInventory) -> bool:
-	return _compiled_regex.search(
+func evaluate(item: ItemInstance, inventory: ItemInventory) -> FilterResult:
+	# Run the regex on the display name
+	var found_match = _compiled_regex.search(
 		item.get_descriptor().get_display_name()
 	) != null
+	
+	return FilterResult.PASS if found_match else FilterResult.REJECT
