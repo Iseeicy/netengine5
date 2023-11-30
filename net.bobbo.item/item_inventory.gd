@@ -29,6 +29,10 @@ signal slot_updated(index: int, item: ItemInstance)
 ## How many slots are there in this inventory?
 @export var size: int = 64
 
+## OPTIONAL. The filters that items must pass in order to be added to this
+## inventory. Filters are evaluated in linear order.
+@export var filters: Array[ItemFilter] = []
+
 #
 #	Private Variables
 #
@@ -224,6 +228,12 @@ func _put_item_in_slot(index: int, item: ItemInstance) -> InventoryError:
 #	Private Functions
 #
 
+## Checks to see if the given item passes all filters in this inventory's
+## filter list.
 func _does_item_pass_filters(item: ItemInstance) -> bool:
-	## TODO - Implement filters!
+	# Check to see if this item passes through EVERY filter.
+	for filter in filters:
+		# If we fail a single filter, STOP IMMEDIATELY.
+		if not filter.evaluate(item): return false
+	# As long as we pass all filters, we're good to go!
 	return true
