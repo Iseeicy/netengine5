@@ -20,7 +20,7 @@ const crouch_action: String = "player_crouch"
 ## because the default height in player_controller is 2
 var _default_player_height: float = 2
 
-var _ray_cast: RayCast3D = null
+var _ray_cast: RayCast3D
 
 const _standing_height_multiplier: float = 1
 const _crouching_height_multiplier: float = 0.5
@@ -32,20 +32,18 @@ const _crouching_height_multiplier: float = 0.5
 func player_ready():
 	_default_player_height = player.height
 	
-	_ray_cast = RayCast3D.new()
-	_ray_cast.add_exception(player)
+	#assign raycast (have to do it here to avoid an error)
+	_ray_cast = $CrouchRay3D
 	
-	# I split this up into a variable to keep it behind the second line
-	var inital_target_position = Vector3(0, _default_player_height - player.position.y, 0)
-	_ray_cast.target_position = player.up_direction * inital_target_position
-	add_child(_ray_cast)
+	#reparent the ray to the player
+	_ray_cast.reparent(player, false)
+	
+	#Set inital target position so we're not a frame behind
+	_ray_cast.target_position = player.up_direction * (_default_player_height / 2 + 0.01)
 	
 	self.assert_input_action(crouch_action)
 
 func player_physics_process(delta: float):
-	# Calculate origin and target position of raycast
-	_ray_cast.position = player.position
-	
 	# We have two different equations for calculating the target position
 	# of the raycast to account for changes in distance from an above surface
 	# when crouching
