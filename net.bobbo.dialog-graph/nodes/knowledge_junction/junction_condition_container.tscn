@@ -1,0 +1,74 @@
+[gd_scene load_steps=4 format=3 uid="uid://ighdxkufv1y8"]
+
+[ext_resource type="PackedScene" uid="uid://bbg1cob3e3bae" path="res://addons/netengine5/net.bobbo.resource-field/resource_field.tscn" id="1_n2iwi"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.knowledge/resource_fields/knowledge_bool/knowledge_bool_search_filter.gd" id="2_8po27"]
+
+[sub_resource type="Resource" id="Resource_kwi65"]
+script = ExtResource("2_8po27")
+
+[node name="junction_condition_container" type="PanelContainer"]
+offset_right = 281.0
+offset_bottom = 41.0
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="ConditionTypeContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="LineLabel" type="Label" parent="MarginContainer/VBoxContainer/ConditionTypeContainer"]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+text = "0:"
+
+[node name="ConditionType" type="OptionButton" parent="MarginContainer/VBoxContainer/ConditionTypeContainer"]
+custom_minimum_size = Vector2(230, 0)
+layout_mode = 2
+item_count = 3
+selected = 0
+popup/item_0/text = "Condition"
+popup/item_0/id = 0
+popup/item_1/text = "Custom Comparison Condition"
+popup/item_1/id = 1
+popup/item_2/text = "Custom Operator Condition"
+popup/item_2/id = 2
+
+[node name="ConditionEditContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/ConditionEditContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/ConditionEditContainer/HBoxContainer"]
+layout_mode = 2
+text = "Condition: "
+
+[node name="ConditionResourceField" parent="MarginContainer/VBoxContainer/ConditionEditContainer/HBoxContainer" instance=ExtResource("1_n2iwi")]
+layout_mode = 2
+size_flags_horizontal = 3
+filter = SubResource("Resource_kwi65")
+
+[node name="ConditionStateButton" type="OptionButton" parent="MarginContainer/VBoxContainer/ConditionEditContainer"]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+item_count = 2
+selected = 0
+popup/item_0/text = "Transition if True"
+popup/item_0/id = 0
+popup/item_1/text = "Transition if False"
+popup/item_1/id = 1
+
+[node name="CustomComparisonConditionEditContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+
+[node name="CustomOperatorConditionEditContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2

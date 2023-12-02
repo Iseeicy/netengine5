@@ -1,0 +1,40 @@
+[gd_scene load_steps=3 format=3 uid="uid://ci2liqrrp5cj2"]
+
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.dialog-graph/nodes/knowledge_junction/knowledge_junction_node.gd" id="1_y422h"]
+[ext_resource type="PackedScene" uid="uid://ighdxkufv1y8" path="res://addons/netengine5/net.bobbo.dialog-graph/nodes/knowledge_junction/junction_condition_container.tscn" id="2_63kbb"]
+
+[node name="knowledge_junction_node" type="GraphNode"]
+custom_minimum_size = Vector2(400, 0)
+offset_right = 400.0
+offset_bottom = 87.0
+size_flags_vertical = 0
+mouse_filter = 1
+title = "Knowledge Junction"
+show_close = true
+slot/0/left_enabled = false
+slot/0/left_type = 0
+slot/0/left_color = Color(1, 1, 1, 1)
+slot/0/left_icon = null
+slot/0/right_enabled = false
+slot/0/right_type = 0
+slot/0/right_color = Color(1, 1, 1, 1)
+slot/0/right_icon = null
+slot/0/draw_stylebox = true
+script = ExtResource("1_y422h")
+condition_maker_scene = ExtResource("2_63kbb")
+
+[node name="TopButtonContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="RemoveLineButton" type="Button" parent="TopButtonContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "-"
+
+[node name="AddLineButton" type="Button" parent="TopButtonContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "+"
+
+[connection signal="pressed" from="TopButtonContainer/RemoveLineButton" to="." method="_on_remove_line_button_pressed"]
+[connection signal="pressed" from="TopButtonContainer/AddLineButton" to="." method="_on_add_line_button_pressed"]

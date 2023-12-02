@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="DialogGraphNodeDescriptor" load_steps=5 format=3 uid="uid://uibu3jc3c1ch"]
+
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.dialog-graph/nodes/knowledge_junction/knowledge_junction_data.gd" id="1_yw0kr"]
+[ext_resource type="PackedScene" uid="uid://ci2liqrrp5cj2" path="res://addons/netengine5/net.bobbo.dialog-graph/nodes/knowledge_junction/knowledge_junction_node.tscn" id="2_hnkd7"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.dialog-graph/nodes/knowledge_junction/knowledge_junction_handler.gd" id="3_h851k"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.dialog-graph/dialog_graph_node_descriptor.gd" id="4_pqkmc"]
+
+[resource]
+script = ExtResource("4_pqkmc")
+node_name = "Knowledge Junction"
+graph_node_scene = ExtResource("2_hnkd7")
+handler_script = ExtResource("3_h851k")
+data_script = ExtResource("1_yw0kr")
+is_spawnable = true
