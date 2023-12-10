@@ -4,3 +4,6 @@
 
 [node name="Crouch" type="Node"]
 script = ExtResource("1_yv07o")
+
+[node name="CrouchRay3D" type="RayCast3D" parent="."]
+target_position = Vector3(0, 1, 0)
