@@ -32,13 +32,13 @@ const _crouching_height_multiplier: float = 0.5
 func player_ready():
 	_default_player_height = player.height
 	
-	#assign raycast (have to do it here to avoid an error)
+	# Assign raycast (have to do it here to avoid an error)
 	_ray_cast = $CrouchRay3D
 	
-	#reparent the ray to the player
+	# Reparent the ray to the player
 	_ray_cast.reparent(player, false)
 	
-	#Set inital target position so we're not a frame behind
+	# Set inital target position so we're not a frame behind
 	_ray_cast.target_position = player.up_direction * (_default_player_height / 2 + 0.01)
 	
 	self.assert_input_action(crouch_action)
