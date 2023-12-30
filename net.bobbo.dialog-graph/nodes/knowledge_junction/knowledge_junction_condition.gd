@@ -26,11 +26,7 @@ var _settings_open = false
 #
 
 func _ready():
-	_line_label = $MarginContainer/VBoxContainer/OptionEditContainer/LineLabel
-	_line_edit = $MarginContainer/VBoxContainer/OptionEditContainer/LineEdit
-	_settings_button = $MarginContainer/VBoxContainer/OptionEditContainer/SettingsButton
-	_settings_container = $MarginContainer/VBoxContainer/OptionSettingsContainer
-	_condition_resource_field = $MarginContainer/VBoxContainer/OptionSettingsContainer/HBoxContainer/KnowledgeBoolResourceField
+	_line_label = $MarginContainer/VBoxContainer/ConditionTypeContainer/LineLabel
 	_set_settings_open(false)
 
 #
@@ -57,13 +53,6 @@ func set_option(new_condition: Dictionary) -> void:
 
 func _set_settings_open(is_open: bool):
 	_settings_open = is_open
-	_settings_container.visible = is_open
-	
-	if is_open:
-		_settings_button.text = " ^ "
-	else:
-		_settings_button.text = " v "
-	settings_visibility_changed.emit(is_open)
 
 func _on_settings_button_pressed():
 	_set_settings_open(!_settings_open)

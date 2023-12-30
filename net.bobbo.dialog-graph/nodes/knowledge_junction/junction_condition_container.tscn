@@ -1,9 +1,13 @@
-[gd_scene load_steps=10 format=3 uid="uid://b8iueg85k7v7a"]
+[gd_scene load_steps=12 format=3 uid="uid://b8iueg85k7v7a"]
 
 [ext_resource type="PackedScene" uid="uid://bbg1cob3e3bae" path="res://addons/netengine5/net.bobbo.resource-field/resource_field.tscn" id="1_r21qd"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.dialog-graph/nodes/knowledge_junction/knowledge_junction_condition.gd" id="1_sfgjf"]
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.knowledge/resource_fields/knowledge/knowledge_search_filter.gd" id="2_6wfk7"]
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.knowledge/resource_fields/knowledge_bool/knowledge_bool_search_filter.gd" id="2_8po27"]
 [ext_resource type="ButtonGroup" uid="uid://dh3ljdebkg86n" path="res://addons/netengine5/net.bobbo.dialog-graph/nodes/knowledge_junction/CustomComparisonTypeButtons.tres" id="3_ile7q"]
+
+[sub_resource type="Resource" id="Resource_mxg7f"]
+script = ExtResource("2_8po27")
 
 [sub_resource type="Resource" id="Resource_bpfnp"]
 script = ExtResource("2_6wfk7")
@@ -22,6 +26,7 @@ script = ExtResource("2_8po27")
 [node name="JunctionConditionContainer" type="PanelContainer"]
 offset_right = 281.0
 offset_bottom = 41.0
+script = ExtResource("1_sfgjf")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 2
@@ -66,6 +71,7 @@ text = "Condition: "
 [node name="ConditionResourceField" parent="MarginContainer/VBoxContainer/ConditionContainer/HBoxContainer" instance=ExtResource("1_r21qd")]
 custom_minimum_size = Vector2(223.95, 0)
 layout_mode = 2
+filter = SubResource("Resource_mxg7f")
 
 [node name="ConditionStateButton" type="OptionButton" parent="MarginContainer/VBoxContainer/ConditionContainer"]
 custom_minimum_size = Vector2(0, 25)

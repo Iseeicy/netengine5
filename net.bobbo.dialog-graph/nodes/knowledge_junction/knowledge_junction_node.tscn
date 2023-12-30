@@ -1,6 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://ci2liqrrp5cj2"]
 
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.dialog-graph/nodes/knowledge_junction/knowledge_junction_node.gd" id="1_y422h"]
+[ext_resource type="PackedScene" uid="uid://b8iueg85k7v7a" path="res://addons/netengine5/net.bobbo.dialog-graph/nodes/knowledge_junction/junction_condition_container.tscn" id="2_63kbb"]
 
 [node name="KnowledgeJunctionNode" type="GraphNode"]
 custom_minimum_size = Vector2(400, 0)
@@ -20,6 +21,7 @@ slot/0/right_color = Color(1, 1, 1, 1)
 slot/0/right_icon = null
 slot/0/draw_stylebox = true
 script = ExtResource("1_y422h")
+condition_maker_scene = ExtResource("2_63kbb")
 
 [node name="TopButtonContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
