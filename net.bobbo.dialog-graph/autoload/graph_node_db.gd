@@ -13,6 +13,8 @@ extends Node
 	preload("../nodes/dialog_text/dialog_text_desc.tres"),
 	preload("../nodes/choice_prompt/choice_prompt_desc.tres"),
 	preload("../nodes/forwarder/forwarder_desc.tres"),
+	preload("../nodes/knowledge_action/knowledge_action_desc.tres"),
+	preload("../nodes/knowledge_junction/knowledge_junction_desc.tres"),
 ]
 
 #

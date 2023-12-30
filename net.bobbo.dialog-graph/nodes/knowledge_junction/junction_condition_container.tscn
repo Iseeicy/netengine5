@@ -1,12 +1,25 @@
-[gd_scene load_steps=4 format=3 uid="uid://ighdxkufv1y8"]
+[gd_scene load_steps=10 format=3 uid="uid://b8iueg85k7v7a"]
 
-[ext_resource type="PackedScene" uid="uid://bbg1cob3e3bae" path="res://addons/netengine5/net.bobbo.resource-field/resource_field.tscn" id="1_n2iwi"]
+[ext_resource type="PackedScene" uid="uid://bbg1cob3e3bae" path="res://addons/netengine5/net.bobbo.resource-field/resource_field.tscn" id="1_r21qd"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.knowledge/resource_fields/knowledge/knowledge_search_filter.gd" id="2_6wfk7"]
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.knowledge/resource_fields/knowledge_bool/knowledge_bool_search_filter.gd" id="2_8po27"]
+[ext_resource type="ButtonGroup" uid="uid://dh3ljdebkg86n" path="res://addons/netengine5/net.bobbo.dialog-graph/nodes/knowledge_junction/CustomComparisonTypeButtons.tres" id="3_ile7q"]
 
-[sub_resource type="Resource" id="Resource_kwi65"]
+[sub_resource type="Resource" id="Resource_bpfnp"]
+script = ExtResource("2_6wfk7")
+
+[sub_resource type="ImageTexture" id="ImageTexture_tnqaj"]
+
+[sub_resource type="Resource" id="Resource_jfwcv"]
+script = ExtResource("2_6wfk7")
+
+[sub_resource type="Resource" id="Resource_88gu6"]
 script = ExtResource("2_8po27")
 
-[node name="junction_condition_container" type="PanelContainer"]
+[sub_resource type="Resource" id="Resource_m5m3p"]
+script = ExtResource("2_8po27")
+
+[node name="JunctionConditionContainer" type="PanelContainer"]
 offset_right = 281.0
 offset_bottom = 41.0
 
@@ -40,22 +53,21 @@ popup/item_1/id = 1
 popup/item_2/text = "Custom Operator Condition"
 popup/item_2/id = 2
 
-[node name="ConditionEditContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer"]
+[node name="ConditionContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/ConditionEditContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/ConditionContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/ConditionEditContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/ConditionContainer/HBoxContainer"]
 layout_mode = 2
 text = "Condition: "
 
-[node name="ConditionResourceField" parent="MarginContainer/VBoxContainer/ConditionEditContainer/HBoxContainer" instance=ExtResource("1_n2iwi")]
+[node name="ConditionResourceField" parent="MarginContainer/VBoxContainer/ConditionContainer/HBoxContainer" instance=ExtResource("1_r21qd")]
+custom_minimum_size = Vector2(223.95, 0)
 layout_mode = 2
-size_flags_horizontal = 3
-filter = SubResource("Resource_kwi65")
 
-[node name="ConditionStateButton" type="OptionButton" parent="MarginContainer/VBoxContainer/ConditionEditContainer"]
+[node name="ConditionStateButton" type="OptionButton" parent="MarginContainer/VBoxContainer/ConditionContainer"]
 custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
 item_count = 2
@@ -65,10 +77,120 @@ popup/item_0/id = 0
 popup/item_1/text = "Transition if False"
 popup/item_1/id = 1
 
-[node name="CustomComparisonConditionEditContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+[node name="CustomComparisonContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer"]
 visible = false
 layout_mode = 2
 
-[node name="CustomOperatorConditionEditContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+[node name="ResourceHBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/CustomComparisonContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/CustomComparisonContainer/ResourceHBoxContainer"]
+layout_mode = 2
+text = "Value: "
+
+[node name="ValueResourceField" parent="MarginContainer/VBoxContainer/CustomComparisonContainer/ResourceHBoxContainer" instance=ExtResource("1_r21qd")]
+layout_mode = 2
+size_flags_horizontal = 3
+filter = SubResource("Resource_bpfnp")
+
+[node name="ComparisonTypeButton" type="OptionButton" parent="MarginContainer/VBoxContainer/CustomComparisonContainer"]
+layout_mode = 2
+item_count = 6
+selected = 0
+popup/item_0/text = "Equals"
+popup/item_0/id = 0
+popup/item_1/text = "Does Not Equal"
+popup/item_1/id = 1
+popup/item_2/text = "Is Greater Than"
+popup/item_2/id = 2
+popup/item_3/text = "Is Greater Than or Equal To"
+popup/item_3/id = 3
+popup/item_4/text = "Is Less Than"
+popup/item_4/id = 4
+popup/item_5/text = "Is Less Than or Equal To"
+popup/item_5/id = 5
+
+[node name="ButtonsHBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/CustomComparisonContainer"]
+layout_mode = 2
+
+[node name="ConstantLabel" type="Label" parent="MarginContainer/VBoxContainer/CustomComparisonContainer/ButtonsHBoxContainer"]
+layout_mode = 2
+text = "Constant Value"
+
+[node name="IsConstantButton" type="CheckButton" parent="MarginContainer/VBoxContainer/CustomComparisonContainer/ButtonsHBoxContainer"]
+layout_mode = 2
+button_pressed = true
+button_group = ExtResource("3_ile7q")
+
+[node name="KnowledgeLabel" type="Label" parent="MarginContainer/VBoxContainer/CustomComparisonContainer/ButtonsHBoxContainer"]
+layout_mode = 2
+text = "Knowledge"
+
+[node name="IsKnowledgeButton" type="CheckButton" parent="MarginContainer/VBoxContainer/CustomComparisonContainer/ButtonsHBoxContainer"]
+layout_mode = 2
+button_group = ExtResource("3_ile7q")
+
+[node name="ConstantHBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/CustomComparisonContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/CustomComparisonContainer/ConstantHBoxContainer"]
+layout_mode = 2
+text = "Value: "
+
+[node name="SpinBox" type="SpinBox" parent="MarginContainer/VBoxContainer/CustomComparisonContainer/ConstantHBoxContainer"]
+layout_mode = 2
+theme_override_icons/updown = SubResource("ImageTexture_tnqaj")
+allow_greater = true
+allow_lesser = true
+alignment = 1
+
+[node name="KnowledgeHBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/CustomComparisonContainer"]
 visible = false
 layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/CustomComparisonContainer/KnowledgeHBoxContainer"]
+layout_mode = 2
+text = "Knowledge Value: "
+
+[node name="SecondValueResourceField" parent="MarginContainer/VBoxContainer/CustomComparisonContainer/KnowledgeHBoxContainer" instance=ExtResource("1_r21qd")]
+layout_mode = 2
+size_flags_horizontal = 3
+filter = SubResource("Resource_jfwcv")
+
+[node name="CustomOperatorConditionEditContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+
+[node name="Knowledge1HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/CustomOperatorConditionEditContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/CustomOperatorConditionEditContainer/Knowledge1HBoxContainer"]
+layout_mode = 2
+text = "Knowledge 1: "
+
+[node name="KnowledgeResourceField" parent="MarginContainer/VBoxContainer/CustomOperatorConditionEditContainer/Knowledge1HBoxContainer" instance=ExtResource("1_r21qd")]
+layout_mode = 2
+size_flags_horizontal = 3
+filter = SubResource("Resource_88gu6")
+
+[node name="OperatorTypeButton" type="OptionButton" parent="MarginContainer/VBoxContainer/CustomOperatorConditionEditContainer"]
+layout_mode = 2
+item_count = 2
+selected = 0
+popup/item_0/text = "And"
+popup/item_0/id = 0
+popup/item_1/text = "Or"
+popup/item_1/id = 1
+
+[node name="KnowledgeHBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/CustomOperatorConditionEditContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/CustomOperatorConditionEditContainer/KnowledgeHBoxContainer"]
+layout_mode = 2
+text = "Knowledge 2: "
+
+[node name="SecondKnowledgeResourceField" parent="MarginContainer/VBoxContainer/CustomOperatorConditionEditContainer/KnowledgeHBoxContainer" instance=ExtResource("1_r21qd")]
+layout_mode = 2
+size_flags_horizontal = 3
+filter = SubResource("Resource_m5m3p")
