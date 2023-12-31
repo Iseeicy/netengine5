@@ -5,15 +5,19 @@ extends DialogGraphNode
 #	Exports
 #
 
+## The scene that holds all the UI for a condition
 @export var condition_maker_scene: PackedScene
 
 #
 #	Variables
 #
 
-@onready var _starting_size: Vector2 = size 
+@onready var _starting_size: Vector2 = size
+
+# The node's list of all its conditions
 var _conditions: Array[KnowledgeJunctionConditionContainer] = []
 
+# The node's data
 var _casted_data: KnowledgeJunctionNodeData:
 	get:
 		return _data
@@ -53,6 +57,8 @@ func _update_size():
 func _add_new_condition() -> void:
 	var new_condition = _new_condition_control()
 	_conditions.push_back(new_condition)
+	
+	# Write the default values for all the data within the new condition
 	_casted_data.conditions.push_back({ 
 		KnowledgeJunctionNodeData.STATES_KEY: [0, 0, 0, 0] as Array[int], 
 		KnowledgeJunctionNodeData.RESOURCES_KEY: [null, null, null, null, null] as Array[Knowledge], 
@@ -82,6 +88,8 @@ func _new_condition_control() -> KnowledgeJunctionConditionContainer:
 	new_condition.setup(this_index)
 	set_slot(this_index + 1, false, 0, Color.CYAN, true, 0, Color.YELLOW)
 	
+	# Bind these functions within the node to these signals within the new 
+	# condition for updating data
 	new_condition.state_changed.connect(_on_state_changed.bind())
 	new_condition.resource_field_updated.connect(_on_resource_field_changed.bind())
 	new_condition.button_state_changed.connect(_on_button_state_changed.bind())
@@ -107,6 +115,9 @@ func _on_add_line_button_pressed():
 	_add_new_condition()
 	
 # Data Changed Signals
+# Here I made it so that they all send the index of their condition when they
+# send their signals so that the data can properly update each condition with
+# its data based off the condition's personal account of its data
 func _on_state_changed(index: int) -> void:
 	_casted_data.conditions[index][KnowledgeJunctionNodeData.STATES_KEY] = _conditions[index].states
 	data_updated.emit(_casted_data)
