@@ -6,7 +6,7 @@
 
 [resource]
 script = ExtResource("1_rfre0")
-node_name = "KnowledgeAction"
+node_name = "Knowledge Action"
 graph_node_scene = ExtResource("1_u2s8b")
 handler_script = ExtResource("2_j1205")
 is_spawnable = true

@@ -124,7 +124,7 @@ func _on_settings_visibility_changed(_is_visible: bool):
 	_update_size()
 	
 func _on_text_changed(index: int, new_text: String) -> void:
-	_casted_data.options[index].text = new_text
+	_casted_data.options[index][ChoicePromptNodeData.OPTIONS_TEXT_KEY] = new_text
 	data_updated.emit(_casted_data)
 	
 func _on_visibility_condition_changed(index: int, condition: KnowledgeBool) -> void:

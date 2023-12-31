@@ -1,0 +1,216 @@
+[gd_scene load_steps=12 format=3 uid="uid://b8iueg85k7v7a"]
+
+[ext_resource type="PackedScene" uid="uid://bbg1cob3e3bae" path="res://addons/netengine5/net.bobbo.resource-field/resource_field.tscn" id="1_r21qd"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.dialog-graph/nodes/knowledge_junction/knowledge_junction_condition.gd" id="1_sfgjf"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.knowledge/resource_fields/knowledge/knowledge_search_filter.gd" id="2_6wfk7"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.knowledge/resource_fields/knowledge_bool/knowledge_bool_search_filter.gd" id="2_8po27"]
+[ext_resource type="ButtonGroup" uid="uid://dh3ljdebkg86n" path="res://addons/netengine5/net.bobbo.dialog-graph/nodes/knowledge_junction/CustomComparisonTypeButtons.tres" id="3_ile7q"]
+
+[sub_resource type="Resource" id="Resource_mxg7f"]
+script = ExtResource("2_8po27")
+
+[sub_resource type="Resource" id="Resource_bpfnp"]
+script = ExtResource("2_6wfk7")
+
+[sub_resource type="ImageTexture" id="ImageTexture_tnqaj"]
+
+[sub_resource type="Resource" id="Resource_jfwcv"]
+script = ExtResource("2_6wfk7")
+
+[sub_resource type="Resource" id="Resource_88gu6"]
+script = ExtResource("2_8po27")
+
+[sub_resource type="Resource" id="Resource_m5m3p"]
+script = ExtResource("2_8po27")
+
+[node name="JunctionConditionContainer" type="PanelContainer"]
+offset_right = 281.0
+offset_bottom = 41.0
+script = ExtResource("1_sfgjf")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="ConditionTypeContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="LineLabel" type="Label" parent="MarginContainer/VBoxContainer/ConditionTypeContainer"]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+text = "0:"
+
+[node name="ConditionType" type="OptionButton" parent="MarginContainer/VBoxContainer/ConditionTypeContainer"]
+custom_minimum_size = Vector2(230, 0)
+layout_mode = 2
+item_count = 3
+selected = 0
+popup/item_0/text = "Condition"
+popup/item_0/id = 0
+popup/item_1/text = "Custom Comparison Condition"
+popup/item_1/id = 1
+popup/item_2/text = "Custom Operator Condition"
+popup/item_2/id = 2
+
+[node name="ConditionContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/ConditionContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/ConditionContainer/HBoxContainer"]
+layout_mode = 2
+text = "Condition: "
+
+[node name="ConditionResourceField" parent="MarginContainer/VBoxContainer/ConditionContainer/HBoxContainer" instance=ExtResource("1_r21qd")]
+custom_minimum_size = Vector2(223.95, 0)
+layout_mode = 2
+filter = SubResource("Resource_mxg7f")
+
+[node name="ConditionStateButton" type="OptionButton" parent="MarginContainer/VBoxContainer/ConditionContainer"]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+item_count = 2
+selected = 0
+popup/item_0/text = "Transition if True"
+popup/item_0/id = 0
+popup/item_1/text = "Transition if False"
+popup/item_1/id = 1
+
+[node name="CustomComparisonContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+
+[node name="ResourceHBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/CustomComparisonContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/CustomComparisonContainer/ResourceHBoxContainer"]
+layout_mode = 2
+text = "Value: "
+
+[node name="ValueResourceField" parent="MarginContainer/VBoxContainer/CustomComparisonContainer/ResourceHBoxContainer" instance=ExtResource("1_r21qd")]
+layout_mode = 2
+size_flags_horizontal = 3
+filter = SubResource("Resource_bpfnp")
+
+[node name="ComparisonTypeButton" type="OptionButton" parent="MarginContainer/VBoxContainer/CustomComparisonContainer"]
+layout_mode = 2
+item_count = 6
+selected = 0
+popup/item_0/text = "Equals"
+popup/item_0/id = 0
+popup/item_1/text = "Does Not Equal"
+popup/item_1/id = 1
+popup/item_2/text = "Is Greater Than"
+popup/item_2/id = 2
+popup/item_3/text = "Is Greater Than or Equal To"
+popup/item_3/id = 3
+popup/item_4/text = "Is Less Than"
+popup/item_4/id = 4
+popup/item_5/text = "Is Less Than or Equal To"
+popup/item_5/id = 5
+
+[node name="ButtonsHBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/CustomComparisonContainer"]
+layout_mode = 2
+
+[node name="ConstantLabel" type="Label" parent="MarginContainer/VBoxContainer/CustomComparisonContainer/ButtonsHBoxContainer"]
+layout_mode = 2
+text = "Constant Value"
+
+[node name="IsConstantButton" type="CheckButton" parent="MarginContainer/VBoxContainer/CustomComparisonContainer/ButtonsHBoxContainer"]
+layout_mode = 2
+button_pressed = true
+button_group = ExtResource("3_ile7q")
+
+[node name="KnowledgeLabel" type="Label" parent="MarginContainer/VBoxContainer/CustomComparisonContainer/ButtonsHBoxContainer"]
+layout_mode = 2
+text = "Knowledge"
+
+[node name="IsKnowledgeButton" type="CheckButton" parent="MarginContainer/VBoxContainer/CustomComparisonContainer/ButtonsHBoxContainer"]
+layout_mode = 2
+button_group = ExtResource("3_ile7q")
+
+[node name="ConstantHBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/CustomComparisonContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/CustomComparisonContainer/ConstantHBoxContainer"]
+layout_mode = 2
+text = "Value: "
+
+[node name="SpinBox" type="SpinBox" parent="MarginContainer/VBoxContainer/CustomComparisonContainer/ConstantHBoxContainer"]
+layout_mode = 2
+theme_override_icons/updown = SubResource("ImageTexture_tnqaj")
+step = 0.0
+allow_greater = true
+allow_lesser = true
+alignment = 1
+
+[node name="KnowledgeHBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/CustomComparisonContainer"]
+visible = false
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/CustomComparisonContainer/KnowledgeHBoxContainer"]
+layout_mode = 2
+text = "Knowledge Value: "
+
+[node name="SecondValueResourceField" parent="MarginContainer/VBoxContainer/CustomComparisonContainer/KnowledgeHBoxContainer" instance=ExtResource("1_r21qd")]
+layout_mode = 2
+size_flags_horizontal = 3
+filter = SubResource("Resource_jfwcv")
+
+[node name="CustomOperatorConditionEditContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+
+[node name="Knowledge1HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/CustomOperatorConditionEditContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/CustomOperatorConditionEditContainer/Knowledge1HBoxContainer"]
+layout_mode = 2
+text = "Knowledge 1: "
+
+[node name="KnowledgeResourceField" parent="MarginContainer/VBoxContainer/CustomOperatorConditionEditContainer/Knowledge1HBoxContainer" instance=ExtResource("1_r21qd")]
+layout_mode = 2
+size_flags_horizontal = 3
+filter = SubResource("Resource_88gu6")
+
+[node name="OperatorTypeButton" type="OptionButton" parent="MarginContainer/VBoxContainer/CustomOperatorConditionEditContainer"]
+layout_mode = 2
+item_count = 2
+selected = 0
+popup/item_0/text = "And"
+popup/item_0/id = 0
+popup/item_1/text = "Or"
+popup/item_1/id = 1
+
+[node name="KnowledgeHBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/CustomOperatorConditionEditContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/CustomOperatorConditionEditContainer/KnowledgeHBoxContainer"]
+layout_mode = 2
+text = "Knowledge 2: "
+
+[node name="SecondKnowledgeResourceField" parent="MarginContainer/VBoxContainer/CustomOperatorConditionEditContainer/KnowledgeHBoxContainer" instance=ExtResource("1_r21qd")]
+layout_mode = 2
+size_flags_horizontal = 3
+filter = SubResource("Resource_m5m3p")
+
+[connection signal="item_selected" from="MarginContainer/VBoxContainer/ConditionTypeContainer/ConditionType" to="." method="_on_condition_type_selected"]
+[connection signal="target_resource_updated" from="MarginContainer/VBoxContainer/ConditionContainer/HBoxContainer/ConditionResourceField" to="." method="_on_resource_field_updated"]
+[connection signal="item_selected" from="MarginContainer/VBoxContainer/ConditionContainer/ConditionStateButton" to="." method="_on_state_selected"]
+[connection signal="target_resource_updated" from="MarginContainer/VBoxContainer/CustomComparisonContainer/ResourceHBoxContainer/ValueResourceField" to="." method="_on_resource_field_updated"]
+[connection signal="item_selected" from="MarginContainer/VBoxContainer/CustomComparisonContainer/ComparisonTypeButton" to="." method="_on_state_selected"]
+[connection signal="toggled" from="MarginContainer/VBoxContainer/CustomComparisonContainer/ButtonsHBoxContainer/IsConstantButton" to="." method="_on_constant_button_toggled"]
+[connection signal="toggled" from="MarginContainer/VBoxContainer/CustomComparisonContainer/ButtonsHBoxContainer/IsKnowledgeButton" to="." method="_on_knowledge_button_toggled"]
+[connection signal="value_changed" from="MarginContainer/VBoxContainer/CustomComparisonContainer/ConstantHBoxContainer/SpinBox" to="." method="_on_constant_value_changed"]
+[connection signal="target_resource_updated" from="MarginContainer/VBoxContainer/CustomComparisonContainer/KnowledgeHBoxContainer/SecondValueResourceField" to="." method="_on_resource_field_updated"]
+[connection signal="target_resource_updated" from="MarginContainer/VBoxContainer/CustomOperatorConditionEditContainer/Knowledge1HBoxContainer/KnowledgeResourceField" to="." method="_on_resource_field_updated"]
+[connection signal="item_selected" from="MarginContainer/VBoxContainer/CustomOperatorConditionEditContainer/OperatorTypeButton" to="." method="_on_state_selected"]
+[connection signal="target_resource_updated" from="MarginContainer/VBoxContainer/CustomOperatorConditionEditContainer/KnowledgeHBoxContainer/SecondKnowledgeResourceField" to="." method="_on_resource_field_updated"]
