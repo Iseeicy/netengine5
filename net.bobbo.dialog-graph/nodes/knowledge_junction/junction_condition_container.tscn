@@ -200,3 +200,16 @@ text = "Knowledge 2: "
 layout_mode = 2
 size_flags_horizontal = 3
 filter = SubResource("Resource_m5m3p")
+
+[connection signal="item_selected" from="MarginContainer/VBoxContainer/ConditionTypeContainer/ConditionType" to="." method="_on_condition_type_selected"]
+[connection signal="target_resource_updated" from="MarginContainer/VBoxContainer/ConditionContainer/HBoxContainer/ConditionResourceField" to="." method="_on_resource_field_updated"]
+[connection signal="item_selected" from="MarginContainer/VBoxContainer/ConditionContainer/ConditionStateButton" to="." method="_on_state_selected"]
+[connection signal="target_resource_updated" from="MarginContainer/VBoxContainer/CustomComparisonContainer/ResourceHBoxContainer/ValueResourceField" to="." method="_on_resource_field_updated"]
+[connection signal="item_selected" from="MarginContainer/VBoxContainer/CustomComparisonContainer/ComparisonTypeButton" to="." method="_on_state_selected"]
+[connection signal="toggled" from="MarginContainer/VBoxContainer/CustomComparisonContainer/ButtonsHBoxContainer/IsConstantButton" to="." method="_on_constant_button_toggled"]
+[connection signal="toggled" from="MarginContainer/VBoxContainer/CustomComparisonContainer/ButtonsHBoxContainer/IsKnowledgeButton" to="." method="_on_knowledge_button_toggled"]
+[connection signal="value_changed" from="MarginContainer/VBoxContainer/CustomComparisonContainer/ConstantHBoxContainer/SpinBox" to="." method="_on_constant_value_changed"]
+[connection signal="target_resource_updated" from="MarginContainer/VBoxContainer/CustomComparisonContainer/KnowledgeHBoxContainer/SecondValueResourceField" to="." method="_on_resource_field_updated"]
+[connection signal="target_resource_updated" from="MarginContainer/VBoxContainer/CustomOperatorConditionEditContainer/Knowledge1HBoxContainer/KnowledgeResourceField" to="." method="_on_resource_field_updated"]
+[connection signal="item_selected" from="MarginContainer/VBoxContainer/CustomOperatorConditionEditContainer/OperatorTypeButton" to="." method="_on_state_selected"]
+[connection signal="target_resource_updated" from="MarginContainer/VBoxContainer/CustomOperatorConditionEditContainer/KnowledgeHBoxContainer/SecondKnowledgeResourceField" to="." method="_on_resource_field_updated"]

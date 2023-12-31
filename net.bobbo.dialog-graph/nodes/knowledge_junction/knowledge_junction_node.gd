@@ -52,10 +52,12 @@ func _update_size():
 
 func _add_new_condition() -> void:
 	var new_condition = _new_condition_control()
-	_conditions.push_back(new_condition)	
+	_conditions.push_back(new_condition)
 	_casted_data.conditions.push_back({ 
-		KnowledgeJunctionNodeData.CONDITIONS_TEXT_KEY: "", 
-		KnowledgeJunctionNodeData.CONDITIONS_VIS_COND_KEY: null, 
+		KnowledgeJunctionNodeData.STATES_KEY: [0, 0, 0, 0] as Array[int], 
+		KnowledgeJunctionNodeData.RESOURCES_KEY: [null, null, null, null, null] as Array[Knowledge], 
+		KnowledgeJunctionNodeData.BUTTON_STATES_KEY: [true, false] as Array[bool], 
+		KnowledgeJunctionNodeData.CONSTANT_KEY: 0
 	})
 	data_updated.emit(_casted_data)
 
@@ -80,32 +82,16 @@ func _new_condition_control() -> KnowledgeJunctionConditionContainer:
 	new_condition.setup(this_index)
 	set_slot(this_index + 1, false, 0, Color.CYAN, true, 0, Color.YELLOW)
 	
-	# Hook into the condition container's signal that fires
-	# when the settings panel is opened and closed,
-	# becaues we need to adjust the size of this when
-	# the size of the condition changes.
-	new_condition.settings_visibility_changed.connect(
-		_on_settings_visibility_changed.bind()
-	)
-	
-	# Create custom functions that pass the index of this condition in to our
-	# internal signal functions, so that we know what condition called
-	var text_changed_function = func(new_text: String):
-		_on_condition_changed(this_index, new_text)
-	var on_visibility_condition_changed_function = func(new_conditon: KnowledgeBool):
-		_on_visibility_condition_changed(this_index, new_conditon)
-		
-	new_condition.text_changed.connect(text_changed_function.bind())
-	new_condition.visibility_condition_changed.connect(on_visibility_condition_changed_function.bind())
+	new_condition.state_changed.connect(_on_state_changed.bind())
+	new_condition.resource_field_updated.connect(_on_resource_field_changed.bind())
+	new_condition.button_state_changed.connect(_on_button_state_changed.bind())
+	new_condition.constant_value_changed.connect(_on_value_changed.bind())
 	return new_condition
 
 func _free_condition_control(old_condition: KnowledgeJunctionConditionContainer) -> void:
 	var this_index = _conditions.size()
 	set_slot(this_index + 1, this_index == 0, 0, Color.CYAN, false, 0, Color.YELLOW)
 	
-	old_condition.settings_visibility_changed.disconnect(
-		_on_settings_visibility_changed.bind()
-	)
 	old_condition.queue_free()
 	old_condition.visible = false
 	_update_size()
@@ -119,14 +105,27 @@ func _on_remove_line_button_pressed():
 
 func _on_add_line_button_pressed():
 	_add_new_condition()
-
-func _on_settings_visibility_changed(_is_visible: bool):
-	_update_size()
-
-func _on_condition_changed(index: int, new_text: String) -> void:
-	_casted_data.conditions[index].text = new_text
+	
+# Data Changed Signals
+func _on_state_changed(index: int) -> void:
+	_casted_data.conditions[index][KnowledgeJunctionNodeData.STATES_KEY] = _conditions[index].states
 	data_updated.emit(_casted_data)
 
-func _on_visibility_condition_changed(index: int, condition: KnowledgeBool) -> void:
-	_casted_data.conditions[index][KnowledgeJunctionNodeData.CONDITIONS_VIS_COND_KEY] = condition
+func _on_resource_field_changed(index: int) -> void:
+	# Funny story about this signal, I had an issue where I accidentally wrote 
+	# over the NodeData array when reloading which made me wonder for a hot 
+	# second what was happening until I realized that by loading the values for 
+	# the resource fields and assigning them one at at time, it caused this 
+	# signal to trigger overwritting the data only allowing one of the resource 
+	# fields to be written too, I got around this by just making a temporary 
+	# array to store the values before assigning them to their fields
+	_casted_data.conditions[index][KnowledgeJunctionNodeData.RESOURCES_KEY] = _conditions[index].resources
+	data_updated.emit(_casted_data)
+
+func _on_button_state_changed(index: int) -> void:
+	_casted_data.conditions[index][KnowledgeJunctionNodeData.BUTTON_STATES_KEY] = _conditions[index].buttons
+	data_updated.emit(_casted_data)
+
+func _on_value_changed(index: int) -> void:
+	_casted_data.conditions[index][KnowledgeJunctionNodeData.CONSTANT_KEY] = _conditions[index].constant_value
 	data_updated.emit(_casted_data)
