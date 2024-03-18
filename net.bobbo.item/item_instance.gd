@@ -89,7 +89,10 @@ func get_stack_size() -> int: return _current_stack_size
 ## Set how many items are represented by this instance. Will be clamped between
 ## 0 and the max stack size.
 func set_stack_size(size: int) -> void: 
-	_current_stack_size = clampi(size, 0, get_max_stack_size())
+	var new_stack_size = clampi(size, 0, get_max_stack_size())
+	if new_stack_size == _current_stack_size: return
+
+	_current_stack_size = new_stack_size
 	stack_size_changed.emit(_current_stack_size)
 
 ## Returns how many items can possibly be fit in this instance.
