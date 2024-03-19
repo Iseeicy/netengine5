@@ -5,6 +5,19 @@ extends Node3D
 class_name ItemViewModel3D
 
 #
+#	Exports
+#
+
+## The animation tree used to control this view model.
+@export var animation_tree: AnimationTree = null
+
+#
+#	Public Variables
+#
+
+const item_ready_param = "parameters/item_ready/request"
+
+#
 #	Private Variables
 #
 
@@ -22,3 +35,9 @@ func setup(item: ItemInstance) -> void:
 ## Returns the item instance that this model belongs to.
 func get_item_instance() -> ItemInstance:
 	return _item_instance
+
+## Tells the view model that it is on screen and ready to be used.
+func item_ready() -> void:
+	if animation_tree:
+		animation_tree.active = true
+		animation_tree[item_ready_param] = AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE
