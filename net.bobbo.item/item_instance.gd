@@ -8,21 +8,21 @@ class_name ItemInstance
 
 ## The state of an item's existence in space.
 enum SpaceState {
-	NOWHERE = 0,		# This item doesn't exist anywhere other than in memory!
-	IN_INVENTORY = 1,	# This item is in an inventory somewhere.
-	IN_WORLD = 2,		# This item is in the game world somewhere.
+	NOWHERE = 0, # This item doesn't exist anywhere other than in memory!
+	IN_INVENTORY = 1, # This item is in an inventory somewhere.
+	IN_WORLD = 2, # This item is in the game world somewhere.
 }
 
 ## Used to indicate if an item instance operation succeeded, or if there was
 ## some kind of error.
 enum InstanceError {
-	OK = 0,					# There is no error.
-	UNKNOWN = -1,			# We don't know the error, but there was one.
-	ALREADY_EXISTS = -2,	# This item already exists.
-	SCENE_MISSING = -3,		# The scene is in the descriptor is missing.
-	FILTER_DENIED = -4,		# A filter denied this.
-	NO_FIT = -5,			# This didn't fit.
-	DIFFERENT_TYPES = -6,	# This item isn't the same type.
+	OK = 0, # There is no error.
+	UNKNOWN = -1, # We don't know the error, but there was one.
+	ALREADY_EXISTS = -2, # This item already exists.
+	SCENE_MISSING = -3, # The scene is in the descriptor is missing.
+	FILTER_DENIED = -4, # A filter denied this.
+	NO_FIT = -5, # This didn't fit.
+	DIFFERENT_TYPES = -6, # This item isn't the same type.
 }
 
 #
@@ -88,7 +88,7 @@ func get_stack_size() -> int: return _current_stack_size
 
 ## Set how many items are represented by this instance. Will be clamped between
 ## 0 and the max stack size.
-func set_stack_size(size: int) -> void: 
+func set_stack_size(size: int) -> void:
 	var new_stack_size = clampi(size, 0, get_max_stack_size())
 	if new_stack_size == _current_stack_size: return
 
@@ -123,8 +123,8 @@ func merge_stack_into(item: ItemInstance) -> void:
 ## and leave items in both the current item stack and new item stack, this will
 ## return null.
 func split_stack(new_stack_size: int) -> ItemInstance:
-	if new_stack_size <= 0: return null		# If they don't want any, EXIT EARLY
-	if get_stack_size() == 0: return null	# If we don't have any, EXIT EARLY
+	if new_stack_size <= 0: return null # If they don't want any, EXIT EARLY
+	if get_stack_size() == 0: return null # If we don't have any, EXIT EARLY
 	
 	# If we would use all of or more than what we have, EXIT EARLY
 	if get_stack_size() - new_stack_size <= 0: return null
@@ -135,11 +135,11 @@ func split_stack(new_stack_size: int) -> ItemInstance:
 	new_item.set_stack_size(new_stack_size)
 	
 	return new_item
-	
 
 ## Spawn and return a new instance of this item's view model, if there is one. 
-## Returns null if there isn't one
-func instantiate_view_model() -> ItemViewModel:
+## Returns null if there isn't one. Otherwise, returns an ItemViewModel2D or
+## ItemViewModel3D.
+func instantiate_view_model() -> Node:
 	if _descriptor.view_model_scene == null:
 		return null
 	
@@ -154,7 +154,7 @@ func instantiate_view_model() -> ItemViewModel:
 ##	`InstanceError.ALREADY_EXISTS` if the item is already in the game world
 ##	`InstanceError.SCENE_MISSING` if there is no scene in the descriptor for a
 ##		WorldItem
-func put_in_world(world_root: Node = null) -> InstanceError:
+func put_in_world(world_root: Node=null) -> InstanceError:
 	if _space_state == SpaceState.IN_WORLD:
 		return InstanceError.ALREADY_EXISTS
 	if _descriptor.world_item_scene == null:
@@ -187,9 +187,9 @@ func put_in_world(world_root: Node = null) -> InstanceError:
 ##	`InstanceError.FILTER_DENIED` if the item was rejected by the inventory's
 ##		filter.
 ##	`InstanceError.NO_FIT` if the entire item could not fit in the inventory
-func put_in_inventory(inventory: ItemInventory, slot: int = -1) -> InstanceError:
+func put_in_inventory(inventory: ItemInventory, slot: int=- 1) -> InstanceError:
 	# If we should just put this item anywhere in the inventory....
-	if slot == -1:
+	if slot == - 1:
 		# Try to push the item in
 		var error = inventory._push_item(self)
 		
@@ -211,8 +211,8 @@ func put_in_inventory(inventory: ItemInventory, slot: int = -1) -> InstanceError
 		
 		_space_state = SpaceState.IN_INVENTORY
 		_current_parent_inventory = inventory
-		_if_empty_free() 		# Free ourselves if we have no stack left
-		return InstanceError.OK	# We pushed correctly!
+		_if_empty_free() # Free ourselves if we have no stack left
+		return InstanceError.OK # We pushed correctly!
 	# If we should put this item in a specific slot of the inventory...
 	else:
 		# Try to put the item into the specific slot
@@ -238,15 +238,15 @@ func put_in_inventory(inventory: ItemInventory, slot: int = -1) -> InstanceError
 		
 		_space_state = SpaceState.IN_INVENTORY
 		_current_parent_inventory = inventory
-		_if_empty_free() 		# Free ourselves if we have no stack left
-		return InstanceError.OK	# We put correctly!
+		_if_empty_free() # Free ourselves if we have no stack left
+		return InstanceError.OK # We put correctly!
 
 ## Places this item back into a limbo state, existing mostly just in memory.
 ## If it was in the world, it is removed from the game world. If it was in an
 ## inventory, it is removed from that inventory.
 func put_nowhere() -> void:
-	_remove_from_world()		# Make sure we're no longer in the world
-	_remove_from_inventory()	# Make sure we're no longer in an inventory
+	_remove_from_world() # Make sure we're no longer in the world
+	_remove_from_inventory() # Make sure we're no longer in an inventory
 	
 	# Place us into the item VOID plane
 	_space_state = SpaceState.NOWHERE
@@ -265,11 +265,11 @@ func _remove_from_inventory() -> bool:
 		return false
 		
 	var slot_index = _current_parent_inventory.find(self)
-	if slot_index != -1:
+	if slot_index != - 1:
 		_current_parent_inventory._take_item_from_slot(slot_index)
 	_current_parent_inventory = null
 	_space_state = SpaceState.NOWHERE
-	return slot_index != -1
+	return slot_index != - 1
 
 ## Remove this instance from the game world, if it's placed there.
 ## Returns:

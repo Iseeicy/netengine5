@@ -15,7 +15,7 @@ class_name ItemDescriptor
 
 @export_group("Scenes")
 ## The scene that contains the view model for this item. Root node should
-## inherit from ItemViewModel.
+## inherit from ItemViewModel2D or ItemViewModel3D.
 @export var view_model_scene: PackedScene
 ## The scene that contans the object to be spawned in the world for this item.
 ## Root node should inherit from WorldItem2D or WorldItem3D.
