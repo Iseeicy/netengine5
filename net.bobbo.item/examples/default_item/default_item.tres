@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemDescriptor" load_steps=4 format=3 uid="uid://d2khqd4lclxaj"]
+
+[ext_resource type="Texture2D" uid="uid://cfaj67qhqh8uq" path="res://addons/netengine5/net.bobbo.item/examples/default_item/default_item_icon.png" id="1_f14k7"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.item/item_descriptor.gd" id="2_ohn0h"]
+[ext_resource type="PackedScene" uid="uid://b1m2vvp1xfnid" path="res://addons/netengine5/net.bobbo.item/examples/default_item/default_world_item_2d.tscn" id="3_pq8t6"]
+
+[resource]
+script = ExtResource("2_ohn0h")
+item_name = "default_item"
+max_stack_size = 4
+world_item_2d_scene = ExtResource("3_pq8t6")
+display_name = ""
+category = ""
+preview_icon = ExtResource("1_f14k7")
