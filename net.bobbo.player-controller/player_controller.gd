@@ -16,9 +16,11 @@ class_name PlayerController
 @onready var mouselook: MouseLook3D = $CameraOrigin/MouseLook3D
 @onready var camera: Camera3D = $CameraOrigin/Camera3D
 @onready var interactor: InteractorRay3D = $CameraOrigin/InteractorRay3D
+@onready var item_interactor: ItemInteractor = $ItemInteractor
 @onready var model_pivot: Node3D = $BodyPivot
 @onready var model: PlayerModel = $BodyPivot/PlayerModel
 @onready var collider: CollisionShape3D = $Collider
+@onready var inventory: ItemInventory = $ItemInventory
 var camera_offset: Vector3 = Vector3.ZERO
 var height: float = 2
 
@@ -29,6 +31,8 @@ var height: float = 2
 func _ready():
 	if initial_model != null:
 		model.set_model(initial_model)
+
+	item_interactor.inventory = inventory
 	
 	for script_scene in player_scripts:
 		var spawned_script = script_scene.instantiate()
@@ -72,9 +76,9 @@ func get_movement_dir() -> Vector3:
 	return input
 	
 func get_rotated_move_dir() -> Vector3:
-	return get_movement_dir().rotated(	# Rot input to match facing dir
-		Vector3.UP, 			# vert axis to rotate around
-		model_pivot.rotation.y	# how much to rot in radians
+	return get_movement_dir().rotated( # Rot input to match facing dir
+		Vector3.UP, # vert axis to rotate around
+		model_pivot.rotation.y # how much to rot in radians
 	)
 	
 static func find(root: Node) -> PlayerController:
@@ -86,4 +90,3 @@ static func find(root: Node) -> PlayerController:
 			if result is PlayerController:
 				return result
 		return null
-

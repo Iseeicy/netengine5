@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://b4nwduau6uxjr"]
+[gd_scene load_steps=17 format=3 uid="uid://b4nwduau6uxjr"]
 
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.player-controller/player_controller.gd" id="1_f5l1k"]
 [ext_resource type="PackedScene" uid="uid://bysmgnirlwse2" path="res://addons/netengine5/net.bobbo.player-controller/player_scripts/air_movement_default.tscn" id="2_43h2e"]
@@ -10,13 +10,18 @@
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.player-controller/script_runner/player_script_runner.gd" id="5_03xim"]
 [ext_resource type="PackedScene" uid="uid://d2ya4ybiuosav" path="res://addons/netengine5/net.bobbo.player-controller/player_scripts/crouch_default.tscn" id="5_5mfos"]
 [ext_resource type="PackedScene" uid="uid://bpiel1qntfmyh" path="res://addons/netengine5/net.bobbo.player-controller/player_scripts/jump_default.tscn" id="6_jkgnv"]
+[ext_resource type="PackedScene" uid="uid://bfwsj3q80wj8q" path="res://addons/netengine5/net.bobbo.player-controller/player_scripts/item_selector_default.tscn" id="7_g2to4"]
+[ext_resource type="PackedScene" uid="uid://8g4l55gdq7tl" path="res://addons/netengine5/net.bobbo.player-controller/player_scripts/item_drop_default.tscn" id="8_xyibm"]
+[ext_resource type="PackedScene" uid="uid://dan8wk0ijijys" path="res://addons/netengine5/net.bobbo.player-controller/player_scripts/item_pickup_default.tscn" id="9_4kan1"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.item/item_inventory.gd" id="11_bf8wo"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.item/item_interactor.gd" id="12_6fbtn"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_i5qqf"]
 
 [node name="PlayerController" type="CharacterBody3D"]
 collision_layer = 2
 script = ExtResource("1_f5l1k")
-player_scripts = Array[PackedScene]([ExtResource("2_atrpy"), ExtResource("3_4r1p5"), ExtResource("2_43h2e"), ExtResource("5_5mfos"), ExtResource("6_jkgnv")])
+player_scripts = Array[PackedScene]([ExtResource("2_atrpy"), ExtResource("3_4r1p5"), ExtResource("2_43h2e"), ExtResource("5_5mfos"), ExtResource("6_jkgnv"), ExtResource("7_g2to4"), ExtResource("8_xyibm"), ExtResource("9_4kan1")])
 
 [node name="Collider" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_i5qqf")
@@ -43,3 +48,9 @@ script = ExtResource("4_aevm5")
 
 [node name="ScriptRunner" type="Node" parent="."]
 script = ExtResource("5_03xim")
+
+[node name="ItemInventory" type="Node" parent="."]
+script = ExtResource("11_bf8wo")
+
+[node name="ItemInteractor" type="Node" parent="."]
+script = ExtResource("12_6fbtn")
