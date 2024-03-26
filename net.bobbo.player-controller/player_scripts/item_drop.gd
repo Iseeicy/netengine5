@@ -5,7 +5,7 @@ extends PlayerControllerScript
 #
 
 ## How much forward force to apply when dropping an item.
-@export var drop_impulse: float = 5
+@export var drop_impulse: float = 3
 
 #
 #	Private Variables
