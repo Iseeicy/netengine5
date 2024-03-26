@@ -69,6 +69,9 @@ func drop_item(item_index: int, stack_size: int=- 1) -> ItemInstance:
     var err = item_to_drop.put_in_world_3d(get_window())
     if err != ItemInstance.InstanceError.OK: return null
 
+    # Start the pickup timer, so we don't accidentally re-pick up this item
+    item_to_drop.get_world_item_3d().start_pickup_timer()
+
     # Make it so the item comes out of the player's facing direction
     var world_item = item_to_drop.get_world_item_3d()
     world_item.global_position = player.camera.global_position
