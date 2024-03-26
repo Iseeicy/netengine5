@@ -41,7 +41,7 @@ func get_item_instance() -> ItemInstance:
 	return _item_instance
 
 #
-#	Functions
+#	Signals
 #
 
 func _on_pickup_timer_timeout() -> void:
