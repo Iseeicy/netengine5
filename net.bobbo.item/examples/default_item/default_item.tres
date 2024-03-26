@@ -1,7 +1,8 @@
-[gd_resource type="Resource" script_class="ItemDescriptor" load_steps=5 format=3 uid="uid://d2khqd4lclxaj"]
+[gd_resource type="Resource" script_class="ItemDescriptor" load_steps=6 format=3 uid="uid://d2khqd4lclxaj"]
 
 [ext_resource type="Texture2D" uid="uid://cfaj67qhqh8uq" path="res://addons/netengine5/net.bobbo.item/examples/default_item/default_item_icon.png" id="1_f14k7"]
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.item/item_descriptor.gd" id="2_ohn0h"]
+[ext_resource type="PackedScene" uid="uid://xrmqlcjd0k3h" path="res://addons/netengine5/net.bobbo.item/examples/default_item/default_view_model_3d.tscn" id="3_150pp"]
 [ext_resource type="PackedScene" uid="uid://b1m2vvp1xfnid" path="res://addons/netengine5/net.bobbo.item/examples/default_item/default_world_item_2d.tscn" id="3_pq8t6"]
 [ext_resource type="PackedScene" uid="uid://0m2vkoykud1d" path="res://addons/netengine5/net.bobbo.item/examples/default_item/default_world_item_3d.tscn" id="4_rd1hx"]
 
@@ -10,6 +11,7 @@ script = ExtResource("2_ohn0h")
 item_name = "default_item"
 max_stack_size = 4
 world_item_2d_scene = ExtResource("3_pq8t6")
+view_model_3d_scene = ExtResource("3_150pp")
 world_item_3d_scene = ExtResource("4_rd1hx")
 display_name = ""
 category = ""

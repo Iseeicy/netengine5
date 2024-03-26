@@ -1,0 +1,30 @@
+[gd_scene load_steps=6 format=3 uid="uid://xrmqlcjd0k3h"]
+
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.item/item_view_model_3d.gd" id="1_yt6hu"]
+[ext_resource type="Texture2D" uid="uid://cfaj67qhqh8uq" path="res://addons/netengine5/net.bobbo.item/examples/default_item/default_item_icon.png" id="2_i6biw"]
+[ext_resource type="PackedScene" uid="uid://coikfjx7fnh5w" path="res://addons/netengine5/net.bobbo.item/examples/default_item/default_animation_tree_3d.tscn" id="3_n3451"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rn4dv"]
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+albedo_texture = ExtResource("2_i6biw")
+texture_filter = 0
+texture_repeat = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_0yxhu"]
+
+[node name="DefaultViewModel3D" type="Node3D" node_paths=PackedStringArray("animation_tree")]
+script = ExtResource("1_yt6hu")
+animation_tree = NodePath("DefaultAnimationTree3D")
+
+[node name="ItemRoot" type="Node3D" parent="."]
+metadata/_edit_group_ = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="ItemRoot"]
+layers = 524288
+material_override = SubResource("StandardMaterial3D_rn4dv")
+mesh = SubResource("QuadMesh_0yxhu")
+skeleton = NodePath("../..")
+
+[node name="DefaultAnimationTree3D" parent="." instance=ExtResource("3_n3451")]
