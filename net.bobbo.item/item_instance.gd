@@ -50,6 +50,10 @@ var _space_state: SpaceState = SpaceState.NOWHERE
 var _current_world_item_2d: WorldItem2D = null
 ## If this instance is IN_WORLD_3D, then this is the WorldItem that represents us.
 var _current_world_item_3d: WorldItem3D = null
+## All 2D viewmodels that have been spawned
+var _current_viewmodels_2d: Array[ItemViewModel2D] = []
+## All 3D viewmodels that have been spawned
+var _current_viewmodels_3d: Array[ItemViewModel3D] = []
 ## If this instance is IN_INVENTORY, then this is the ItemInventory that the
 ## item is currently contained in.
 var _current_parent_inventory: ItemInventory = null
@@ -164,6 +168,14 @@ func instantiate_view_model_2d() -> ItemViewModel2D:
 	
 	var new_view_model = _descriptor.view_model_2d_scene.instantiate()
 	new_view_model.setup(self)
+
+	# Put this viewmodel in the cache of existing viewmodels, and configure it
+	# so that it will be removed from the cache when the viewmodel is free'd.
+	_current_viewmodels_2d.append(new_view_model)
+	var remove_when_free_func = func():
+		_current_viewmodels_2d.erase(new_view_model)
+	new_view_model.view_model_freed.connect(remove_when_free_func.bind())
+
 	return new_view_model
 
 ## Spawn and return a new instance of this item's view model, if there is one. 
@@ -174,6 +186,14 @@ func instantiate_view_model_3d() -> ItemViewModel3D:
 	
 	var new_view_model = _descriptor.view_model_3d_scene.instantiate()
 	new_view_model.setup(self)
+
+	# Put this viewmodel in the cache of existing viewmodels, and configure it
+	# so that it will be removed from the cache when the viewmodel is free'd.
+	_current_viewmodels_3d.append(new_view_model)
+	var remove_when_free_func = func():
+		_current_viewmodels_3d.erase(new_view_model)
+	new_view_model.view_model_freed.connect(remove_when_free_func.bind())
+	
 	return new_view_model
 
 ## Places this item instance in the 2D game world. If it was in an inventory, it is

@@ -1,5 +1,8 @@
 extends Node
 class_name ItemScriptBase
+# TODO - how does item get view model?
+# TODO - how does item get player?
+# TODO - what is an animation library?
 
 #
 #   Classes

@@ -8,6 +8,10 @@ class_name ItemViewModel2D
 #	Exports
 #
 
+## Emitted when this node is being freed.
+signal view_model_freed()
+
+## The animation tree used to control this view model.
 @export var animation_tree: AnimationTree = null
 
 #
@@ -22,6 +26,14 @@ const item_ready_param = "parameters/item_ready/request"
 
 var _item_instance: ItemInstance
 
+#
+#	Godot Functions
+#
+
+func _notification(what: int):
+	# When this object is free'd, tell other nodes (keyley the ItemInstance) about it
+	if what == NOTIFICATION_PREDELETE:
+		view_model_freed.emit()
 #
 #	Public Functions
 #
