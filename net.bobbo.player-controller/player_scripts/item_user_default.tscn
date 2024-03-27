@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://40a8nwm87ybx"]
+
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.player-controller/player_scripts/item_user.gd" id="1_c4ba2"]
+
+[node name="ItemUser" type="Node"]
+script = ExtResource("1_c4ba2")

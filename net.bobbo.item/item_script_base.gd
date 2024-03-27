@@ -6,36 +6,17 @@ class_name ItemScriptBase
 #
 
 class ItemInput extends RefCounted:
-    #
-    #   Public Variables
-    #
-    
     ## Is this input JUST being pressed, right now?
-    var just_down: bool:
-        get: return _supported and Input.is_action_just_pressed(_action)
+    var just_down: bool = false
     ## Is this input actively being held down?
-    var pressing: bool:
-        get: return _supported and Input.is_action_pressed(_action)
+    var pressing: bool = false
     ## Is this input JUST being released, right now?
-    var just_up: bool:
-        get: return _supported and Input.is_action_just_released(_action)
-    
-    #
-    #   Private Variables
-    #
+    var just_up: bool = false
 
-    ## The name of the action representing this input.
-    var _action: String = ""
-    ## Is this input supported currently?
-    var _supported: bool
-
-    #
-    #   Godot Functions
-    #
-
-    func _init(action_name: String):
-        _action = action_name
-        _supported = InputMap.has_action(action_name)
+    func reset() -> void:
+        just_down = false
+        pressing = false
+        just_up = false
 
 #
 #   Signals
@@ -52,12 +33,12 @@ signal selected_stop()
 #
 
 ## The key for the primary "use item" action. Traditionally left mouse.
-## Can be overriden to provide input from some other source.
-var use_0_input: ItemInput = ItemInput.new("player_use_item_0")
+## Typically values are provided in some PlayerScript.
+var use_0_input: ItemInput = ItemInput.new()
 
 ## The key for the secondary "use item" action. Traditionally right mouse.
-## Can be overriden to provide input from some other source.
-var use_1_input: ItemInput = ItemInput.new("player_use_item_1")
+## Typically values are provided in some PlayerScript.
+var use_1_input: ItemInput = ItemInput.new()
 
 ## Is this item currently selected by an `ItemInteractor`?
 var is_selected: bool:
@@ -90,6 +71,8 @@ func call_selected_process(delta: float) -> void:
 func call_selected_stop() -> void:
     _is_selected = false
     item_selected_stop()
+    use_0_input.reset()
+    use_1_input.reset()
     selected_stop.emit()
 
 #
