@@ -83,8 +83,8 @@ func call_selected_start() -> void:
     selected_start.emit()
 
 ## Call to trigger `item_selected_process` on subclasses.
-func call_selected_process() -> void:
-    item_selected_process()
+func call_selected_process(delta: float) -> void:
+    item_selected_process(delta)
 
 ## Call to trigger `item_selected_stop` on subclasses.
 func call_selected_stop() -> void:
@@ -100,7 +100,7 @@ func call_selected_stop() -> void:
 func item_selected_start() -> void: return
 
 ## Called each frame that an `ItemInteractor`is selecting this item. 
-func item_selected_process() -> void: return
+func item_selected_process(_delta: float) -> void: return
 
 ## Called when an `ItemInteractor` stops selecting this item. 
 func item_selected_stop() -> void: return
