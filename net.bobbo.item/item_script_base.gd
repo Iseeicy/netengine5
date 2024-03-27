@@ -1,6 +1,6 @@
 extends Node
 class_name ItemScriptBase
-# TODO - how does item get view model?
+# TODO - how can animations be made easier?
 # TODO - how does item get player?
 # TODO - what is an animation library?
 

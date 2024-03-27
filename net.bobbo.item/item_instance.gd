@@ -196,6 +196,17 @@ func instantiate_view_model_3d() -> ItemViewModel3D:
 	
 	return new_view_model
 
+## Sets an animation parameter in every viewmodel that exists for this specific item instance.
+## Args:
+## 	`param_key`: The raw key for the AnimationTree parameter to set. If this doesn't match
+## 		a valid param, nothing will happen.
+## 	`param_value`: The value to set the param to, if found.
+func set_viewmodel_anim_param(param_key: String, param_value: Variant) -> void:
+	for viewmodel_3d in _current_viewmodels_3d:
+		viewmodel_3d.animation_tree.set(param_key, param_value)
+	for viewmodel_2d in _current_viewmodels_2d:
+		viewmodel_2d.animation_tree.set(param_key, param_value)
+
 ## Places this item instance in the 2D game world. If it was in an inventory, it is
 ## removed from that inventory.
 ## Returns
