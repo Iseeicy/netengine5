@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bo4ryb5qnbbb6"]
+[gd_scene load_steps=8 format=3 uid="uid://bo4ryb5qnbbb6"]
 
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.dialog-graph/autoload/graph_node_db.gd" id="1_uw2a3"]
 [ext_resource type="Resource" uid="uid://cpp3y2hlglg5c" path="res://addons/netengine5/net.bobbo.dialog-graph/nodes/change_character/change_character_desc.tres" id="2_bhsd3"]
@@ -6,7 +6,8 @@
 [ext_resource type="Resource" uid="uid://bsr7sku2bwkax" path="res://addons/netengine5/net.bobbo.dialog-graph/nodes/dialog_text/dialog_text_desc.tres" id="4_l6we2"]
 [ext_resource type="Resource" uid="uid://cmpfaetr774wm" path="res://addons/netengine5/net.bobbo.dialog-graph/nodes/entry/entry_desc.tres" id="5_d1q35"]
 [ext_resource type="Resource" uid="uid://bck5y5qf4cv2n" path="res://addons/netengine5/net.bobbo.dialog-graph/nodes/forwarder/forwarder_desc.tres" id="6_pxfe5"]
+[ext_resource type="Resource" uid="uid://uibu3jc3c1ch" path="res://addons/netengine5/net.bobbo.dialog-graph/nodes/knowledge_junction/knowledge_junction_desc.tres" id="8_vivf8"]
 
 [node name="GraphNodeDB" type="Node"]
 script = ExtResource("1_uw2a3")
-descriptors = Array[Resource("res://addons/netengine5/net.bobbo.dialog-graph/dialog_graph_node_descriptor.gd")]([ExtResource("2_bhsd3"), ExtResource("3_y0qgf"), ExtResource("4_l6we2"), ExtResource("5_d1q35"), ExtResource("6_pxfe5")])
+descriptors = Array[Resource("res://addons/netengine5/net.bobbo.dialog-graph/dialog_graph_node_descriptor.gd")]([ExtResource("2_bhsd3"), ExtResource("3_y0qgf"), ExtResource("4_l6we2"), ExtResource("5_d1q35"), ExtResource("6_pxfe5"), ExtResource("8_vivf8")])
