@@ -42,6 +42,8 @@ signal stack_size_changed(size: int)
 
 ## The descriptor that this instance came from.
 var _descriptor: ItemDescriptor = null
+## The scripting for this item, if any.
+var _item_script: ItemScriptBase = null
 ## Generally where is this object spatially?
 var _space_state: SpaceState = SpaceState.NOWHERE
 ## If this instance is IN_WORLD_2D, then this is the WorldItem that represents us.
@@ -72,10 +74,20 @@ func _notification(what: int):
 ## belongs to.
 func setup(desc: ItemDescriptor) -> void:
 	_descriptor = desc
+
+	# Spawn the scripting for this item as a child
+	if desc.item_script_scene != null:
+		_item_script = desc.item_script_scene.instantiate()
+		add_child(_item_script)
+		_item_script.setup(self)
+
 	put_nowhere()
 
 ## Returns the ItemDescriptor that this item belongs to.
 func get_descriptor() -> ItemDescriptor: return _descriptor
+
+## Returns the scripting for this item if it has any. `null` otherwise.
+func get_item_script() -> ItemScriptBase: return _item_script
 
 ## Returns the current SpaceState of this item.
 func get_space_state() -> SpaceState: return _space_state
@@ -171,7 +183,7 @@ func instantiate_view_model_3d() -> ItemViewModel3D:
 ##	`InstanceError.ALREADY_EXISTS` if the item is already in the 2D or 3D game world
 ##	`InstanceError.SCENE_MISSING` if there is no scene in the descriptor for a
 ##		WorldItem
-func put_in_world_2d(world_root: Node = null) -> InstanceError:
+func put_in_world_2d(world_root: Node=null) -> InstanceError:
 	if _space_state == SpaceState.IN_WORLD_2D:
 		return InstanceError.ALREADY_EXISTS
 	if _space_state == SpaceState.IN_WORLD_3D:
@@ -203,7 +215,7 @@ func put_in_world_2d(world_root: Node = null) -> InstanceError:
 ##	`InstanceError.ALREADY_EXISTS` if the item is already in the 2D or 3D game world
 ##	`InstanceError.SCENE_MISSING` if there is no scene in the descriptor for a
 ##		WorldItem
-func put_in_world_3d(world_root: Node = null) -> InstanceError:
+func put_in_world_3d(world_root: Node=null) -> InstanceError:
 	if _space_state == SpaceState.IN_WORLD_2D:
 		return InstanceError.ALREADY_EXISTS
 	if _space_state == SpaceState.IN_WORLD_3D:
@@ -329,7 +341,7 @@ func _remove_from_world() -> bool:
 	var actually_removed = false
 	
 	# Remove our 2D world item, if there is one.
-	if  _current_world_item_2d != null:
+	if _current_world_item_2d != null:
 		_current_world_item_2d.queue_free()
 		_current_world_item_2d = null
 		actually_removed = false

@@ -11,13 +11,13 @@ class ItemInput extends RefCounted:
     #
     
     ## Is this input JUST being pressed, right now?
-    var pressed: bool:
+    var just_down: bool:
         get: return _supported and Input.is_action_just_pressed(_action)
     ## Is this input actively being held down?
     var pressing: bool:
         get: return _supported and Input.is_action_pressed(_action)
     ## Is this input JUST being released, right now?
-    var released: bool:
+    var just_up: bool:
         get: return _supported and Input.is_action_just_released(_action)
     
     #
@@ -57,16 +57,24 @@ var use_0_input: ItemInput = ItemInput.new("player_use_item_0")
 
 ## The key for the secondary "use item" action. Traditionally right mouse.
 ## Can be overriden to provide input from some other source.
-var use_1_action: ItemInput = ItemInput.new("player_use_item_1")
+var use_1_input: ItemInput = ItemInput.new("player_use_item_1")
 
 ## Is this item currently selected by an `ItemInteractor`?
 var is_selected: bool:
     get: return _is_selected
 var _is_selected: bool = false
 
+## The `ItemInstance` that this script belongs to.
+var instance: ItemInstance:
+    get: return _item_instance
+var _item_instance: ItemInstance = null
+
 #
 #   Public Functions
 #
+
+func setup(parent_instance: ItemInstance) -> void:
+    _item_instance = parent_instance
 
 ## Call to trigger `item_selected_start` on subclasses.
 func call_selected_start() -> void:
