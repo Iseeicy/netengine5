@@ -78,6 +78,10 @@ func call_selected_stop() -> void:
     use_1_input.reset()
     selected_stop.emit()
 
+## Trigger a oneshot animation on all viewmodels.
+func viewmodel_animation_oneshot(key: String) -> void:
+    instance.set_viewmodel_anim_param("parameters/%s/request" % key, AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+
 #
 #   Base Functions
 #
