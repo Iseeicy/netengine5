@@ -33,6 +33,10 @@ var inventory: ItemInventory:
 
         _set_selected_slot_index_helper( - 1)
 
+## OPTIONAL. The character that uses this interactor. Items that are interacted with will
+## think that THIS character is interacting with them.
+var character: CharacterDefinition = null
+
 ## The currently selected slot index. If no slot is selected or there
 ## is no inventory, this is -1.
 var selected_slot: int:
@@ -138,7 +142,7 @@ func _set_selected_slot_index_helper(new_index: int) -> void:
     # If there is an item at the new slot that has scripting, tell it
     # about being selected
     if selected_item != null and selected_item.get_item_script() != null:
-        selected_item.get_item_script().call_selected_start()
+        selected_item.get_item_script().call_selected_start(self)
 
     # ...and tell us about all that!
     slot_selected.emit(new_index)

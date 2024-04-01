@@ -1,7 +1,6 @@
 extends Node
 class_name ItemScriptBase
 # TODO - how can animations be made easier?
-# TODO - how does item get player?
 # TODO - what is an animation library?
 
 #
@@ -53,6 +52,17 @@ var instance: ItemInstance:
     get: return _item_instance
 var _item_instance: ItemInstance = null
 
+## The `ItemInteractor` that is interacting with this item.
+var interactor: ItemInteractor:
+    get: return _interactor
+var _interactor: ItemInteractor = null
+
+## The `CharacterDefinition` that is using this item currently.
+var character: CharacterDefinition:
+    get:
+        if interactor: return interactor.character
+        return null
+
 #
 #   Public Functions
 #
@@ -61,8 +71,9 @@ func setup(parent_instance: ItemInstance) -> void:
     _item_instance = parent_instance
 
 ## Call to trigger `item_selected_start` on subclasses.
-func call_selected_start() -> void:
+func call_selected_start(parent_interactor: ItemInteractor) -> void:
     _is_selected = true
+    _interactor = parent_interactor
     item_selected_start()
     selected_start.emit()
 
@@ -76,6 +87,7 @@ func call_selected_stop() -> void:
     item_selected_stop()
     use_0_input.reset()
     use_1_input.reset()
+    _interactor = null
     selected_stop.emit()
 
 ## Trigger a oneshot animation on all viewmodels.
