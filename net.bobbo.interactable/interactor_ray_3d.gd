@@ -10,68 +10,64 @@ const METHOD_INTERACT_STOP = "player_interact_stop"
 const METHOD_HOVER_START = "player_interact_hover_start"
 const METHOD_HOVER_STOP = "player_interact_hover_stop"
 
-var focused_interactable = null
-var is_interacting = false
+var focused_inter_parent = null
+var is_using = false
 
 func _process(delta):
-	if focused_interactable:
-		if Input.is_action_just_pressed("player_interact") and !is_interacting:
-			is_interacting = true
-			call_interact_start(focused_interactable)
-		if Input.is_action_just_released("player_interact") and is_interacting:
-			is_interacting = false
-			call_interact_stop(focused_interactable)
+	if focused_inter_parent:
+		var current_interactables = Interactable.find_in_children(focused_inter_parent)
+		
+		if Input.is_action_just_pressed("player_interact") and !is_using:
+			is_using = true
+			call_interact_start(current_interactables)
+		if Input.is_action_just_released("player_interact") and is_using:
+			is_using = false
+			call_interact_stop(current_interactables)
 
 func _physics_process(_delta):
-	var cur_collider = get_collider()
-	if cur_collider == focused_interactable:
+	var current_collider = get_collider()
+	if current_collider == focused_inter_parent:
 		return
-		
-	# We're colliding with a NEW THING
-	var new_interactable = null
 	
+	var current_interactables = Interactable.find_in_children(focused_inter_parent)
+	var new_interactables = Interactable.find_in_children(current_collider)
+
 	# If we were hovering, stop
-	if focused_interactable != null:
-		call_hover_stop(focused_interactable)
+	if focused_inter_parent != null:
+		call_hover_stop(current_interactables)
 		
-		if is_interacting:
-			is_interacting = false
-			call_interact_stop(focused_interactable)
+		if is_using:
+			is_using = false
+			call_interact_stop(current_interactables)
 		
-	# If this is an interactable object...
-	if is_collider_interactable(cur_collider):
-		# Save this collider
-		new_interactable = get_collider()
+	# If this is an interactable object... start hovering
+	if is_collider_interactable(new_interactables):
+		call_hover_start(new_interactables)
 		
-		# Start hovering
-		call_hover_start(new_interactable)
-		
-	if focused_interactable == null and new_interactable != null:
+	if current_interactables.size() == 0 and new_interactables.size() != 0:
 		interact_hover_start.emit()
 		interact_hover_changed.emit(true)
-	elif focused_interactable != null and new_interactable == null:
+	elif current_interactables.size() != 0 and new_interactables.size() == 0:
 		interact_hover_stop.emit()
 		interact_hover_changed.emit(false)
 		
-	focused_interactable = new_interactable
+	focused_inter_parent = current_collider
 		
-func is_collider_interactable(collider: Node) -> bool:
-	if collider == null:
-		return false
-	return Interactable.find_interactable_children(collider).size() > 0
+func is_collider_interactable(interactables: Array[Interactable]) -> bool:
+	return interactables.size() > 0
 
-func call_hover_start(collider: Node):
-	for interactable in Interactable.find_interactable_children(collider):
+func call_hover_start(interactables: Array[Interactable]):
+	for interactable in interactables:
 		interactable.call_hover_start()
 	
-func call_hover_stop(collider: Node):
-	for interactable in Interactable.find_interactable_children(collider):
+func call_hover_stop(interactables: Array[Interactable]):
+	for interactable in interactables:
 		interactable.call_hover_stop()
 
-func call_interact_start(collider: Node):
-	for interactable in Interactable.find_interactable_children(collider):
+func call_interact_start(interactables: Array[Interactable]):
+	for interactable in interactables:
 		interactable.call_use_start()
 	
-func call_interact_stop(collider: Node):
-	for interactable in Interactable.find_interactable_children(collider):
+func call_interact_stop(interactables: Array[Interactable]):
+	for interactable in interactables:
 		interactable.call_use_stop()

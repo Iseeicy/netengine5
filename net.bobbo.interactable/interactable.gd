@@ -61,7 +61,8 @@ func _get_configuration_warnings():
 
 ## Given a node, return a list of it's direct children that are `Interactable`
 ## nodes.
-static func find_interactable_children(node: Node) -> Array[Interactable]:
+static func find_in_children(node: Node) -> Array[Interactable]:
+	if node == null: return []
 	var found: Array[Interactable] = []
 	for child in node.get_children():
 		if child is Interactable: found.append(child)
