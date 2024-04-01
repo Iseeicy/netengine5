@@ -62,7 +62,7 @@ func _ready():
     # Find required nodes
     for child in get_children():
         if child is CollisionShape3D:
-            collider = child
+            _collider = child
             break
 
     # Setup our PlayerModel
@@ -112,11 +112,27 @@ func _get_configuration_warnings():
     return warnings
 
 func _process(delta):
+    _process_before(delta)
+    
     # Make sure the script runner is doing it's job
     script_runner.scripts_process(delta)
 
+    _process_after(delta)
+
 func _physics_process(delta):
+    _physics_process_before(delta)
+    
     # Make sure the script runner is doing it's job
     script_runner.scripts_physics_process(delta)
-    # Move this agent
+
+    _physics_process_after(delta)
     move_and_slide()
+
+#
+#   Virtual Functions
+#
+
+func _process_before(delta: float) -> void: return
+func _process_after(delta: float) -> void: return
+func _physics_process_before(delta: float) -> void: return
+func _physics_process_after(delta: float) -> void: return
