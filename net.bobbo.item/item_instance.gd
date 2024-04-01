@@ -42,12 +42,18 @@ signal stack_size_changed(size: int)
 
 ## The descriptor that this instance came from.
 var _descriptor: ItemDescriptor = null
+## The scripting for this item, if any.
+var _item_script: ItemScriptBase = null
 ## Generally where is this object spatially?
 var _space_state: SpaceState = SpaceState.NOWHERE
 ## If this instance is IN_WORLD_2D, then this is the WorldItem that represents us.
 var _current_world_item_2d: WorldItem2D = null
 ## If this instance is IN_WORLD_3D, then this is the WorldItem that represents us.
 var _current_world_item_3d: WorldItem3D = null
+## All 2D viewmodels that have been spawned
+var _current_viewmodels_2d: Array[ItemViewModel2D] = []
+## All 3D viewmodels that have been spawned
+var _current_viewmodels_3d: Array[ItemViewModel3D] = []
 ## If this instance is IN_INVENTORY, then this is the ItemInventory that the
 ## item is currently contained in.
 var _current_parent_inventory: ItemInventory = null
@@ -72,10 +78,20 @@ func _notification(what: int):
 ## belongs to.
 func setup(desc: ItemDescriptor) -> void:
 	_descriptor = desc
+
+	# Spawn the scripting for this item as a child
+	if desc.item_script_scene != null:
+		_item_script = desc.item_script_scene.instantiate()
+		add_child(_item_script)
+		_item_script.setup(self)
+
 	put_nowhere()
 
 ## Returns the ItemDescriptor that this item belongs to.
 func get_descriptor() -> ItemDescriptor: return _descriptor
+
+## Returns the scripting for this item if it has any. `null` otherwise.
+func get_item_script() -> ItemScriptBase: return _item_script
 
 ## Returns the current SpaceState of this item.
 func get_space_state() -> SpaceState: return _space_state
@@ -152,6 +168,14 @@ func instantiate_view_model_2d() -> ItemViewModel2D:
 	
 	var new_view_model = _descriptor.view_model_2d_scene.instantiate()
 	new_view_model.setup(self)
+
+	# Put this viewmodel in the cache of existing viewmodels, and configure it
+	# so that it will be removed from the cache when the viewmodel is free'd.
+	_current_viewmodels_2d.append(new_view_model)
+	var remove_when_free_func = func():
+		_current_viewmodels_2d.erase(new_view_model)
+	new_view_model.view_model_freed.connect(remove_when_free_func.bind())
+
 	return new_view_model
 
 ## Spawn and return a new instance of this item's view model, if there is one. 
@@ -162,7 +186,26 @@ func instantiate_view_model_3d() -> ItemViewModel3D:
 	
 	var new_view_model = _descriptor.view_model_3d_scene.instantiate()
 	new_view_model.setup(self)
+
+	# Put this viewmodel in the cache of existing viewmodels, and configure it
+	# so that it will be removed from the cache when the viewmodel is free'd.
+	_current_viewmodels_3d.append(new_view_model)
+	var remove_when_free_func = func():
+		_current_viewmodels_3d.erase(new_view_model)
+	new_view_model.view_model_freed.connect(remove_when_free_func.bind())
+	
 	return new_view_model
+
+## Sets an animation parameter in every viewmodel that exists for this specific item instance.
+## Args:
+## 	`param_key`: The raw key for the AnimationTree parameter to set. If this doesn't match
+## 		a valid param, nothing will happen.
+## 	`param_value`: The value to set the param to, if found.
+func set_viewmodel_anim_param(param_key: String, param_value: Variant) -> void:
+	for viewmodel_3d in _current_viewmodels_3d:
+		viewmodel_3d.animation_tree.set(param_key, param_value)
+	for viewmodel_2d in _current_viewmodels_2d:
+		viewmodel_2d.animation_tree.set(param_key, param_value)
 
 ## Places this item instance in the 2D game world. If it was in an inventory, it is
 ## removed from that inventory.
@@ -171,7 +214,7 @@ func instantiate_view_model_3d() -> ItemViewModel3D:
 ##	`InstanceError.ALREADY_EXISTS` if the item is already in the 2D or 3D game world
 ##	`InstanceError.SCENE_MISSING` if there is no scene in the descriptor for a
 ##		WorldItem
-func put_in_world_2d(world_root: Node = null) -> InstanceError:
+func put_in_world_2d(world_root: Node=null) -> InstanceError:
 	if _space_state == SpaceState.IN_WORLD_2D:
 		return InstanceError.ALREADY_EXISTS
 	if _space_state == SpaceState.IN_WORLD_3D:
@@ -203,7 +246,7 @@ func put_in_world_2d(world_root: Node = null) -> InstanceError:
 ##	`InstanceError.ALREADY_EXISTS` if the item is already in the 2D or 3D game world
 ##	`InstanceError.SCENE_MISSING` if there is no scene in the descriptor for a
 ##		WorldItem
-func put_in_world_3d(world_root: Node = null) -> InstanceError:
+func put_in_world_3d(world_root: Node=null) -> InstanceError:
 	if _space_state == SpaceState.IN_WORLD_2D:
 		return InstanceError.ALREADY_EXISTS
 	if _space_state == SpaceState.IN_WORLD_3D:
@@ -329,7 +372,7 @@ func _remove_from_world() -> bool:
 	var actually_removed = false
 	
 	# Remove our 2D world item, if there is one.
-	if  _current_world_item_2d != null:
+	if _current_world_item_2d != null:
 		_current_world_item_2d.queue_free()
 		_current_world_item_2d = null
 		actually_removed = false

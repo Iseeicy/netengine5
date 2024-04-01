@@ -33,6 +33,10 @@ var inventory: ItemInventory:
 
         _set_selected_slot_index_helper( - 1)
 
+## OPTIONAL. The character that uses this interactor. Items that are interacted with will
+## think that THIS character is interacting with them.
+var character: CharacterDefinition = null
+
 ## The currently selected slot index. If no slot is selected or there
 ## is no inventory, this is -1.
 var selected_slot: int:
@@ -45,7 +49,7 @@ var selected_slot: int:
 ## The currently selected item. If nothing is selected, this is null.
 var selected_item: ItemInstance:
     get:
-        if inventory == null:
+        if selected_slot < 0:
             return null
         else:
             return inventory.get_item_at_slot(selected_slot)
@@ -60,6 +64,15 @@ var _target_inventory: ItemInventory = null
 ## The index of the selected slot in `inventory`. -1 if there is nothing
 ## selected.
 var _selected_slot_index: int = -1
+
+#
+#   Godot Functions
+#
+
+func _process(delta):
+    # If we have a selected item, and that item has scripting, call it's process function
+    if selected_item != null and selected_item.get_item_script() != null:
+        selected_item.get_item_script().item_selected_process(delta)
 
 #
 #   Public Functions
@@ -115,6 +128,21 @@ func _on_inventory_slot_updated(index: int, item: ItemInstance) -> void:
 ## A helper function that only sets the selected item index and emits an
 ## event if a new value is being assigned.
 func _set_selected_slot_index_helper(new_index: int) -> void:
+    # If we're already selecting this slot, EXIT
     if _selected_slot_index == new_index: return
+
+    # If there was an item at the old slot that has scripting, tell it
+    # about being unselected
+    if selected_item != null and selected_item.get_item_script() != null:
+        selected_item.get_item_script().call_selected_stop()
+    
+    # Update the selected slot
     _selected_slot_index = new_index
+
+    # If there is an item at the new slot that has scripting, tell it
+    # about being selected
+    if selected_item != null and selected_item.get_item_script() != null:
+        selected_item.get_item_script().call_selected_start(self)
+
+    # ...and tell us about all that!
     slot_selected.emit(new_index)

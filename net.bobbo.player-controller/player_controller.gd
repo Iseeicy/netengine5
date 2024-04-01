@@ -8,6 +8,10 @@ class_name PlayerController
 @export var player_scripts: Array[PackedScene] = []
 @export var initial_model: PackedScene = null
 
+## OPTIONAL. The character that this player represents. If not assigned,
+## a default value will be assigned.
+@export var character_definition: CharacterDefinition = null
+
 #
 #	Variables
 #
@@ -29,10 +33,22 @@ var height: float = 2
 #
 
 func _ready():
+	# Setup our playermodel
 	if initial_model != null:
 		model.set_model(initial_model)
 
+	# Create a default character if there isn't one assigned to this
+	# player.
+	if character_definition == null:
+		character_definition = CharacterDefinition.new()
+		character_definition.name = "Player"
+
+	# Make sure that the character def knows where our player character is
+	character_definition.set_tracked_node(self)
+
+	# Setup the item interactor
 	item_interactor.inventory = inventory
+	item_interactor.character = character_definition
 	
 	for script_scene in player_scripts:
 		var spawned_script = script_scene.instantiate()
