@@ -11,7 +11,7 @@ extends PlayerControllerScript
 #	Functions
 #
 
-func player_physics_process(delta: float) -> void:
+func character_agent_physics_process(delta: float) -> void:
 	if player.is_on_floor():
 		return
 	
@@ -36,6 +36,6 @@ func _get_move_speed(delta: float) -> float:
 	# If we're currently moving at a speed greater than our target,
 	# then just use that speed
 	if current_move_speed > move_speed:
-		return current_move_speed	
+		return current_move_speed
 	else:
 		return move_speed

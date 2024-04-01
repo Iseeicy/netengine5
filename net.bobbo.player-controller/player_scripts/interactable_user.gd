@@ -13,7 +13,7 @@ const use_action: String = "player_interact"
 #	Player Functions
 #
 
-func player_process(_delta: float) -> void:
+func character_agent_process(_delta: float) -> void:
     # If the player is NOT hovering over something right now, EXIT EARLY
     if not player.interactor.is_hovering: return
     # If we don't even have a use key, EXIT EARLY

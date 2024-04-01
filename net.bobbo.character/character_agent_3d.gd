@@ -39,10 +39,10 @@ class_name CharacterAgent3D
 #   Public Variables
 #
 
-## The node that manages player scripts on this agent.
-var script_runner: PlayerControllerScriptRunner:
+## The node that manages character agent scripts on this agent.
+var script_runner: CharacterAgentScriptRunner:
     get: return _script_runner
-var _script_runner: PlayerControllerScriptRunner = null
+var _script_runner: CharacterAgentScriptRunner = null
 
 ## The node that handles interacting with this agent's items.
 var item_interactor: ItemInteractor:
@@ -86,7 +86,7 @@ func _ready():
     item_interactor.character = character
 
     # Setup the script runner (DO THIS LAST)
-    _script_runner = PlayerControllerScriptRunner.new()
+    _script_runner = CharacterAgentScriptRunner.new()
     add_child(_script_runner)
     for script_scene in agent_scripts:
         var spawned_script = script_scene.instantiate()

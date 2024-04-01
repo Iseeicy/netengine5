@@ -25,7 +25,7 @@ const crouch_action: String = "player_crouch"
 #	Functions
 #
 
-func player_ready():
+func character_agent_ready():
 	self.assert_input_action(move_forward_action)
 	self.assert_input_action(move_back_action)
 	self.assert_input_action(move_left_action)
@@ -33,7 +33,7 @@ func player_ready():
 	self.assert_input_action(run_action)
 	self.assert_input_action(crouch_action)
 
-func player_physics_process(delta: float) -> void:
+func character_agent_physics_process(delta: float) -> void:
 	if not player.is_on_floor():
 		return
 	
@@ -64,4 +64,3 @@ func _calculate_acceleration(target_vel: Vector3, prev_vel: Vector3) -> float:
 		return acceleration_rise
 	else:
 		return acceleration_fall
-	

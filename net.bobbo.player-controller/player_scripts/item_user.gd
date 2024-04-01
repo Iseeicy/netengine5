@@ -14,7 +14,7 @@ const use_1_action: String = "player_use_item_1"
 #	Player Functions
 #
 
-func player_process(_delta: float) -> void:
+func character_agent_process(_delta: float) -> void:
     # Get the currently selected item and item script. If there isn't one, EXIT EARLY
     var item: ItemInstance = player.item_interactor.selected_item
     if item == null: return

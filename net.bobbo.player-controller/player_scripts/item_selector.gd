@@ -20,7 +20,7 @@ var _scroll_item_back_pressed: bool:
 #	Player Functions
 #
 
-func player_process(_delta: float):
+func character_agent_process(_delta: float):
     # Run the logic for selecting the next item
     if _scroll_item_forward_pressed: select_next_item()
 
