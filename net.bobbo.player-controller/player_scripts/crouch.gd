@@ -18,10 +18,10 @@ const crouch_action: String = "player_crouch"
 #	Functions
 #
 
-func player_ready():
+func character_agent_ready():
 	self.assert_input_action(crouch_action)
 
-func player_physics_process(delta: float):
+func character_agent_physics_process(delta: float):
 	if Input.is_action_pressed(crouch_action):
 		crouch_target = 0.5
 	else:

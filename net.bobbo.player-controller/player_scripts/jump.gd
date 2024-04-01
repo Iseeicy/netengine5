@@ -18,10 +18,10 @@ const jump_action: String = "player_jump"
 #	Functions
 #
 
-func player_ready():
+func character_agent_ready():
 	self.assert_input_action(jump_action)
 		
-func player_physics_process(_delta) -> void:
+func character_agent_physics_process(_delta) -> void:
 	if support_ground_jump:
 		player.velocity += calc_ground_jump_velocity()
 	if support_wall_jump:
@@ -40,6 +40,4 @@ func calc_wall_jump_velocity() -> Vector3:
 		var vert_jump = Vector3(0, jump_impulse, 0)
 		var wall_jump = player.get_wall_normal() * jump_impulse
 		
-		return 	lerp(vert_jump, wall_jump, 0.5)
-		
-		
+		return lerp(vert_jump, wall_jump, 0.5)

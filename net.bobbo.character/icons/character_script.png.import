@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cj8o41nxafeaw"
-path="res://.godot/imported/player_script_runner.png-678a2de2834ed0314ef9f8cd66beab39.ctex"
+uid="uid://bovh082ua6uqe"
+path="res://.godot/imported/character_script.png-22e966ab616ec35c78a6699ab5b1a294.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/netengine5/net.bobbo.player-controller/icons/player_script_runner.png"
-dest_files=["res://.godot/imported/player_script_runner.png-678a2de2834ed0314ef9f8cd66beab39.ctex"]
+source_file="res://addons/netengine5/net.bobbo.character/icons/character_script.png"
+dest_files=["res://.godot/imported/character_script.png-22e966ab616ec35c78a6699ab5b1a294.ctex"]
 
 [params]
 

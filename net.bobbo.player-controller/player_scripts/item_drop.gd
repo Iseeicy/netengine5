@@ -27,7 +27,7 @@ var _drop_item_stack_pressed: bool:
 #	Player Functions
 #
 
-func player_physics_process(_delta: float):
+func character_agent_physics_process(_delta: float):
     # Run logic for dropping a single item
     if _drop_item_single_pressed:
         drop_item(player.item_interactor.selected_slot, 1)

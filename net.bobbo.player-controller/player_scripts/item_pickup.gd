@@ -11,11 +11,11 @@ var _items_that_could_be_picked_up: Array[WorldItem3D] = []
 #   Player Functions
 #
 
-func player_ready() -> void:
+func character_agent_ready() -> void:
     # Put the pickup area under a 3D node
     _pickup_area.reparent(player, false)
 
-func player_physics_process(_delta: float) -> void:
+func character_agent_physics_process(_delta: float) -> void:
     # Try to pickup any cached items that couldn't be picked up before, but MAYBE could be now
     for item in _items_that_could_be_picked_up:
         _attempt_pickup_item(item)
