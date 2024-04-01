@@ -58,28 +58,20 @@ func _physics_process(_delta):
 func is_collider_interactable(collider: Node) -> bool:
 	if collider == null:
 		return false
-	
-	for child in collider.get_children():
-		if child is Interactable:
-			return true
-	return false
+	return Interactable.find_interactable_children(collider).size() > 0
 
 func call_hover_start(collider: Node):
-	for child in collider.get_children():
-		if child is Interactable:
-			child.hover_start()
+	for interactable in Interactable.find_interactable_children(collider):
+		interactable.call_hover_start()
 	
 func call_hover_stop(collider: Node):
-	for child in collider.get_children():
-		if child is Interactable:
-			child.hover_stop()
+	for interactable in Interactable.find_interactable_children(collider):
+		interactable.call_hover_stop()
 
 func call_interact_start(collider: Node):
-	for child in collider.get_children():
-		if child is Interactable:
-			child.interact_start()
+	for interactable in Interactable.find_interactable_children(collider):
+		interactable.call_use_start()
 	
 func call_interact_stop(collider: Node):
-	for child in collider.get_children():
-		if child is Interactable:
-			child.interact_stop()
+	for interactable in Interactable.find_interactable_children(collider):
+		interactable.call_use_stop()
