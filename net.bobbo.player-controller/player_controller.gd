@@ -44,7 +44,8 @@ func _ready():
 		character_definition.name = "Player"
 
 	# Make sure that the character def knows where our player character is
-	character_definition.set_tracked_node(self)
+	character_definition.body_node = self
+	character_definition.head_node = camera
 
 	# Setup the item interactor
 	item_interactor.inventory = inventory
