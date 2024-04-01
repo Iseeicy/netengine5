@@ -12,14 +12,14 @@ func _process(delta):
 	if !current_character:
 		return
 		
-	_projection.set_focus_position(current_character.get_position())
+	_projection.set_focus_position(current_character.body_node.position)
 
 #
 #	Private Functions
 #
 
 func _set_target_character(character: CharacterDefinition) -> void:
-	if character and character.is_physical():
+	if character and character.is_physical:
 		current_character = character
 	else:
 		current_character = null

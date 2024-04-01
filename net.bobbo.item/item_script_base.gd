@@ -68,8 +68,8 @@ var character: CharacterDefinition:
 ## scenario?
 var player3d: PlayerController:
     get:
-        if character and character.get_tracked_node() is PlayerController:
-            return character.get_tracked_node()
+        if character and character.body_node is PlayerController:
+            return character.body_node
         return null
 
 #
