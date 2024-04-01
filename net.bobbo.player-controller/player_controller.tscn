@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://b4nwduau6uxjr"]
+[gd_scene load_steps=19 format=3 uid="uid://b4nwduau6uxjr"]
 
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.player-controller/player_controller.gd" id="1_f5l1k"]
 [ext_resource type="PackedScene" uid="uid://bysmgnirlwse2" path="res://addons/netengine5/net.bobbo.player-controller/player_scripts/air_movement_default.tscn" id="2_43h2e"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://bvg5g5iuv5gvc" path="res://addons/netengine5/net.bobbo.player-controller/player_scripts/ground_movement_default.tscn" id="3_4r1p5"]
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.mouse-look-3d/mouse_look_3d.gd" id="3_gmmyx"]
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.interactable/interactor_ray_3d.gd" id="4_aevm5"]
+[ext_resource type="PackedScene" uid="uid://dnqijjhfxppc2" path="res://addons/netengine5/net.bobbo.player-controller/player_scripts/interactable_user_default.tscn" id="5_0va03"]
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.player-controller/script_runner/player_script_runner.gd" id="5_03xim"]
 [ext_resource type="PackedScene" uid="uid://d2ya4ybiuosav" path="res://addons/netengine5/net.bobbo.player-controller/player_scripts/crouch_default.tscn" id="5_5mfos"]
 [ext_resource type="PackedScene" uid="uid://bpiel1qntfmyh" path="res://addons/netengine5/net.bobbo.player-controller/player_scripts/jump_default.tscn" id="6_jkgnv"]
@@ -22,7 +23,7 @@
 [node name="PlayerController" type="CharacterBody3D"]
 collision_layer = 2
 script = ExtResource("1_f5l1k")
-player_scripts = Array[PackedScene]([ExtResource("2_atrpy"), ExtResource("3_4r1p5"), ExtResource("2_43h2e"), ExtResource("5_5mfos"), ExtResource("6_jkgnv"), ExtResource("7_g2to4"), ExtResource("8_xyibm"), ExtResource("9_4kan1"), ExtResource("10_fmm05")])
+player_scripts = Array[PackedScene]([ExtResource("2_atrpy"), ExtResource("3_4r1p5"), ExtResource("2_43h2e"), ExtResource("5_0va03"), ExtResource("5_5mfos"), ExtResource("6_jkgnv"), ExtResource("7_g2to4"), ExtResource("8_xyibm"), ExtResource("9_4kan1"), ExtResource("10_fmm05")])
 
 [node name="Collider" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_i5qqf")

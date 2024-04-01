@@ -1,73 +1,85 @@
+## A `RayCast3D` that specifically aims to intersect with objects
+## containing `Interactable` nodes. This will automatically call
+## any found `Interactable`'s hover functions.
 extends RayCast3D
 class_name InteractorRay3D
 
-signal interact_hover_changed(bool)
-signal interact_hover_start
-signal interact_hover_stop
+#
+#	Exports
+#
 
-const METHOD_INTERACT_START = "player_interact_start"
-const METHOD_INTERACT_STOP = "player_interact_stop"
-const METHOD_HOVER_START = "player_interact_hover_start"
-const METHOD_HOVER_STOP = "player_interact_hover_stop"
+## Emitted when the value of `is_hovering` has changed.
+signal is_hovering_changed(is_hovering: bool)
 
-var focused_inter_parent = null
-var is_using = false
+#
+#	Public Variables
+#
 
-func _process(delta):
-	if focused_inter_parent:
-		var current_interactables = Interactable.find_in_children(focused_inter_parent)
-		
-		if Input.is_action_just_pressed("player_interact") and !is_using:
-			is_using = true
-			call_interact_start(current_interactables)
-		if Input.is_action_just_released("player_interact") and is_using:
-			is_using = false
-			call_interact_stop(current_interactables)
+## Is this ray currently hovering over an interactable object?
+## Emits `is_hovering_changed` when this value changes.
+var is_hovering: bool:
+	get: return _is_hovering
+var _is_hovering: bool = false:
+	get: return _is_hovering
+	set(value):
+		if value == _is_hovering: return
+		_is_hovering = value
+		is_hovering_changed.emit(value)
+
+#
+#	Private Variables
+#
+
+## The object that this ray is currently intersecting with, if any.
+## Typically this is the parent body of any collision shapes, like a
+## Rigidbody or StaticBody.
+var _focused_object: CollisionObject3D = null
+
+#
+#	Godot Functions
+#
 
 func _physics_process(_delta):
-	var current_collider = get_collider()
-	if current_collider == focused_inter_parent:
-		return
-	
-	var current_interactables = Interactable.find_in_children(focused_inter_parent)
-	var new_interactables = Interactable.find_in_children(current_collider)
+	# If the object intersecting with this ray is NOT the object that
+	# we already know about, then UPDATE IT!
+	if _focused_object != get_collider():
+		_set_focused_object(get_collider())
 
-	# If we were hovering, stop
-	if focused_inter_parent != null:
-		call_hover_stop(current_interactables)
-		
-		if is_using:
-			is_using = false
-			call_interact_stop(current_interactables)
-		
-	# If this is an interactable object... start hovering
-	if is_collider_interactable(new_interactables):
-		call_hover_start(new_interactables)
-		
-	if current_interactables.size() == 0 and new_interactables.size() != 0:
-		interact_hover_start.emit()
-		interact_hover_changed.emit(true)
-	elif current_interactables.size() != 0 and new_interactables.size() == 0:
-		interact_hover_stop.emit()
-		interact_hover_changed.emit(false)
-		
-	focused_inter_parent = current_collider
-		
-func is_collider_interactable(interactables: Array[Interactable]) -> bool:
-	return interactables.size() > 0
+func _notification(what: int):
+	# When this object is free'd, force unfocus
+	if what == NOTIFICATION_PREDELETE:
+		_set_focused_object(null)
 
-func call_hover_start(interactables: Array[Interactable]):
-	for interactable in interactables:
-		interactable.call_hover_start()
-	
-func call_hover_stop(interactables: Array[Interactable]):
-	for interactable in interactables:
-		interactable.call_hover_stop()
+#
+#	Public Functions
+#
 
-func call_interact_start(interactables: Array[Interactable]):
-	for interactable in interactables:
-		interactable.call_use_start()
+## Get a list of interactables that we are hovering over. When `is_hovering`
+## is true, this will have more than 0 elements.
+func get_focused_interactables() -> Array[Interactable]:
+	return Interactable.find_in_children(_focused_object)
+
+#
+#	Private Functions
+#
+
+## Targets a new object, and calls proper Interactable methods on the old
+## + new objects if applicable.
+func _set_focused_object(new_focused_object: CollisionObject3D) -> void:
+	if _focused_object == new_focused_object: return
 	
-func call_interact_stop(interactables: Array[Interactable]):
-	for interactable in interactables:
-		interactable.call_use_stop()
+	var old_interactables = Interactable.find_in_children(_focused_object)
+	var new_interactables = Interactable.find_in_children(new_focused_object)
+
+	# Stop hovering / using old interactables
+	for old_inter in old_interactables:
+		if old_inter.is_hovering: old_inter.call_hover_stop()
+		if old_inter.is_using: old_inter.call_use_stop()
+
+	# Start hovering new interactables
+	for new_inter in new_interactables:
+		new_inter.call_hover_start()
+
+	# Mark that we either ARE or ARE NOT hovering
+	_is_hovering = new_interactables.size() > 0
+	_focused_object = new_focused_object

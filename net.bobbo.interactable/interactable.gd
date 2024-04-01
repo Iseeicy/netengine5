@@ -1,6 +1,6 @@
 ## Allows an object to be interactable in some way. Typically expected to be
 ## the child of some kind of body (something extending from CollisionObject3D
-## or 2D) 
+## or 2D).
 @tool
 extends Node
 class_name Interactable
