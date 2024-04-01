@@ -63,6 +63,15 @@ var character: CharacterDefinition:
         if interactor: return interactor.character
         return null
 
+## The `PlayerController` that is using this item, if there is one.
+## TODO - I don't know if I like this. How would an NPC use the same item code in this
+## scenario?
+var player3d: PlayerController:
+    get:
+        if character and character.get_tracked_node() is PlayerController:
+            return character.get_tracked_node()
+        return null
+
 #
 #   Public Functions
 #
