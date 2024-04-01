@@ -1,3 +1,7 @@
+## Allows an object to be interactable in some way. Typically expected to be
+## the child of some kind of body (something extending from CollisionObject3D
+## or 2D) 
+@tool
 extends Node
 class_name Interactable
 
@@ -20,7 +24,20 @@ var hovering = false
 var interacting = false
 
 #
-#	Functions
+#	Godot Functions
+#
+
+func _get_configuration_warnings():
+	var warnings: Array[String] = []
+	
+	if not (get_parent() == null or get_parent() is CollisionObject3D or get_parent() is CollisionObject2D):
+		warnings.append("Parent node is not a CollisionObject of some kind. " +
+		"This may still work, but typically this should be the child of a CollisionObject.")
+
+	return warnings
+
+#
+#	Public Functions
 #
 
 func interact_start():
