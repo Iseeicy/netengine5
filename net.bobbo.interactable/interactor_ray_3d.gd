@@ -21,8 +21,6 @@ func _process(delta):
 		if Input.is_action_just_released("player_interact") and is_interacting:
 			is_interacting = false
 			call_interact_stop(focused_interactable)
-			
-	
 
 func _physics_process(_delta):
 	var cur_collider = get_collider()
