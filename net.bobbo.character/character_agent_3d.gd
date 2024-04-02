@@ -60,6 +60,10 @@ var _collider: CollisionShape3D = null
 #
 
 func _ready():
+    # EXIT EARLY if func called by editor. We need this bc the script
+    # uses @tool.
+    if Engine.is_editor_hint(): return
+    
     # Find required nodes
     for child in get_children():
         if child is CollisionShape3D:
@@ -113,19 +117,23 @@ func _get_configuration_warnings():
     return warnings
 
 func _process(delta):
-    _process_before(delta)
-    
-    # Make sure the script runner is doing it's job
-    script_runner.scripts_process(delta)
+    # EXIT EARLY if func called by editor. We need this bc the script
+    # uses @tool.
+    if Engine.is_editor_hint(): return
 
+    # Make sure the script runner is doing it's job
+    _process_before(delta)
+    script_runner.scripts_process(delta)
     _process_after(delta)
 
 func _physics_process(delta):
-    _physics_process_before(delta)
-    
-    # Make sure the script runner is doing it's job
-    script_runner.scripts_physics_process(delta)
+    # EXIT EARLY if func called by editor. We need this bc the script
+    # uses @tool.
+    if Engine.is_editor_hint(): return
 
+    # Make sure the script runner is doing it's job
+    _physics_process_before(delta)
+    script_runner.scripts_physics_process(delta)
     _physics_process_after(delta)
     move_and_slide()
 
@@ -133,7 +141,7 @@ func _physics_process(delta):
 #   Virtual Functions
 #
 
-func _process_before(delta: float) -> void: return
-func _process_after(delta: float) -> void: return
-func _physics_process_before(delta: float) -> void: return
-func _physics_process_after(delta: float) -> void: return
+func _process_before(_delta: float) -> void: return
+func _process_after(_delta: float) -> void: return
+func _physics_process_before(_delta: float) -> void: return
+func _physics_process_after(_delta: float) -> void: return

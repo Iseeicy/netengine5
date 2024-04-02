@@ -1,3 +1,4 @@
+@tool
 extends CharacterAgent3D
 class_name PlayerController
 
