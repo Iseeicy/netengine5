@@ -1,4 +1,6 @@
-extends PlayerControllerScript
+## Allows an agent to pickup items off the ground and store
+## them in their inventory.
+extends CharacterAgentScript
 
 #
 #   Private Variables
@@ -8,12 +10,12 @@ extends PlayerControllerScript
 var _items_that_could_be_picked_up: Array[WorldItem3D] = []
 
 #
-#   Player Functions
+#   Agent Functions
 #
 
 func character_agent_ready() -> void:
     # Put the pickup area under a 3D node
-    _pickup_area.reparent(player, false)
+    _pickup_area.reparent(agent, false)
 
 func character_agent_physics_process(_delta: float) -> void:
     # Try to pickup any cached items that couldn't be picked up before, but MAYBE could be now
@@ -34,8 +36,8 @@ func _attempt_pickup_item(item: WorldItem3D) -> bool:
     # If we can NOT pick up this item, EXIT EARLY
     if not item.can_pickup: return false
 
-    # Try to put the item in the player's inventory
-    var err = item.get_item_instance().put_in_inventory(player.inventory)
+    # Try to put the item in the agent's inventory
+    var err = item.get_item_instance().put_in_inventory(agent.inventory)
 
     # If we can't fit the item in, EXIT EARLY
     if err != ItemInstance.InstanceError.OK: return false

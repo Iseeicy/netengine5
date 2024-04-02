@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://dan8wk0ijijys"]
 
-[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.player-controller/player_scripts/item_pickup.gd" id="1_cu3lv"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.character/agent_scripts/item_pickup.gd" id="1_cu3lv"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_asvhx"]
 radius = 1.0
