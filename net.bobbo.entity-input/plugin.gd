@@ -2,7 +2,9 @@
 extends EditorPlugin
 
 func _enter_tree():
-	return # TODO
+	add_custom_type("EntityInput", "Node", preload ("entity_input.gd"), preload ("icons/entity_input.png"))
+	add_custom_type("PlayerInput", "Node", preload ("player_input.gd"), preload ("icons/player_input.png"))
 
 func _exit_tree():
-	return # TODO
+	remove_custom_type("PlayerInput")
+	remove_custom_type("EntityInput")
