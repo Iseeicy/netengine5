@@ -1,3 +1,4 @@
+@tool
 extends CharacterBody3D
 class_name CharacterAgent3D
 
