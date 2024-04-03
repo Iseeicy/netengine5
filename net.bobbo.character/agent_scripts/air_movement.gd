@@ -1,4 +1,5 @@
-extends PlayerControllerScript
+## Allows an agent to move while in the air.
+extends CharacterAgentScript
 
 #
 #	Exported

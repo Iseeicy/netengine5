@@ -1,4 +1,5 @@
-extends PlayerControllerScript
+## Allows an agent to use items in their inventory.
+extends CharacterAgentScript
 
 #
 #	Constants

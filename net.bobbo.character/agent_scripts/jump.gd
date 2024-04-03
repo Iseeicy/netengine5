@@ -1,4 +1,5 @@
-extends PlayerControllerScript
+## Allows an agent to jump.
+extends CharacterAgentScript
 
 #
 #	Constant

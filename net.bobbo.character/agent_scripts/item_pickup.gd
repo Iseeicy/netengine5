@@ -1,5 +1,5 @@
-## Allows an agent to pickup items off the ground and store
-## them in their inventory.
+## Allows an agent to pickup items off the ground and store them in
+## their inventory.
 extends CharacterAgentScript
 
 #

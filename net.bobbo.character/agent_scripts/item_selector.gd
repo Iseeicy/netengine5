@@ -1,4 +1,5 @@
-extends PlayerControllerScript
+## Allows an agent to scroll through items in their inventory.
+extends CharacterAgentScript
 
 #
 #	Constants

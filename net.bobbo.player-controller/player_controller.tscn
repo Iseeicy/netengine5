@@ -1,21 +1,21 @@
 [gd_scene load_steps=20 format=3 uid="uid://b4nwduau6uxjr"]
 
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.player-controller/player_controller.gd" id="1_f5l1k"]
-[ext_resource type="PackedScene" uid="uid://bysmgnirlwse2" path="res://addons/netengine5/net.bobbo.player-controller/player_scripts/air_movement_default.tscn" id="2_43h2e"]
 [ext_resource type="PackedScene" uid="uid://cki8segkyvq7t" path="res://addons/netengine5/net.bobbo.character/agent_scripts/gravity_default.tscn" id="2_atrpy"]
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.player-model/player_model.gd" id="2_re4ek"]
 [ext_resource type="PackedScene" uid="uid://buiywmcmet4ip" path="res://addons/netengine5/net.bobbo.player-model/default_player_model.tscn" id="2_vu5bp"]
-[ext_resource type="PackedScene" uid="uid://bvg5g5iuv5gvc" path="res://addons/netengine5/net.bobbo.player-controller/player_scripts/ground_movement_default.tscn" id="3_4r1p5"]
+[ext_resource type="PackedScene" uid="uid://bvg5g5iuv5gvc" path="res://addons/netengine5/net.bobbo.character/agent_scripts/ground_movement_default.tscn" id="3_7xwkj"]
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.mouse-look-3d/mouse_look_3d.gd" id="3_gmmyx"]
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.interactable/interactor_ray_3d.gd" id="4_aevm5"]
 [ext_resource type="PackedScene" uid="uid://dnqijjhfxppc2" path="res://addons/netengine5/net.bobbo.player-controller/player_scripts/interactable_user_default.tscn" id="5_0va03"]
 [ext_resource type="PackedScene" uid="uid://d2ya4ybiuosav" path="res://addons/netengine5/net.bobbo.player-controller/player_scripts/crouch_default.tscn" id="5_5mfos"]
-[ext_resource type="PackedScene" uid="uid://bpiel1qntfmyh" path="res://addons/netengine5/net.bobbo.player-controller/player_scripts/jump_default.tscn" id="6_jkgnv"]
-[ext_resource type="PackedScene" uid="uid://bfwsj3q80wj8q" path="res://addons/netengine5/net.bobbo.player-controller/player_scripts/item_selector_default.tscn" id="7_g2to4"]
-[ext_resource type="PackedScene" uid="uid://8g4l55gdq7tl" path="res://addons/netengine5/net.bobbo.player-controller/player_scripts/item_drop_default.tscn" id="8_xyibm"]
+[ext_resource type="PackedScene" uid="uid://bysmgnirlwse2" path="res://addons/netengine5/net.bobbo.character/agent_scripts/air_movement_default.tscn" id="5_cvtin"]
+[ext_resource type="PackedScene" uid="uid://bpiel1qntfmyh" path="res://addons/netengine5/net.bobbo.character/agent_scripts/jump_default.tscn" id="6_mrnam"]
+[ext_resource type="PackedScene" uid="uid://8g4l55gdq7tl" path="res://addons/netengine5/net.bobbo.character/agent_scripts/item_drop_default.tscn" id="8_rnc0p"]
 [ext_resource type="PackedScene" uid="uid://dan8wk0ijijys" path="res://addons/netengine5/net.bobbo.character/agent_scripts/item_pickup_default.tscn" id="9_4kan1"]
-[ext_resource type="PackedScene" uid="uid://40a8nwm87ybx" path="res://addons/netengine5/net.bobbo.player-controller/player_scripts/item_user_default.tscn" id="10_fmm05"]
+[ext_resource type="PackedScene" uid="uid://bfwsj3q80wj8q" path="res://addons/netengine5/net.bobbo.character/agent_scripts/item_selector_default.tscn" id="10_yrp2c"]
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.item/item_inventory.gd" id="11_bf8wo"]
+[ext_resource type="PackedScene" uid="uid://40a8nwm87ybx" path="res://addons/netengine5/net.bobbo.character/agent_scripts/item_user_default.tscn" id="11_weqc3"]
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.entity-input/player_input.gd" id="17_1081f"]
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.entity-input/player_input_action.gd" id="18_k6u20"]
 
@@ -24,7 +24,7 @@
 [node name="PlayerController" type="CharacterBody3D" node_paths=PackedStringArray("input", "body_node", "head_node", "inventory", "playermodel", "playermodel_pivot")]
 collision_layer = 2
 script = ExtResource("1_f5l1k")
-agent_scripts = Array[PackedScene]([ExtResource("2_atrpy"), ExtResource("3_4r1p5"), ExtResource("5_5mfos"), ExtResource("2_43h2e"), ExtResource("6_jkgnv"), ExtResource("5_0va03"), ExtResource("8_xyibm"), ExtResource("9_4kan1"), ExtResource("7_g2to4"), ExtResource("10_fmm05")])
+agent_scripts = Array[PackedScene]([ExtResource("2_atrpy"), ExtResource("3_7xwkj"), ExtResource("5_5mfos"), ExtResource("5_cvtin"), ExtResource("6_mrnam"), ExtResource("5_0va03"), ExtResource("8_rnc0p"), ExtResource("9_4kan1"), ExtResource("10_yrp2c"), ExtResource("11_weqc3")])
 input = NodePath("PlayerInput")
 body_node = NodePath(".")
 head_node = NodePath("CameraOrigin")

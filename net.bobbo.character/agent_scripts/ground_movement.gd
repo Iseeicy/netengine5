@@ -1,4 +1,5 @@
-extends PlayerControllerScript
+## Allows an agent to move while on the ground.
+extends CharacterAgentScript
 
 #
 #	Constants

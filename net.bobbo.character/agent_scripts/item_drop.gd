@@ -1,4 +1,5 @@
-extends PlayerControllerScript
+## Allows an agent to drop items from their inventory.
+extends CharacterAgentScript
 
 #
 #	Constants
