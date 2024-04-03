@@ -22,7 +22,7 @@ const DROP_ITEM_STACK_ACTION: String = "player_drop_item_stack"
 #
 
 
-func character_agent_physics_process(_delta: float):
+func character_agent_process(_delta: float):
 	# Run logic for dropping a single item
 	if agent_3d.input.is_action_just_pressed(DROP_ITEM_SINGLE_ACTION):
 		drop_item(player.item_interactor.selected_slot, 1)

@@ -15,8 +15,21 @@ const JUMP_ACTION: String = "player_jump"
 @export var support_wall_jump: bool = false
 
 #
-#	Functions
+#	Private Variables
 #
+
+## Is the entity trying to jump right now?
+var _should_jump: bool = false
+
+#
+#	Agent Functions
+#
+
+
+func character_agent_process(_delta: float) -> void:
+	# Cache our input in process so we can use it in physics_process
+	if not _should_jump and agent_3d.input.is_action_just_pressed(JUMP_ACTION):
+		_should_jump = true
 
 
 func character_agent_physics_process(_delta) -> void:
@@ -25,22 +38,25 @@ func character_agent_physics_process(_delta) -> void:
 	if support_wall_jump:
 		player.velocity += calc_wall_jump_velocity()
 
+	# Make sure to reset the jump flag
+	if _should_jump:
+		_should_jump = false
+
+
+#
+#	Private Functions
+#
+
 
 func calc_ground_jump_velocity() -> Vector3:
-	if (
-		not player.is_on_floor()
-		or not agent_3d.input.is_action_just_pressed(JUMP_ACTION)
-	):
+	if not player.is_on_floor() or not _should_jump:
 		return Vector3.ZERO
 
 	return Vector3(0, jump_impulse, 0)
 
 
 func calc_wall_jump_velocity() -> Vector3:
-	if (
-		not player.is_on_wall()
-		or not agent_3d.input.is_action_just_pressed(JUMP_ACTION)
-	):
+	if not player.is_on_wall() or not _should_jump:
 		return Vector3.ZERO
 
 	var vert_jump = Vector3(0, jump_impulse, 0)
