@@ -1,5 +1,5 @@
-extends CharacterAgentScript
 class_name PlayerControllerScript
+extends CharacterAgentScript
 
 #
 #	Public Variables

@@ -43,7 +43,7 @@ func character_agent_physics_process(delta: float) -> void:
 		return
 
 	# Calculate our new velocity without vertical movement
-	var target_vel = player.get_rotated_move_dir() * _get_move_speed() * delta
+	var target_vel = _get_rotated_movement_dir() * _get_move_speed() * delta
 	var previous_vel = Vector3(player.velocity.x, 0, player.velocity.z)
 	var accel = _calculate_acceleration(target_vel, previous_vel)
 
@@ -55,6 +55,13 @@ func character_agent_physics_process(delta: float) -> void:
 #
 #	Private Functions
 #
+
+
+func _get_rotated_movement_dir() -> Vector3:
+	# Rotate the input to match facing dir
+	return agent_3d.input.get_movement_dir().rotated(
+		Vector3.UP, agent_3d.playermodel_pivot.rotation.y
+	)
 
 
 func _get_move_speed() -> float:

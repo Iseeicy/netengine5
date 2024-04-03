@@ -16,7 +16,7 @@ func character_agent_physics_process(delta: float) -> void:
 	if player.is_on_floor():
 		return
 
-	if player.get_movement_dir() == Vector3.ZERO:
+	if agent_3d.input.get_movement_dir() == Vector3.ZERO:
 		return
 
 	var target_vel = (
