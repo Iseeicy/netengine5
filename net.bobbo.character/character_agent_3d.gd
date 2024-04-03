@@ -1,6 +1,6 @@
 @tool
-extends CharacterBody3D
 class_name CharacterAgent3D
+extends CharacterBody3D
 
 #
 #   Exports
@@ -47,20 +47,17 @@ class_name CharacterAgent3D
 ## The node that manages character agent scripts on this agent.
 var script_runner: CharacterAgentScriptRunner:
 	get:
-		return _script_runner
-var _script_runner: CharacterAgentScriptRunner = null
+		return script_runner
 
 ## The node that handles interacting with this agent's items.
 var item_interactor: ItemInteractor:
 	get:
-		return _item_interactor
-var _item_interactor: ItemInteractor = null
+		return item_interactor
 
 ## The collider of this agent.
 var collider: CollisionShape3D:
 	get:
-		return _collider
-var _collider: CollisionShape3D = null
+		return collider
 
 #
 #   Godot Functions
@@ -76,7 +73,7 @@ func _ready():
 	# Find required nodes
 	for child in get_children():
 		if child is CollisionShape3D:
-			_collider = child
+			collider = child
 			break
 
 	# Setup our PlayerModel
@@ -98,17 +95,17 @@ func _ready():
 	character.head_node = head_node
 
 	# Setup the item interactor
-	_item_interactor = ItemInteractor.new()
-	add_child(_item_interactor)
+	item_interactor = ItemInteractor.new()
+	add_child(item_interactor)
 	item_interactor.inventory = inventory
 	item_interactor.character = character
 
 	# Setup the script runner (DO THIS LAST)
-	_script_runner = CharacterAgentScriptRunner.new()
-	add_child(_script_runner)
+	script_runner = CharacterAgentScriptRunner.new()
+	add_child(script_runner)
 	for script_scene in agent_scripts:
 		var spawned_script = script_scene.instantiate()
-		_script_runner.add_child(spawned_script)
+		script_runner.add_child(spawned_script)
 		spawned_script.owner = self
 	script_runner.initialize()
 	script_runner.scripts_ready()

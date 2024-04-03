@@ -59,7 +59,7 @@ func character_agent_physics_process(delta: float) -> void:
 
 func _get_rotated_movement_dir() -> Vector3:
 	# Rotate the input to match facing dir
-	return agent_3d.input.get_movement_dir().rotated(
+	return agent_3d.input.get_local_movement_dir().rotated(
 		Vector3.UP, agent_3d.playermodel_pivot.rotation.y
 	)
 
