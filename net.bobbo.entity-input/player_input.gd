@@ -16,9 +16,10 @@ var _input_actions: Dictionary = {}
 
 func _ready():
 	# Get all of our input actions
-	for child in get_children():
-		if child is PlayerInputAction:
-			_input_actions[child.name] = child
+	var found_inputs: Array[PlayerInputAction] = []
+	_find_all_inputs(self, found_inputs)
+	for child in found_inputs:
+		_input_actions[child.name] = child
 
 
 func _process(_delta):
@@ -57,6 +58,16 @@ func get_local_movement_dir() -> Vector3:
 #
 #	Private Functions
 #
+
+
+func _find_all_inputs(
+	starting_node: Node, results: Array[PlayerInputAction]
+) -> void:
+	if starting_node is PlayerInputAction:
+		results.append(starting_node)
+
+	for child in starting_node.get_children():
+		_find_all_inputs(child, results)
 
 
 ## Go through all of the inputs stored in `_input_actions` and register
