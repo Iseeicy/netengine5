@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://b4nwduau6uxjr"]
+[gd_scene load_steps=19 format=3 uid="uid://b4nwduau6uxjr"]
 
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.player-controller/player_controller.gd" id="1_f5l1k"]
 [ext_resource type="PackedScene" uid="uid://bysmgnirlwse2" path="res://addons/netengine5/net.bobbo.player-controller/player_scripts/air_movement_default.tscn" id="2_43h2e"]
@@ -16,6 +16,7 @@
 [ext_resource type="PackedScene" uid="uid://dan8wk0ijijys" path="res://addons/netengine5/net.bobbo.character/agent_scripts/item_pickup_default.tscn" id="9_4kan1"]
 [ext_resource type="PackedScene" uid="uid://40a8nwm87ybx" path="res://addons/netengine5/net.bobbo.player-controller/player_scripts/item_user_default.tscn" id="10_fmm05"]
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.item/item_inventory.gd" id="11_bf8wo"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.entity-input/player_input.gd" id="17_1081f"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_i5qqf"]
 
@@ -55,3 +56,6 @@ script = ExtResource("4_aevm5")
 
 [node name="ItemInventory" type="Node" parent="."]
 script = ExtResource("11_bf8wo")
+
+[node name="PlayerInput" type="Node" parent="."]
+script = ExtResource("17_1081f")
