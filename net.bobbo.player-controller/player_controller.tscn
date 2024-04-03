@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://b4nwduau6uxjr"]
+[gd_scene load_steps=20 format=3 uid="uid://b4nwduau6uxjr"]
 
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.player-controller/player_controller.gd" id="1_f5l1k"]
 [ext_resource type="PackedScene" uid="uid://bysmgnirlwse2" path="res://addons/netengine5/net.bobbo.player-controller/player_scripts/air_movement_default.tscn" id="2_43h2e"]
@@ -17,6 +17,7 @@
 [ext_resource type="PackedScene" uid="uid://40a8nwm87ybx" path="res://addons/netengine5/net.bobbo.player-controller/player_scripts/item_user_default.tscn" id="10_fmm05"]
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.item/item_inventory.gd" id="11_bf8wo"]
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.entity-input/player_input.gd" id="17_1081f"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.entity-input/player_input_action.gd" id="18_k6u20"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_i5qqf"]
 
@@ -59,3 +60,50 @@ script = ExtResource("11_bf8wo")
 
 [node name="PlayerInput" type="Node" parent="."]
 script = ExtResource("17_1081f")
+
+[node name="player_move" type="Node" parent="PlayerInput"]
+
+[node name="player_move_forward" type="Node" parent="PlayerInput/player_move"]
+script = ExtResource("18_k6u20")
+
+[node name="player_move_back" type="Node" parent="PlayerInput/player_move"]
+script = ExtResource("18_k6u20")
+
+[node name="player_move_left" type="Node" parent="PlayerInput/player_move"]
+script = ExtResource("18_k6u20")
+
+[node name="player_move_right" type="Node" parent="PlayerInput/player_move"]
+script = ExtResource("18_k6u20")
+
+[node name="player_should_run" type="Node" parent="PlayerInput"]
+script = ExtResource("18_k6u20")
+
+[node name="player_jump" type="Node" parent="PlayerInput"]
+script = ExtResource("18_k6u20")
+
+[node name="player_interact" type="Node" parent="PlayerInput"]
+script = ExtResource("18_k6u20")
+
+[node name="player_drop_item" type="Node" parent="PlayerInput"]
+
+[node name="player_drop_item_stack" type="Node" parent="PlayerInput/player_drop_item"]
+script = ExtResource("18_k6u20")
+
+[node name="player_drop_item_single" type="Node" parent="PlayerInput/player_drop_item"]
+script = ExtResource("18_k6u20")
+
+[node name="player_scroll_item" type="Node" parent="PlayerInput"]
+
+[node name="player_scroll_item_forward" type="Node" parent="PlayerInput/player_scroll_item"]
+script = ExtResource("18_k6u20")
+
+[node name="player_scroll_item_back" type="Node" parent="PlayerInput/player_scroll_item"]
+script = ExtResource("18_k6u20")
+
+[node name="player_use_item" type="Node" parent="PlayerInput"]
+
+[node name="player_use_item_0" type="Node" parent="PlayerInput/player_use_item"]
+script = ExtResource("18_k6u20")
+
+[node name="player_use_item_1" type="Node" parent="PlayerInput/player_use_item"]
+script = ExtResource("18_k6u20")
