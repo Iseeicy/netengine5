@@ -34,9 +34,9 @@ func character_agent_process(_delta: float) -> void:
 
 func character_agent_physics_process(_delta) -> void:
 	if support_ground_jump:
-		player.velocity += calc_ground_jump_velocity()
+		agent_3d.velocity += calc_ground_jump_velocity()
 	if support_wall_jump:
-		player.velocity += calc_wall_jump_velocity()
+		agent_3d.velocity += calc_wall_jump_velocity()
 
 	# Make sure to reset the jump flag
 	if _should_jump:
@@ -49,17 +49,17 @@ func character_agent_physics_process(_delta) -> void:
 
 
 func calc_ground_jump_velocity() -> Vector3:
-	if not player.is_on_floor() or not _should_jump:
+	if not agent_3d.is_on_floor() or not _should_jump:
 		return Vector3.ZERO
 
 	return Vector3(0, jump_impulse, 0)
 
 
 func calc_wall_jump_velocity() -> Vector3:
-	if not player.is_on_wall() or not _should_jump:
+	if not agent_3d.is_on_wall() or not _should_jump:
 		return Vector3.ZERO
 
 	var vert_jump = Vector3(0, jump_impulse, 0)
-	var wall_jump = player.get_wall_normal() * jump_impulse
+	var wall_jump = agent_3d.get_wall_normal() * jump_impulse
 
 	return lerp(vert_jump, wall_jump, 0.5)

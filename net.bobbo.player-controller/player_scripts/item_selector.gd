@@ -34,18 +34,20 @@ func character_agent_process(_delta: float):
 ## this will select the first item.
 func select_next_item() -> ItemInstance:
 	var start_index = _get_search_start_index()
-	var next_index = player.inventory.find_filled_slot_after(start_index, true)
-	return player.item_interactor.set_selected_slot(next_index)
+	var next_index = agent_3d.inventory.find_filled_slot_after(
+		start_index, true
+	)
+	return agent_3d.item_interactor.set_selected_slot(next_index)
 
 
 ## Select the previous item in the inventory. If no item is selected,
 ## then this will select the last item.
 func select_previous_item() -> void:
 	var start_index = _get_search_start_index()
-	var prev_index = player.inventory.find_filled_slot_before(
+	var prev_index = agent_3d.inventory.find_filled_slot_before(
 		start_index, true
 	)
-	return player.item_interactor.set_selected_slot(prev_index)
+	return agent_3d.item_interactor.set_selected_slot(prev_index)
 
 
 #
@@ -55,7 +57,7 @@ func select_previous_item() -> void:
 
 ## Get the index where item searching should start.
 func _get_search_start_index() -> int:
-	if player.item_interactor.selected_slot < 0:
+	if agent_3d.item_interactor.selected_slot < 0:
 		return 0
 
-	return player.item_interactor.selected_slot
+	return agent_3d.item_interactor.selected_slot

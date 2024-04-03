@@ -18,7 +18,7 @@ const USE_1_ACTION: String = "player_use_item_1"
 func character_agent_process(_delta: float) -> void:
 	# Get the currently selected item and item script. If there isn't
 	# one, EXIT EARLY
-	var item: ItemInstance = player.item_interactor.selected_item
+	var item: ItemInstance = agent_3d.item_interactor.selected_item
 	if item == null:
 		return
 	var item_script = item.get_item_script()
@@ -36,7 +36,7 @@ func character_agent_process(_delta: float) -> void:
 
 
 ## Given some input action and an ItemInput object, fill in the values
-## that the ItemInput needs to properly represent the player's input
+## that the ItemInput needs to properly represent the agent's input
 ## state.
 func _process_item_input(
 	action_name: String, input: ItemScriptBase.ItemInput

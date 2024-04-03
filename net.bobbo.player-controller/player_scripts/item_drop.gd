@@ -25,11 +25,11 @@ const DROP_ITEM_STACK_ACTION: String = "player_drop_item_stack"
 func character_agent_process(_delta: float):
 	# Run logic for dropping a single item
 	if agent_3d.input.is_action_just_pressed(DROP_ITEM_SINGLE_ACTION):
-		drop_item(player.item_interactor.selected_slot, 1)
+		drop_item(agent_3d.item_interactor.selected_slot, 1)
 
 	# Run logic for dropping a whole stack
 	if agent_3d.input.is_action_just_pressed(DROP_ITEM_STACK_ACTION):
-		drop_item(player.item_interactor.selected_slot)
+		drop_item(agent_3d.item_interactor.selected_slot)
 
 
 #
@@ -37,7 +37,7 @@ func character_agent_process(_delta: float):
 #
 
 
-## Makes the player drop an item from their inventory into the 3D game
+## Makes the agent drop an item from their inventory into the 3D game
 ## world. If `stack_size` is larger than what is actually at
 ## `item_index`, then the whole stack will be dropped.
 ## Returns:
@@ -48,7 +48,7 @@ func character_agent_process(_delta: float):
 ##  `null` if `ItemInstance.put_in_world_3d()` doesn't return OK
 func drop_item(item_index: int, stack_size: int = -1) -> ItemInstance:
 	# If we're trying to use an index that's outta bounds, EXIT EARLY.
-	if item_index < 0 or item_index >= player.inventory.size:
+	if item_index < 0 or item_index >= agent_3d.inventory.size:
 		return null
 
 	# If we're not trying to drop ANY items for some reason, EXIT EARLY.
@@ -57,7 +57,7 @@ func drop_item(item_index: int, stack_size: int = -1) -> ItemInstance:
 
 	# Find the item to drop in our inventory. If there isn't one at that
 	# slot, EXIT EARLY
-	var item_to_drop = player.inventory.get_item_at_slot(item_index)
+	var item_to_drop = agent_3d.inventory.get_item_at_slot(item_index)
 	if item_to_drop == null:
 		return null
 
@@ -77,13 +77,13 @@ func drop_item(item_index: int, stack_size: int = -1) -> ItemInstance:
 	# item
 	item_to_drop.get_world_item_3d().start_pickup_timer()
 
-	# Make it so the item comes out of the player's facing direction
+	# Make it so the item comes out of the agent's facing direction
 	var world_item = item_to_drop.get_world_item_3d()
-	world_item.global_position = player.camera.global_position
+	world_item.global_position = agent_3d.head_node.global_position
 	if not world_item.lock_rotation:
-		world_item.global_rotation = player.camera.global_rotation
+		world_item.global_rotation = agent_3d.head_node.global_rotation
 	world_item.apply_impulse(
-		-player.camera.global_transform.basis.z * drop_impulse
+		-agent_3d.head_node.global_transform.basis.z * drop_impulse
 	)
 
 	return item_to_drop

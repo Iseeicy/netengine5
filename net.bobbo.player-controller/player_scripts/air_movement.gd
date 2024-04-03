@@ -13,7 +13,7 @@ extends PlayerControllerScript
 
 
 func character_agent_physics_process(delta: float) -> void:
-	if player.is_on_floor():
+	if agent_3d.is_on_floor():
 		return
 
 	if agent_3d.input.get_local_movement_dir() == Vector3.ZERO:
@@ -22,10 +22,10 @@ func character_agent_physics_process(delta: float) -> void:
 	var target_vel = (
 		_get_rotated_movement_dir() * _get_move_speed(delta) * delta
 	)
-	var previous_vel = Vector3(player.velocity.x, 0, player.velocity.z)
+	var previous_vel = Vector3(agent_3d.velocity.x, 0, agent_3d.velocity.z)
 	var new_vel = previous_vel.move_toward(target_vel, delta * acceleration)
-	player.velocity.x = new_vel.x
-	player.velocity.z = new_vel.z
+	agent_3d.velocity.x = new_vel.x
+	agent_3d.velocity.z = new_vel.z
 
 
 #
@@ -42,7 +42,7 @@ func _get_rotated_movement_dir() -> Vector3:
 
 func _get_move_speed(delta: float) -> float:
 	# Calculate the speed we're already moving at
-	var previous_vel = Vector3(player.velocity.x, 0, player.velocity.z)
+	var previous_vel = Vector3(agent_3d.velocity.x, 0, agent_3d.velocity.z)
 	var current_move_speed = previous_vel.length() / delta
 
 	# If we're currently moving at a speed greater than our target,
