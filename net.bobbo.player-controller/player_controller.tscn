@@ -21,10 +21,11 @@
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_i5qqf"]
 
-[node name="PlayerController" type="CharacterBody3D" node_paths=PackedStringArray("body_node", "head_node", "inventory", "playermodel", "playermodel_pivot")]
+[node name="PlayerController" type="CharacterBody3D" node_paths=PackedStringArray("input", "body_node", "head_node", "inventory", "playermodel", "playermodel_pivot")]
 collision_layer = 2
 script = ExtResource("1_f5l1k")
 agent_scripts = Array[PackedScene]([ExtResource("2_atrpy"), ExtResource("3_4r1p5"), ExtResource("5_5mfos"), ExtResource("2_43h2e"), ExtResource("6_jkgnv"), ExtResource("5_0va03"), ExtResource("8_xyibm"), ExtResource("9_4kan1"), ExtResource("7_g2to4"), ExtResource("10_fmm05")])
+input = NodePath("PlayerInput")
 body_node = NodePath(".")
 head_node = NodePath("CameraOrigin")
 inventory = NodePath("ItemInventory")

@@ -18,7 +18,7 @@ func _ready():
 	# Get all of our input actions
 	for child in get_children():
 		if child is PlayerInputAction:
-			_input_actions[child.action_name] = child
+			_input_actions[child.name] = child
 
 
 func _process(_delta):
@@ -63,7 +63,7 @@ func get_local_movement_dir() -> Vector3:
 ## them as our `EntityInput` inputs.
 func _register_all_inputs() -> void:
 	for input in _input_actions.values():
-		var action_name: String = input.action_name
+		var action_name: String = input.name
 		var state: EntityInput.InputState = input.get_input_state()
 
 		# If we actually had an input event on this frame, REGISTER IT!

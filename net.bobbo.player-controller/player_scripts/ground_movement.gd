@@ -1,6 +1,13 @@
 extends PlayerControllerScript
 
 #
+#	Constants
+#
+
+const RUN_ACTION: String = "player_should_run"
+const CROUCH_ACTION: String = "player_crouch"
+
+#
 #	Exported
 #
 
@@ -11,56 +18,44 @@ extends PlayerControllerScript
 @export var acceleration_fall: float = 40
 
 #
-#	Variables
-#
-
-const move_forward_action: String = "player_move_forward"
-const move_back_action: String = "player_move_back"
-const move_left_action: String = "player_move_left"
-const move_right_action: String = "player_move_right"
-const run_action: String = "player_should_run"
-const crouch_action: String = "player_crouch"
-
-#
 #	Functions
 #
 
-func character_agent_ready():
-	self.assert_input_action(move_forward_action)
-	self.assert_input_action(move_back_action)
-	self.assert_input_action(move_left_action)
-	self.assert_input_action(move_right_action)
-	self.assert_input_action(run_action)
-	self.assert_input_action(crouch_action)
 
 func character_agent_physics_process(delta: float) -> void:
 	if not player.is_on_floor():
 		return
-	
+
 	# Calculate our new velocity without vertical movement
 	var target_vel = player.get_rotated_move_dir() * _get_move_speed() * delta
 	var previous_vel = Vector3(player.velocity.x, 0, player.velocity.z)
 	var accel = _calculate_acceleration(target_vel, previous_vel)
-	
+
 	var new_vel = previous_vel.move_toward(target_vel, delta * accel)
 	player.velocity.x = new_vel.x
 	player.velocity.z = new_vel.z
-	
+
+
 #
 #	Private Functions
 #
 
+
 func _get_move_speed() -> float:
-	if Input.is_action_pressed("player_crouch") and player.is_on_floor():
+	if (
+		agent_3d.input.is_action_pressed(CROUCH_ACTION)
+		and player.is_on_floor()
+	):
 		return crouch_speed
-	
-	if Input.is_action_pressed("player_should_run"):
+
+	if agent_3d.input.is_action_pressed(RUN_ACTION):
 		return run_speed
-	else:
-		return walk_speed
-	
+
+	return walk_speed
+
+
 func _calculate_acceleration(target_vel: Vector3, prev_vel: Vector3) -> float:
 	if target_vel.length_squared() > prev_vel.length_squared():
 		return acceleration_rise
-	else:
-		return acceleration_fall
+
+	return acceleration_fall

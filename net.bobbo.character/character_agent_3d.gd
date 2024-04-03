@@ -141,6 +141,7 @@ func _process(delta):
 	_process_before(delta)
 	script_runner.scripts_process(delta)
 	_process_after(delta)
+	input.sweep_inputs()
 
 
 func _physics_process(delta):
