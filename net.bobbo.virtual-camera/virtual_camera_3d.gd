@@ -22,6 +22,9 @@ func _init() -> void:
 	# Make sure we react to visibility changes
 	visibility_changed.connect(_on_self_visibility_changed.bind())
 
+	# ...and call the callback right away, so we start with a good state
+	_on_self_visibility_changed()
+
 
 func _enter_tree() -> void:
 	add_to_group(GROUP_NAME)
@@ -37,4 +40,7 @@ func _exit_tree() -> void:
 
 
 func _on_self_visibility_changed() -> void:
-	return
+	if visible:
+		add_to_group(VISIBLE_GROUP_NAME)
+	else:
+		remove_from_group(VISIBLE_GROUP_NAME)
