@@ -61,8 +61,16 @@ func _init() -> void:
 func _enter_tree() -> void:
 	add_to_group(GROUP_NAME)
 
+	# Manually trigger a vis change so that we add ourself to the tree's
+	# visible group for this vcam type.
+	_on_self_visibility_changed()
+
 
 func _exit_tree() -> void:
+	# Remove us from the visible group if this vcam is currently in it
+	if visible:
+		remove_from_group(VISIBLE_GROUP_NAME)
+
 	remove_from_group(GROUP_NAME)
 
 
