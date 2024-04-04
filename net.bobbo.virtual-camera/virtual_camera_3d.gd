@@ -31,6 +31,20 @@ static func get_all(scene_tree: SceneTree) -> Array[VirtualCamera3D]:
 	return found_vcams
 
 
+## Get all of the *VISIBLE* 3D VCams that exist in the given scene.
+## These are VCams that have their 3D `visible` property set to true.
+## Args:
+##	`scene_tree`: OPTIONAL. The SceneTree to get the 3D VCams from.
+## Returns:
+##	`Array[VirtualCamera3D]` a list of visible 3D VCams that exist in
+##		the given scene.
+static func get_visible(scene_tree: SceneTree) -> Array[VirtualCamera3D]:
+	# Cast the generic array from the scene tree into something typed.
+	var found_vcams: Array[VirtualCamera3D] = []
+	found_vcams.assign(scene_tree.get_nodes_in_group(VISIBLE_GROUP_NAME))
+	return found_vcams
+
+
 #
 #   Godot Functions
 #
@@ -42,10 +56,6 @@ func _init() -> void:
 
 	# ...and call the callback right away, so we start with a good state
 	_on_self_visibility_changed()
-
-
-func _ready():
-	print(get_all(get_tree()))
 
 
 func _enter_tree() -> void:
@@ -61,6 +71,8 @@ func _exit_tree() -> void:
 #
 
 
+## Whenever this node's visibility changes, handle adding it or removing
+## it to / from the visible group for this kind of VCam.
 func _on_self_visibility_changed() -> void:
 	if visible:
 		add_to_group(VISIBLE_GROUP_NAME)
