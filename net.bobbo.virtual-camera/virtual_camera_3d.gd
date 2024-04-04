@@ -70,17 +70,34 @@ static func get_visible(scene_tree: SceneTree) -> Array[VirtualCamera3D]:
 
 
 ## Get the priority of this VCam, relative to the viewport.
-## Args:
-##	`viewport`: The Viewport that we want to use as reference when
-##		getting this VCam's priority.
-## Returns:
-##	`int` `main_priority`, if `viewport` is null.
-##	`int` `main_priority`, if there is no specific priority for the
-##		given viewport.
-##	`int` The specific priority for the given viewport, if there was
-##		one assigned.
+## See `get_priority_by_rid` for details.
 func get_priority(viewport: Viewport) -> int:
 	return get_priority_by_rid(
+		viewport.get_viewport_rid() if viewport else null
+	)
+
+
+## Get the priority of this VCam, relative to a viewport. See
+## `set_priority_by_rid` for details.
+func set_priority(viewport: Viewport, priority: int) -> void:
+	return set_priority_by_rid(
+		viewport.get_viewport_rid() if viewport else null, priority
+	)
+
+
+## Does this VCam have a specific priority set for the given viewport,
+## using it's RID as reference? See `has_priority_by_rid` for details.
+func has_priority(viewport: Viewport) -> bool:
+	return has_priority_by_rid(
+		viewport.get_viewport_rid() if viewport else null
+	)
+
+
+## Remove the specific priority that this VCam has for a given viewport
+## using the RID of the viewport as reference. See
+## `remove_priority_by_rid` for details.
+func remove_priority(viewport: Viewport) -> bool:
+	return remove_priority_by_rid(
 		viewport.get_viewport_rid() if viewport else null
 	)
 
@@ -100,8 +117,47 @@ func get_priority_by_rid(viewport_rid: RID) -> int:
 	# If we were not given a proper RID, just return the main priority.
 	if viewport_rid == null:
 		return main_priority
-
 	return _specific_priorities.get(viewport_rid, main_priority)
+
+
+## Set the priority of this VCam, relative to the viewport using the RID
+## of the viewport as reference.
+## Args:
+##	`viewport_rid`: The resource ID of the Viewport that we want to use
+##		as reference when setting this VCam's priority.
+##	`priority`: The specific priority value we want to assign for this
+##		VCam to report when queried by the given Viewport.
+func set_priority_by_rid(viewport_rid: RID, priority: int) -> void:
+	if viewport_rid == null:
+		return
+	_specific_priorities[viewport_rid] = priority
+
+
+## Does this VCam have a specific priority set for the given viewport,
+## using it's RID as reference?
+## Args:
+##	`viewport_rid`: The resource ID of the Viewport that we want to see
+##		if this VCam has a priority set for.
+## Returns:
+##	`true` if this VCam has a specific priority assigned to the given
+##		viewport.
+##	`false` otherwise.
+func has_priority_by_rid(viewport_rid: RID) -> bool:
+	if viewport_rid == null:
+		return false
+	return _specific_priorities.has(viewport_rid)
+
+
+## Remove the specific priority that this VCam has for a given viewport
+## using the RID of the viewport as reference.
+## Args:
+##	`viewport_rid`: The resource ID of the Viewport that we want to use
+##		as reference when removing this VCam's priority.
+## Returns:
+##	`true` if the specific priority for the viewport was removed.
+##	`false` if there was no specific priority for the viewport.
+func remove_priority_by_rid(viewport_rid: RID) -> bool:
+	return _specific_priorities.erase(viewport_rid)
 
 
 #
