@@ -33,3 +33,18 @@ func create_transitioner_3d(
 	entity_camera.add_child(transitioner, false, Node.INTERNAL_MODE_BACK)
 
 	return transitioner
+
+
+func create_transitioner_2d(
+	entity_camera: EntityCamera2D, virtual_camera: VirtualCamera2D
+) -> CameraTransitioner2D:
+	## Create the transitioner with our info
+	var transitioner := CameraTransitioner2D.new(
+		self, entity_camera, virtual_camera
+	)
+
+	## Place the transitioner as a hidden internal node under the entity
+	## camera.
+	entity_camera.add_child(transitioner, false, Node.INTERNAL_MODE_BACK)
+
+	return transitioner
