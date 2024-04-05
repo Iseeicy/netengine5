@@ -10,17 +10,28 @@ extends PlayerControllerScript
 const USE_ACTION: String = "player_interact"
 
 #
+#	Private Variables
+#
+
+@onready var _interactor: InteractorRay3D = $InteractorRay3D
+
+#
 #	Player Functions
 #
 
 
+func character_agent_ready() -> void:
+	# Put the ray under a 3D node so it work
+	_interactor.reparent(agent.head_node, false)
+
+
 func character_agent_process(_delta: float) -> void:
 	# If the player is NOT hovering over something right now, EXIT EARLY
-	if not player.interactor.is_hovering:
+	if not _interactor.is_hovering:
 		return
 
 	# Cache all of the interactables to use below
-	var interactables = player.interactor.get_focused_interactables()
+	var interactables = _interactor.get_focused_interactables()
 
 	# If we're just now pressing the use key, call all of the use start
 	## funcs.
