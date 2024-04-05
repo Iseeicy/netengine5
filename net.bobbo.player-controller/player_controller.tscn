@@ -21,7 +21,7 @@
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_i5qqf"]
 
-[node name="PlayerController" type="CharacterBody3D" node_paths=PackedStringArray("input", "body_node", "head_node", "inventory", "playermodel", "playermodel_pivot")]
+[node name="PlayerController" type="CharacterBody3D" node_paths=PackedStringArray("input", "body_node", "head_node", "inventory", "playermodel", "playermodel_pivot", "collider")]
 collision_layer = 2
 script = ExtResource("1_f5l1k")
 agent_scripts = Array[PackedScene]([ExtResource("2_atrpy"), ExtResource("3_7xwkj"), ExtResource("5_5mfos"), ExtResource("5_cvtin"), ExtResource("6_mrnam"), ExtResource("7_bugfh"), ExtResource("8_rnc0p"), ExtResource("9_4kan1"), ExtResource("10_yrp2c"), ExtResource("11_weqc3"), ExtResource("12_m6trc")])
@@ -31,6 +31,7 @@ head_node = NodePath("Head")
 inventory = NodePath("ItemInventory")
 playermodel = NodePath("ModelPivot/PlayerModel")
 playermodel_pivot = NodePath("ModelPivot")
+collider = NodePath("Collider")
 initial_playermodel = ExtResource("2_vu5bp")
 
 [node name="Collider" type="CollisionShape3D" parent="."]

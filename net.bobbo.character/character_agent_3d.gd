@@ -36,6 +36,11 @@ extends CharacterBody3D
 ## the y-axis in order to rotate the playermodel.
 @export var playermodel_pivot: Node3D = null
 
+## The collider for this agent. There should only be ONE primary
+## collider. If other colliders are added to this object, they will not
+## be easily accessible.
+@export var collider: CollisionShape3D = null
+
 @export_group("Visuals")
 ## OPTIONAL. The playermodel to give this agent.
 @export var initial_playermodel: PackedScene = null
@@ -54,10 +59,11 @@ var item_interactor: ItemInteractor:
 	get:
 		return item_interactor
 
-## The collider of this agent.
-var collider: CollisionShape3D:
+## The shape that this Agent's collider starts with on ready. Useful
+## for checking how the collider shape has changed over time.
+var default_collider_shape: Shape3D = null:
 	get:
-		return collider
+		return default_collider_shape
 
 #
 #   Godot Functions
@@ -69,12 +75,6 @@ func _ready():
 	# uses @tool.
 	if Engine.is_editor_hint():
 		return
-
-	# Find required nodes
-	for child in get_children():
-		if child is CollisionShape3D:
-			collider = child
-			break
 
 	# Setup our PlayerModel
 	if initial_playermodel != null:
@@ -93,6 +93,9 @@ func _ready():
 	# Make sure that the character def knows where this agent is
 	character.body_node = body_node
 	character.head_node = head_node
+
+	# Save a duplicate of the collider shape
+	default_collider_shape = collider.shape.duplicate(true)
 
 	# Setup the item interactor
 	item_interactor = ItemInteractor.new()
@@ -124,6 +127,23 @@ func _get_configuration_warnings():
 		warnings.append("Value for `playermodel` not assigned.")
 	if not playermodel_pivot:
 		warnings.append("Value for `playermodel_pivot` not assigned.")
+	if not collider:
+		warnings.append("Value for `collider` not assigned.")
+
+	# Give a warning if there's more than one collider
+	var collider_counter = 0
+	for child in get_children():
+		if child is CollisionShape3D:
+			collider_counter += 1
+			if collider_counter > 1:
+				warnings.append(
+					(
+						"There are multiple CollisionShape"
+						+ " children. This is bad practice - there "
+						+ "should only be one collider."
+					)
+				)
+				break
 
 	return warnings
 
