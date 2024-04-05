@@ -1,6 +1,6 @@
 ## Allows players to "use" `Interactables` focused by the player's
 ## `InteractorRay3D` with the `player_interact` input.
-extends PlayerControllerScript
+extends CharacterAgentScript
 
 #
 #	Constants

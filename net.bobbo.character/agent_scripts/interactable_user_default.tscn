@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://dnqijjhfxppc2"]
+
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.character/agent_scripts/interactable_user.gd" id="1_cs2by"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.interactable/interactor_ray_3d.gd" id="2_j3x1u"]
+
+[node name="InteractableUser" type="Node"]
+script = ExtResource("1_cs2by")
+
+[node name="InteractorRay3D" type="RayCast3D" parent="."]
+target_position = Vector3(0, 0, -2)
+script = ExtResource("2_j3x1u")
