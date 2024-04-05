@@ -5,7 +5,6 @@
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.player-model/player_model.gd" id="2_re4ek"]
 [ext_resource type="PackedScene" uid="uid://buiywmcmet4ip" path="res://addons/netengine5/net.bobbo.player-model/default_player_model.tscn" id="2_vu5bp"]
 [ext_resource type="PackedScene" uid="uid://bvg5g5iuv5gvc" path="res://addons/netengine5/net.bobbo.character/agent_scripts/ground_movement_default.tscn" id="3_7xwkj"]
-[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.mouse-look-3d/mouse_look_3d.gd" id="3_gmmyx"]
 [ext_resource type="PackedScene" uid="uid://dnqijjhfxppc2" path="res://addons/netengine5/net.bobbo.player-controller/player_scripts/interactable_user_default.tscn" id="5_0va03"]
 [ext_resource type="PackedScene" uid="uid://d2ya4ybiuosav" path="res://addons/netengine5/net.bobbo.player-controller/player_scripts/crouch_default.tscn" id="5_5mfos"]
 [ext_resource type="PackedScene" uid="uid://bysmgnirlwse2" path="res://addons/netengine5/net.bobbo.character/agent_scripts/air_movement_default.tscn" id="5_cvtin"]
@@ -15,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://bfwsj3q80wj8q" path="res://addons/netengine5/net.bobbo.character/agent_scripts/item_selector_default.tscn" id="10_yrp2c"]
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.item/item_inventory.gd" id="11_bf8wo"]
 [ext_resource type="PackedScene" uid="uid://40a8nwm87ybx" path="res://addons/netengine5/net.bobbo.character/agent_scripts/item_user_default.tscn" id="11_weqc3"]
+[ext_resource type="PackedScene" uid="uid://cs7520w6fdog0" path="res://addons/netengine5/net.bobbo.character/agent_scripts/mouse_look.tscn" id="12_m6trc"]
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.virtual-camera/virtual_camera_3d.gd" id="14_inmo7"]
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.entity-input/player_input.gd" id="17_1081f"]
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.entity-input/player_input_action.gd" id="18_k6u20"]
@@ -24,7 +24,7 @@
 [node name="PlayerController" type="CharacterBody3D" node_paths=PackedStringArray("input", "body_node", "head_node", "inventory", "playermodel", "playermodel_pivot")]
 collision_layer = 2
 script = ExtResource("1_f5l1k")
-agent_scripts = Array[PackedScene]([ExtResource("2_atrpy"), ExtResource("3_7xwkj"), ExtResource("5_5mfos"), ExtResource("5_cvtin"), ExtResource("6_mrnam"), ExtResource("5_0va03"), ExtResource("8_rnc0p"), ExtResource("9_4kan1"), ExtResource("10_yrp2c"), ExtResource("11_weqc3")])
+agent_scripts = Array[PackedScene]([ExtResource("2_atrpy"), ExtResource("3_7xwkj"), ExtResource("5_5mfos"), ExtResource("5_cvtin"), ExtResource("6_mrnam"), ExtResource("5_0va03"), ExtResource("8_rnc0p"), ExtResource("9_4kan1"), ExtResource("10_yrp2c"), ExtResource("11_weqc3"), ExtResource("12_m6trc")])
 input = NodePath("PlayerInput")
 body_node = NodePath(".")
 head_node = NodePath("Head")
@@ -46,12 +46,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 
 [node name="VirtualCamera3D" type="Node3D" parent="Head"]
 script = ExtResource("14_inmo7")
-
-[node name="MouseLook3D" type="Node" parent="Head" node_paths=PackedStringArray("model_pivot")]
-script = ExtResource("3_gmmyx")
-sensitivity_x = 0.25
-sensitivity_y = 0.25
-model_pivot = NodePath("../../ModelPivot")
 
 [node name="ItemInventory" type="Node" parent="."]
 script = ExtResource("11_bf8wo")

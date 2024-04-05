@@ -9,7 +9,6 @@ extends CharacterAgent3D
 var camera_offset: Vector3 = Vector3.ZERO
 var height: float = 2
 
-@onready var mouselook: MouseLook3D = $Head/MouseLook3D
 @onready var camera: VirtualCamera3D = $Head/VirtualCamera3D
 
 #
