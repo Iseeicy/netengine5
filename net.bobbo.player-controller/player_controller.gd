@@ -7,7 +7,6 @@ extends CharacterAgent3D
 #
 
 var camera_offset: Vector3 = Vector3.ZERO
-var height: float = 2
 
 @onready var camera: VirtualCamera3D = $Head/VirtualCamera3D
 
@@ -22,15 +21,6 @@ func _process_before(_delta):
 
 func _process_after(_delta):
 	camera.position = camera_offset
-	collider.shape.height = height
-
-
-func _physics_process_before(_delta):
-	height = 2
-
-
-func _physics_process_after(_delta):
-	collider.shape.height = height
 
 
 static func find(root: Node) -> PlayerController:
