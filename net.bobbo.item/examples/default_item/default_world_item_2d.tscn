@@ -1,0 +1,21 @@
+[gd_scene load_steps=5 format=3 uid="uid://b1m2vvp1xfnid"]
+
+[ext_resource type="PhysicsMaterial" uid="uid://bc54oll5s2cdb" path="res://addons/netengine5/net.bobbo.item/item_default_physics_material.tres" id="1_5wn2h"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.item/world_item_2d.gd" id="2_53oer"]
+[ext_resource type="Texture2D" uid="uid://cfaj67qhqh8uq" path="res://addons/netengine5/net.bobbo.item/examples/default_item/default_item_icon.png" id="3_w7d7r"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_s37a4"]
+radius = 16.0
+
+[node name="DefaultWorldItem2D" type="RigidBody2D"]
+mass = 0.5
+physics_material_override = ExtResource("1_5wn2h")
+lock_rotation = true
+script = ExtResource("2_53oer")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_s37a4")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("3_w7d7r")

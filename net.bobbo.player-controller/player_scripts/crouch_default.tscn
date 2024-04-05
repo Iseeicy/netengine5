@@ -1,9 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://d2ya4ybiuosav"]
-
-[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.player-controller/player_scripts/crouch.gd" id="1_yv07o"]
-
-[node name="Crouch" type="Node"]
-script = ExtResource("1_yv07o")
-
-[node name="CrouchRay3D" type="RayCast3D" parent="."]
-target_position = Vector3(0, 1, 0)

@@ -1,0 +1,38 @@
+[gd_scene load_steps=7 format=3 uid="uid://0m2vkoykud1d"]
+
+[ext_resource type="PhysicsMaterial" uid="uid://bc54oll5s2cdb" path="res://addons/netengine5/net.bobbo.item/item_default_physics_material.tres" id="1_sj3qe"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.item/world_item_3d.gd" id="2_h5uei"]
+[ext_resource type="Texture2D" uid="uid://cfaj67qhqh8uq" path="res://addons/netengine5/net.bobbo.item/examples/default_item/default_item_icon.png" id="3_uem3g"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_y1bwn"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_af741"]
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+albedo_texture = ExtResource("3_uem3g")
+texture_filter = 0
+texture_repeat = false
+billboard_mode = 1
+
+[sub_resource type="QuadMesh" id="QuadMesh_0yxhu"]
+
+[node name="DefaultWorldItem3D" type="RigidBody3D"]
+collision_layer = 4
+mass = 0.5
+physics_material_override = ExtResource("1_sj3qe")
+lock_rotation = true
+script = ExtResource("2_h5uei")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_y1bwn")
+
+[node name="ItemRoot" type="Node3D" parent="."]
+transform = Transform3D(0.999437, -0.033551, 0, 0.033551, 0.999437, 0, 0, 0, 1, 0, -0.0246746, 0)
+metadata/_edit_group_ = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="ItemRoot"]
+transform = Transform3D(0.34202, -0.939693, 0, 0.939693, 0.34202, 0, 0, 0, 1, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_af741")
+mesh = SubResource("QuadMesh_0yxhu")
+skeleton = NodePath("../..")

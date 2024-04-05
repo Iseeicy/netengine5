@@ -14,12 +14,23 @@ class_name ItemDescriptor
 @export var max_stack_size: int = 1
 
 @export_group("Scenes")
+## The scene that contains the scripting for this item. Root node should
+## inherit from `ItemScriptBase`.
+@export var item_script_scene: PackedScene
+@export_subgroup("2D")
 ## The scene that contains the view model for this item. Root node should
-## inherit from ItemViewModel.
-@export var view_model_scene: PackedScene
+## inherit from ItemViewModel2D.
+@export var view_model_2d_scene: PackedScene
 ## The scene that contans the object to be spawned in the world for this item.
-## Root node should inherit from WorldItem2D or WorldItem3D.
-@export var world_item_scene: PackedScene
+## Root node should inherit from WorldItem2D.
+@export var world_item_2d_scene: PackedScene
+@export_subgroup("3D")
+## The scene that contains the view model for this item. Root node should
+## inherit from ItemViewModel3D.
+@export var view_model_3d_scene: PackedScene
+## The scene that contans the object to be spawned in the world for this item.
+## Root node should inherit from WorldItem3D.
+@export var world_item_3d_scene: PackedScene
 
 @export_group("UI")
 ## The name to use when displaying this item's name to the user. If empty, then

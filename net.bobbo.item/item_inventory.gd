@@ -121,6 +121,75 @@ func find_last_filled_slot() -> int:
 		index -= 1
 	return -1
 
+## Find the index of the next filled slot in the inventory, in a given direction.
+## Args:
+##	- `start_index`: The index to start searching from (exclusive).
+##  - `direction`: Which direction to search in. `1` for forward, `-1` for backward.
+##  - `wrap`: Should the search wrap around the inventory if the index runs out of bounds?
+## Returns:
+##	- The index of the next filled slot in the given direction.
+##  - `-1` if start_index is out of bounds.
+##  - `-1` if direction is `0`.
+##  - `-1` if a filled slot could not be found.
+func find_filled_slot_in_direction(start_index: int, direction: int, wrap=false) -> int:
+	# Make sure that the direction is either -1, 0 or 1
+	# If we're not looking in a direction for some reason, EXIT EARLY
+	direction = clamp(roundi(direction), -1, 1)
+	if direction == 0: return -1
+
+	# Modify our start index so we don't accidentally look at it and give a false positive.
+	# If our starting index is outta bounds, EXIT EARLY
+	if wrap:
+		if start_index < 0 or start_index >= size: return -1
+		start_index = posmod(start_index + direction, size)
+	else:
+		start_index += direction
+		if start_index < 0 or start_index >= size: return -1
+
+	if wrap:
+		# Return the first slot index we find that is filled, making sure to wrap around
+		# the array if we hit the end.
+		for x in range(0, size - 1):
+			var wrapped_index = posmod(start_index + (direction * x), size)
+			if get_item_at_slot(wrapped_index) != null:
+				return wrapped_index
+	else:
+		# Figure out what the last element we check should be
+		var end_index = -1 if direction == -1 else size
+		
+		# Return the first slot index we find that is filled, making sure to stop
+		# at the end index.
+		for x in range(start_index, end_index, direction):
+			if get_item_at_slot(x) != null: return x
+	
+	# OTHERWISE, if we get here, there are NO filled slots after the start index
+	# in the requested direction.
+	return -1
+	
+## Find the index of the next filled slot AFTER the given slot in the inventory.
+## Args:
+##	- `start_index`: The index to start searching from (exclusive).
+##  - `wrap`: Should the search wrap around the inventory if the index runs out of bounds?
+## Returns:
+##	- The index of the next filled slot.
+##  - `-1` if start_index is out of bounds.
+##  - `-1` if direction is `0`.
+##  - `-1` if a filled slot could not be found.
+func find_filled_slot_after(start_index: int, wrap = false) -> int:
+	return find_filled_slot_in_direction(start_index, 1, wrap)
+
+## Find the index of the next filled slot BEFORE the given slot in the inventory.
+## Args:
+##	- `start_index`: The index to start searching from (exclusive).
+##  - `wrap`: Should the search wrap around the inventory if the index runs out of bounds?
+## Returns:
+##	- The index of the next filled slot.
+##  - `-1` if start_index is out of bounds.
+##  - `-1` if direction is `0`.
+##  - `-1` if a filled slot could not be found.
+func find_filled_slot_before(start_index: int, wrap = false) -> int:
+	return find_filled_slot_in_direction(start_index, -1, wrap)
+
 ## Is this item in the inventory?
 func contains(item: ItemInstance) -> bool: return item in _slots
 
