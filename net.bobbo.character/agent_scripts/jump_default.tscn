@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bpiel1qntfmyh"]
+
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.character/agent_scripts/jump.gd" id="1_axsb6"]
+
+[node name="Jump" type="Node"]
+script = ExtResource("1_axsb6")
