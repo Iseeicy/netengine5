@@ -2,26 +2,6 @@
 class_name PlayerController
 extends CharacterAgent3D
 
-#
-#	Variables
-#
-
-var camera_offset: Vector3 = Vector3.ZERO
-
-@onready var camera: VirtualCamera3D = $Head/VirtualCamera3D
-
-#
-#	Functions
-#
-
-
-func _process_before(_delta):
-	camera_offset = Vector3.ZERO
-
-
-func _process_after(_delta):
-	camera.position = camera_offset
-
 
 static func find(root: Node) -> PlayerController:
 	if root is PlayerController:
