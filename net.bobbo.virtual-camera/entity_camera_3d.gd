@@ -5,13 +5,18 @@ extends Node3D
 #	Exports
 #
 
+## The transition to use when cutting between two different vcams
 @export var default_transition: CameraTransition = null
 
 #
 #	Private Variables
 #
 
+## Keeps track of the active camera transition happening, if there is
+## any.
 var _current_transitioner: CameraTransitioner3D = null
+
+## The last known vcam to have the highest priority.
 var _target_camera: VirtualCamera3D = null
 
 #
@@ -39,6 +44,8 @@ func _process(_delta):
 			_current_transitioner = null
 
 		# If the new target camera is real, start a transition
+		# TODO - We should support allowing cameras to specify
+		# transitions to other specific cameras.
 		if current_target_camera != null:
 			# Create the transitioner
 			var new_transitioner = default_transition.create_transitioner_3d(
