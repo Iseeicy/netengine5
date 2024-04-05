@@ -73,6 +73,9 @@ script = ExtResource("18_k6u20")
 [node name="player_jump" type="Node" parent="PlayerInput"]
 script = ExtResource("18_k6u20")
 
+[node name="player_crouch" type="Node" parent="PlayerInput"]
+script = ExtResource("18_k6u20")
+
 [node name="player_interact" type="Node" parent="PlayerInput"]
 script = ExtResource("18_k6u20")
 
