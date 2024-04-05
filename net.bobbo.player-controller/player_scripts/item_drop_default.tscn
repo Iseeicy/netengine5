@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://8g4l55gdq7tl"]
-
-[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.player-controller/player_scripts/item_drop.gd" id="1_k5fso"]
-
-[node name="ItemDrop" type="Node"]
-script = ExtResource("1_k5fso")

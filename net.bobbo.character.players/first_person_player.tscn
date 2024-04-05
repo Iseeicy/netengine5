@@ -1,0 +1,105 @@
+[gd_scene load_steps=20 format=3 uid="uid://b4nwduau6uxjr"]
+
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.character/character_agent_3d.gd" id="1_f5l1k"]
+[ext_resource type="PackedScene" uid="uid://cki8segkyvq7t" path="res://addons/netengine5/net.bobbo.character/agent_scripts/gravity_default.tscn" id="2_atrpy"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.player-model/player_model.gd" id="2_re4ek"]
+[ext_resource type="PackedScene" uid="uid://buiywmcmet4ip" path="res://addons/netengine5/net.bobbo.player-model/default_player_model.tscn" id="2_vu5bp"]
+[ext_resource type="PackedScene" uid="uid://bvg5g5iuv5gvc" path="res://addons/netengine5/net.bobbo.character/agent_scripts/ground_movement_default.tscn" id="3_7xwkj"]
+[ext_resource type="PackedScene" uid="uid://d2ya4ybiuosav" path="res://addons/netengine5/net.bobbo.character/agent_scripts/crouch_default.tscn" id="4_4k5y0"]
+[ext_resource type="PackedScene" uid="uid://bysmgnirlwse2" path="res://addons/netengine5/net.bobbo.character/agent_scripts/air_movement_default.tscn" id="5_cvtin"]
+[ext_resource type="PackedScene" uid="uid://bpiel1qntfmyh" path="res://addons/netengine5/net.bobbo.character/agent_scripts/jump_default.tscn" id="6_mrnam"]
+[ext_resource type="PackedScene" uid="uid://dnqijjhfxppc2" path="res://addons/netengine5/net.bobbo.character/agent_scripts/interactable_user_default.tscn" id="7_bugfh"]
+[ext_resource type="PackedScene" uid="uid://8g4l55gdq7tl" path="res://addons/netengine5/net.bobbo.character/agent_scripts/item_drop_default.tscn" id="8_rnc0p"]
+[ext_resource type="PackedScene" uid="uid://dan8wk0ijijys" path="res://addons/netengine5/net.bobbo.character/agent_scripts/item_pickup_default.tscn" id="9_4kan1"]
+[ext_resource type="PackedScene" uid="uid://bfwsj3q80wj8q" path="res://addons/netengine5/net.bobbo.character/agent_scripts/item_selector_default.tscn" id="10_yrp2c"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.item/item_inventory.gd" id="11_bf8wo"]
+[ext_resource type="PackedScene" uid="uid://40a8nwm87ybx" path="res://addons/netengine5/net.bobbo.character/agent_scripts/item_user_default.tscn" id="11_weqc3"]
+[ext_resource type="PackedScene" uid="uid://cs7520w6fdog0" path="res://addons/netengine5/net.bobbo.character/agent_scripts/mouse_look.tscn" id="12_m6trc"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.virtual-camera/virtual_camera_3d.gd" id="14_inmo7"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.entity-input/player_input.gd" id="17_1081f"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.entity-input/player_input_action.gd" id="18_k6u20"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_i5qqf"]
+
+[node name="FirstPersonPlayer" type="CharacterBody3D" node_paths=PackedStringArray("input", "body_node", "head_node", "inventory", "playermodel", "playermodel_pivot", "collider")]
+collision_layer = 2
+script = ExtResource("1_f5l1k")
+agent_scripts = Array[PackedScene]([ExtResource("2_atrpy"), ExtResource("3_7xwkj"), ExtResource("4_4k5y0"), ExtResource("5_cvtin"), ExtResource("6_mrnam"), ExtResource("7_bugfh"), ExtResource("8_rnc0p"), ExtResource("9_4kan1"), ExtResource("10_yrp2c"), ExtResource("11_weqc3"), ExtResource("12_m6trc")])
+input = NodePath("PlayerInput")
+body_node = NodePath(".")
+head_node = NodePath("Head")
+inventory = NodePath("ItemInventory")
+playermodel = NodePath("ModelPivot/PlayerModel")
+playermodel_pivot = NodePath("ModelPivot")
+collider = NodePath("Collider")
+initial_playermodel = ExtResource("2_vu5bp")
+
+[node name="Collider" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_i5qqf")
+
+[node name="ModelPivot" type="Node3D" parent="."]
+
+[node name="PlayerModel" type="Node3D" parent="ModelPivot"]
+script = ExtResource("2_re4ek")
+
+[node name="Head" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+
+[node name="VirtualCamera3D" type="Node3D" parent="Head"]
+script = ExtResource("14_inmo7")
+
+[node name="ItemInventory" type="Node" parent="."]
+script = ExtResource("11_bf8wo")
+
+[node name="PlayerInput" type="Node" parent="."]
+script = ExtResource("17_1081f")
+
+[node name="player_move" type="Node" parent="PlayerInput"]
+
+[node name="player_move_forward" type="Node" parent="PlayerInput/player_move"]
+script = ExtResource("18_k6u20")
+
+[node name="player_move_back" type="Node" parent="PlayerInput/player_move"]
+script = ExtResource("18_k6u20")
+
+[node name="player_move_left" type="Node" parent="PlayerInput/player_move"]
+script = ExtResource("18_k6u20")
+
+[node name="player_move_right" type="Node" parent="PlayerInput/player_move"]
+script = ExtResource("18_k6u20")
+
+[node name="player_should_run" type="Node" parent="PlayerInput"]
+script = ExtResource("18_k6u20")
+
+[node name="player_jump" type="Node" parent="PlayerInput"]
+script = ExtResource("18_k6u20")
+
+[node name="player_crouch" type="Node" parent="PlayerInput"]
+script = ExtResource("18_k6u20")
+
+[node name="player_interact" type="Node" parent="PlayerInput"]
+script = ExtResource("18_k6u20")
+
+[node name="player_drop_item" type="Node" parent="PlayerInput"]
+
+[node name="player_drop_item_stack" type="Node" parent="PlayerInput/player_drop_item"]
+script = ExtResource("18_k6u20")
+
+[node name="player_drop_item_single" type="Node" parent="PlayerInput/player_drop_item"]
+script = ExtResource("18_k6u20")
+
+[node name="player_scroll_item" type="Node" parent="PlayerInput"]
+
+[node name="player_scroll_item_forward" type="Node" parent="PlayerInput/player_scroll_item"]
+script = ExtResource("18_k6u20")
+
+[node name="player_scroll_item_back" type="Node" parent="PlayerInput/player_scroll_item"]
+script = ExtResource("18_k6u20")
+
+[node name="player_use_item" type="Node" parent="PlayerInput"]
+
+[node name="player_use_item_0" type="Node" parent="PlayerInput/player_use_item"]
+script = ExtResource("18_k6u20")
+
+[node name="player_use_item_1" type="Node" parent="PlayerInput/player_use_item"]
+script = ExtResource("18_k6u20")
