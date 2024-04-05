@@ -27,9 +27,16 @@ func _enter_tree():
 		preload("virtual_camera_3d.gd"),
 		preload("icons/virtual_camera_3d.png")
 	)
+	add_custom_type(
+		"CameraTransition",
+		"Resource",
+		preload("camera_transition.gd"),
+		preload("icons/camera_transition.png")
+	)
 
 
 func _exit_tree():
+	remove_custom_type("CameraTransition")
 	remove_custom_type("VirtualCamera3D")
 	remove_custom_type("VirtualCamera2D")
 	remove_custom_type("EntityCamera3D")
