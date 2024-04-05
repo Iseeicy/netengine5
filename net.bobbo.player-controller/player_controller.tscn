@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://b4nwduau6uxjr"]
+[gd_scene load_steps=21 format=3 uid="uid://b4nwduau6uxjr"]
 
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.player-controller/player_controller.gd" id="1_f5l1k"]
 [ext_resource type="PackedScene" uid="uid://cki8segkyvq7t" path="res://addons/netengine5/net.bobbo.character/agent_scripts/gravity_default.tscn" id="2_atrpy"]
@@ -16,6 +16,7 @@
 [ext_resource type="PackedScene" uid="uid://bfwsj3q80wj8q" path="res://addons/netengine5/net.bobbo.character/agent_scripts/item_selector_default.tscn" id="10_yrp2c"]
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.item/item_inventory.gd" id="11_bf8wo"]
 [ext_resource type="PackedScene" uid="uid://40a8nwm87ybx" path="res://addons/netengine5/net.bobbo.character/agent_scripts/item_user_default.tscn" id="11_weqc3"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.virtual-camera/virtual_camera_3d.gd" id="14_inmo7"]
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.entity-input/player_input.gd" id="17_1081f"]
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.entity-input/player_input_action.gd" id="18_k6u20"]
 
@@ -27,7 +28,7 @@ script = ExtResource("1_f5l1k")
 agent_scripts = Array[PackedScene]([ExtResource("2_atrpy"), ExtResource("3_7xwkj"), ExtResource("5_5mfos"), ExtResource("5_cvtin"), ExtResource("6_mrnam"), ExtResource("5_0va03"), ExtResource("8_rnc0p"), ExtResource("9_4kan1"), ExtResource("10_yrp2c"), ExtResource("11_weqc3")])
 input = NodePath("PlayerInput")
 body_node = NodePath(".")
-head_node = NodePath("CameraOrigin")
+head_node = NodePath("Head")
 inventory = NodePath("ItemInventory")
 playermodel = NodePath("ModelPivot/PlayerModel")
 playermodel_pivot = NodePath("ModelPivot")
@@ -41,18 +42,19 @@ shape = SubResource("CapsuleShape3D_i5qqf")
 [node name="PlayerModel" type="Node3D" parent="ModelPivot"]
 script = ExtResource("2_re4ek")
 
-[node name="CameraOrigin" type="Node3D" parent="."]
+[node name="Head" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 
-[node name="Camera3D" type="Camera3D" parent="CameraOrigin"]
+[node name="VirtualCamera3D" type="Node3D" parent="Head"]
+script = ExtResource("14_inmo7")
 
-[node name="MouseLook3D" type="Node" parent="CameraOrigin" node_paths=PackedStringArray("model_pivot")]
+[node name="MouseLook3D" type="Node" parent="Head" node_paths=PackedStringArray("model_pivot")]
 script = ExtResource("3_gmmyx")
 sensitivity_x = 0.25
 sensitivity_y = 0.25
 model_pivot = NodePath("../../ModelPivot")
 
-[node name="InteractorRay3D" type="RayCast3D" parent="CameraOrigin"]
+[node name="InteractorRay3D" type="RayCast3D" parent="Head"]
 target_position = Vector3(0, 0, -2)
 script = ExtResource("4_aevm5")
 
