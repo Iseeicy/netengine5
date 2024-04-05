@@ -1,5 +1,5 @@
 ## Allows an agent to crouch
-extends PlayerControllerScript
+extends CharacterAgentScript
 
 #
 #	Constants
