@@ -1,3 +1,5 @@
+## An abstract class used to manage gathering inputs from some arbitrary
+## source. Intended to be extended by `PlayerInput` and `SimulateInput`.
 class_name EntityInput
 extends Node
 
@@ -64,28 +66,18 @@ func is_action_just_released(action_name: String) -> bool:
 	return (state & InputState.JUST_UP) != InputState.NONE
 
 
-## Marks that an input event of some kind has happened on this frame.
-## Args:
-##	`action_name`: The name of the action to store an input for.
-##	`state_flag`: The bitflag values of the input state to set for the
-##		given action.
-func register_input(action_name: String, state_flag: InputState) -> void:
-	# Use bitwise operations to merge the registered flag into the
-	# existing input state.
-	var state = _inputs.get(action_name, InputState.NONE)
-	_inputs[action_name] = state | state_flag
-
-
-## Removes all saved input events from this frame. This should be
-## performed at the end of each frame / tick to ensure that multiple
-## inputs don't build up between frames.
-func sweep_inputs() -> void:
-	_inputs.clear()
-
-
 #
 #   Virtual Functions
 #
+
+
+## Gathers all inputs from our input source, and clears previously
+## gathered inputs. This should be called on the beginning of each
+## _process tick & _physics_process tick by the node that uses this
+## class.
+func gather_inputs() -> void:
+	_sweep_inputs()
+	# This should be implemented by child classes!
 
 
 ## Returns the direction that this entity wants to try and move in. This
@@ -96,3 +88,27 @@ func sweep_inputs() -> void:
 ##  `Vector3` - the target local movement direction.
 func get_local_movement_dir() -> Vector3:
 	return Vector3.ZERO
+
+
+#
+#	Private Functions
+#
+
+
+## Marks that an input event of some kind has happened on this frame.
+## Args:
+##	`action_name`: The name of the action to store an input for.
+##	`state_flag`: The bitflag values of the input state to set for the
+##		given action.
+func _register_input(action_name: String, state_flag: InputState) -> void:
+	# Use bitwise operations to merge the registered flag into the
+	# existing input state.
+	var state = _inputs.get(action_name, InputState.NONE)
+	_inputs[action_name] = state | state_flag
+
+
+## Removes all saved input events from this frame. This should be
+## performed at the end of each frame / tick to ensure that multiple
+## inputs don't build up between frames.
+func _sweep_inputs() -> void:
+	_inputs.clear()
