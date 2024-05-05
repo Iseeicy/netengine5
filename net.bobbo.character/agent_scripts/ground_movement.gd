@@ -33,12 +33,6 @@ var _should_run: bool = false
 #
 
 
-func character_agent_process(_delta: float) -> void:
-	# Cache our input in process so we can use it in physics_process
-	_should_crouch = agent_3d.input.is_action_pressed(CROUCH_ACTION)
-	_should_run = agent_3d.input.is_action_pressed(RUN_ACTION)
-
-
 func character_agent_physics_process(delta: float) -> void:
 	if not agent_3d.is_on_floor():
 		return
@@ -66,10 +60,13 @@ func _get_rotated_movement_dir() -> Vector3:
 
 
 func _get_move_speed() -> float:
-	if _should_crouch and agent_3d.is_on_floor():
+	var should_crouch = agent_3d.input.is_action_pressed(CROUCH_ACTION)
+	var should_run = agent_3d.input.is_action_pressed(RUN_ACTION)
+
+	if should_crouch and agent_3d.is_on_floor():
 		return crouch_speed
 
-	if _should_run:
+	if should_run:
 		return run_speed
 
 	return walk_speed

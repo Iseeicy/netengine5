@@ -22,13 +22,23 @@ func _ready():
 		_input_actions[child.name] = child
 
 
-func _process(_delta):
-	_register_all_inputs()
-
-
 #
 #   Entity Input Functions
 #
+
+
+func gather_inputs() -> void:
+	super()
+
+	# Go through all of the inputs stored in `_input_actions` and
+	# register them as our `EntityInput` inputs.
+	for input in _input_actions.values():
+		var action_name: String = input.name
+		var state: EntityInput.InputState = input.get_input_state()
+
+		# If we actually had an input event on this frame, REGISTER IT!
+		if state != EntityInput.InputState.NONE:
+			_register_input(action_name, state)
 
 
 func get_local_movement_dir() -> Vector3:
@@ -68,15 +78,3 @@ func _find_all_inputs(
 
 	for child in starting_node.get_children():
 		_find_all_inputs(child, results)
-
-
-## Go through all of the inputs stored in `_input_actions` and register
-## them as our `EntityInput` inputs.
-func _register_all_inputs() -> void:
-	for input in _input_actions.values():
-		var action_name: String = input.name
-		var state: EntityInput.InputState = input.get_input_state()
-
-		# If we actually had an input event on this frame, REGISTER IT!
-		if state != EntityInput.InputState.NONE:
-			register_input(action_name, state)

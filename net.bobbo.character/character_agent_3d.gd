@@ -154,11 +154,12 @@ func _process(delta):
 	if Engine.is_editor_hint():
 		return
 
+	input.gather_inputs()  # Update the EntityInput for this agent
+
 	# Make sure the script runner is doing it's job
 	_process_before(delta)
 	script_runner.scripts_process(delta)
 	_process_after(delta)
-	input.sweep_inputs()
 
 
 func _physics_process(delta):
@@ -166,6 +167,8 @@ func _physics_process(delta):
 	# uses @tool.
 	if Engine.is_editor_hint():
 		return
+
+	input.gather_inputs()  # Update the EntityInput for this agent
 
 	# Make sure the script runner is doing it's job
 	_physics_process_before(delta)
