@@ -20,24 +20,16 @@ const CROUCH_ACTION: String = "player_crouch"
 var crouch_current: float = 0
 var crouch_target: float = 0
 
-## Is the entity trying to crouch right now?
-var should_crouch: bool = false
-
 #
 #	Character Agent Functions
 #
-
-
-func character_agent_process(_delta: float):
-	# Cache our input in process so we can use it in physics_process
-	should_crouch = agent_3d.input.is_action_pressed(CROUCH_ACTION)
 
 
 func character_agent_physics_process(delta: float):
 	if not _supports_collider():
 		return
 
-	if should_crouch:
+	if agent_3d.input.is_action_pressed(CROUCH_ACTION):
 		crouch_target = 0.5
 	else:
 		crouch_target = 1
