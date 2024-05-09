@@ -20,7 +20,8 @@ extends EntityInput
 ## to. We store these by tick type, because then we can suppport using this
 ## across the update tick AND the physics tick.
 var _queued_raw_states_by_tick_type: Dictionary = {
-	EntityInput.TickType.PROCESS: [], EntityInput.TickType.PROCESS_PHYSICS: []
+	EntityInput.TickType.PROCESS: [] as Array[Dictionary],
+	EntityInput.TickType.PROCESS_PHYSICS: [] as Array[Dictionary]
 }
 
 ## Dictionary<
@@ -47,11 +48,17 @@ func gather_inputs(tick: EntityInput.TickType) -> void:
 	# Move the current input states forward.
 	_progress_states(_current_states_by_tick_type[tick])
 
-	# Apply the latest states to our current state dict
-	_apply_raw_states(
-		_current_states_by_tick_type[tick],
-		_queued_raw_states_by_tick_type[tick].pop_front()
-	)
+	# Apply the latest states to our current state dict, if there are any
+	if _queued_raw_states_by_tick_type[tick].size() > 0:
+		_apply_raw_states(
+			_current_states_by_tick_type[tick],
+			_queued_raw_states_by_tick_type[tick].pop_front()
+		)
+
+	# Register our current inputs
+	for action_name in _current_states_by_tick_type[tick].keys():
+		var state = _current_states_by_tick_type[tick][action_name]
+		_register_input(action_name, state)
 
 
 func get_local_movement_dir() -> Vector3:
@@ -71,7 +78,7 @@ func get_local_movement_dir() -> Vector3:
 ##  `action_name`: The name of the Input Action to simulate.
 func simulate_action_oneshot(action_name: String) -> void:
 	# Simulate the oneshot for all tick types
-	for tick_type in EntityInput.TickType.keys():
+	for tick_type in EntityInput.TickType.values():
 		_simulate_action_oneshot(
 			_queued_raw_states_by_tick_type[tick_type], action_name
 		)
@@ -83,7 +90,7 @@ func simulate_action_oneshot(action_name: String) -> void:
 ##  `is_down`: Should we simulate the button being held down? Or released?
 func simulate_action(action_name: String, is_down: bool) -> void:
 	# Simulate the action for all tick types
-	for tick_type in EntityInput.TickType.keys():
+	for tick_type in EntityInput.TickType.values():
 		_simulate_action(
 			_queued_raw_states_by_tick_type[tick_type], action_name, is_down
 		)
