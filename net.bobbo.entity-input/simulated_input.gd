@@ -10,50 +10,48 @@ extends EntityInput
 #   Private Variables
 #
 
-## Array[Dictionary<String, bool>]
-## A queue of raw input states to supply when gathering inputs next.
-var _queued_raw_states: Array[Dictionary]
+## Dictionary<
+##	EntityInput.TickType,
+##	Array<
+##		Dictionary<
+##			String,
+##			bool>>>
+## A dictionary that stores a queue of raw states, by the tick type they belong
+## to. We store these by tick type, because then we can suppport using this
+## across the update tick AND the physics tick.
+var _queued_raw_states_by_tick_type: Dictionary = {
+	EntityInput.TickType.PROCESS: [], EntityInput.TickType.PROCESS_PHYSICS: []
+}
 
-## Dictionary<String, EntityInput.InputState>
-## The current state of inputs to supply when gather_inputs is called.
-var _current_states: Dictionary = {}
+## Dictionary<
+##	EntityInput.TickType,
+##	Dictionary<
+##		String,
+##		EntityInput.InputState>>
+## A dictionary that stores the current state of inputs to supply when
+## gather_inputs is called, by the tick type that they belong to. We store
+## these by tick type, because then we can suppport using this across the
+## update tick AND the physics tick.
+var _current_states_by_tick_type: Dictionary = {
+	EntityInput.TickType.PROCESS: {}, EntityInput.TickType.PROCESS_PHYSICS: {}
+}
 
 #
 #   Entity Input Functions
 #
 
 
-func gather_inputs() -> void:
-	super()
-	# TODO - handle process & physics process
+func gather_inputs(tick: EntityInput.TickType) -> void:
+	super(tick)
 
-	_progress_current_states()  # Move the current input states forward.
+	# Move the current input states forward.
+	_progress_states(_current_states_by_tick_type[tick])
 
-	# Compare our queue'd raw states to the now updated current states, and
-	# apply them!
-	var next_states: Dictionary = _queued_raw_states.pop_front()
-	if not next_states:
-		return
-
-	for action_name in next_states.keys():
-		var current_state: EntityInput.InputState = _current_states.get(
-			action_name, EntityInput.InputState.NONE
-		)
-		var should_be_pressed: bool = next_states[action_name]
-
-		# Calculate what the next state should be given our current state and
-		# desired button press state
-		var next_state := _calculate_next_input_state(
-			current_state, should_be_pressed
-		)
-
-		# If this action doesn't have a state anymore (it's unpressed), then
-		# just remove it
-		if next_state == EntityInput.InputState.NONE:
-			_current_states.erase(action_name)
-		# If the action DOES have a state, apply it!
-		else:
-			_current_states[action_name] = next_state
+	# Apply the latest states to our current state dict
+	_apply_raw_states(
+		_current_states_by_tick_type[tick],
+		_queued_raw_states_by_tick_type[tick].pop_front()
+	)
 
 
 func get_local_movement_dir() -> Vector3:
@@ -72,16 +70,11 @@ func get_local_movement_dir() -> Vector3:
 ## Args:
 ##  `action_name`: The name of the Input Action to simulate.
 func simulate_action_oneshot(action_name: String) -> void:
-	# If there's not enough queue'd ticks of action for the next tick and the
-	# tick after, add the dicts for em!
-	while _queued_raw_states.size() < 2:
-		_queued_raw_states.push_back({})
-
-	# In the next tick, queue that our input is to be pressed
-	_queued_raw_states[0][action_name] = true
-
-	# In the tick AFTER the next tick, queue that our input is to be released
-	_queued_raw_states[1][action_name] = false
+	# Simulate the oneshot for all tick types
+	for tick_type in EntityInput.TickType.keys():
+		_simulate_action_oneshot(
+			_queued_raw_states_by_tick_type[tick_type], action_name
+		)
 
 
 ## Simulate pressing a button down or releasing a button.
@@ -89,13 +82,11 @@ func simulate_action_oneshot(action_name: String) -> void:
 ##  `action_name`: The name of the Input Action to simulate.
 ##  `is_down`: Should we simulate the button being held down? Or released?
 func simulate_action(action_name: String, is_down: bool) -> void:
-	# If there's nothing in the queue of states for the next tick, make a dict
-	# for it!
-	if _queued_raw_states.size() < 1:
-		_queued_raw_states.push_back({})
-
-	# Int he next tick, queue our action
-	_queued_raw_states[0][action_name] = is_down
+	# Simulate the action for all tick types
+	for tick_type in EntityInput.TickType.keys():
+		_simulate_action(
+			_queued_raw_states_by_tick_type[tick_type], action_name, is_down
+		)
 
 
 #
@@ -103,20 +94,79 @@ func simulate_action(action_name: String, is_down: bool) -> void:
 #
 
 
-## Go through `_current_states` and progress inputs in the following fashion:
+## Queue agnostic implementation of simulate_action_oneshot
+func _simulate_action_oneshot(
+	raw_state_queue: Array[Dictionary], action_name: String
+) -> void:
+	# If there's not enough queue'd ticks of action for the next tick and the
+	# tick after, add the dicts for em!
+	while raw_state_queue.size() < 2:
+		raw_state_queue.push_back({})
+
+	# In the next tick, queue that our input is to be pressed
+	raw_state_queue[0][action_name] = true
+
+	# In the tick AFTER the next tick, queue that our input is to be released
+	raw_state_queue[1][action_name] = false
+
+
+## Queue agnostic implementation of simulate_action
+func _simulate_action(
+	raw_state_queue: Array[Dictionary], action_name: String, is_down: bool
+) -> void:
+	# If there's nothing in the queue of states for the next tick, make a dict
+	# for it!
+	if raw_state_queue.size() < 1:
+		raw_state_queue.push_back({})
+
+	# Int he next tick, queue our action
+	raw_state_queue[0][action_name] = is_down
+
+
+## Go through a dictionary of states and progress inputs in the
+## following fashion:
 ## - JUST_DOWN -> PRESSED
 ## - JUST_UP -> removed from dict
-func _progress_current_states() -> void:
+## Args:
+##	`states`: Dictionary<String, EntityInput.InputState>
+func _progress_states(states: Dictionary) -> void:
 	# Go through the current state and progress any inputs
-	for action_name in _current_states.keys():
-		var state: EntityInput.InputState = _current_states[action_name]
+	for action_name in states.keys():
+		var state: EntityInput.InputState = states[action_name]
 
 		# If this was just down, now it's pressed
 		if state & EntityInput.InputState.JUST_DOWN:
-			_current_states[action_name] = EntityInput.InputState.PRESSED
+			states[action_name] = EntityInput.InputState.PRESSED
 		# If this was just up, now it shouldn't be here
 		elif state & EntityInput.InputState.JUST_UP:
-			_current_states.erase(action_name)
+			states.erase(action_name)
+
+
+## Apply a dictionary of raw button states to a dictionary of action states,
+## making sure to update stuff like JUST_DOWN and JUST_UP correctly.
+func _apply_raw_states(states: Dictionary, raw_states: Dictionary) -> void:
+	if not raw_states:
+		return
+
+	for action_name in raw_states.keys():
+		var current_state: EntityInput.InputState = states.get(
+			action_name, EntityInput.InputState.NONE
+		)
+		var should_be_pressed: bool = raw_states[action_name]
+
+		# Calculate what the next state should be given our current state and
+		# desired button press state
+		var next_state := _calculate_next_input_state(
+			current_state, should_be_pressed
+		)
+
+		# If this action doesn't have a state anymore (it's unpressed), then
+		# just remove it
+		if next_state == EntityInput.InputState.NONE:
+			states.erase(action_name)
+		# If the action DOES have a state, apply it!
+		else:
+			states[action_name] = next_state
 
 
 ## Given some input state, calculate it's next state given a raw bool of
