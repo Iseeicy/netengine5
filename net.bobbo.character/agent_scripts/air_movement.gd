@@ -49,7 +49,7 @@ func character_agent_physics_process(delta: float) -> void:
 
 
 func _get_rotated_movement_dir() -> Vector3:
-	var movement_input = agent_3d.input.read_axis_2d(_move_axis)
+	var movement_input = agent_3d.input.read_axis_2d(_move_axis).normalized()
 
 	# Rotate the input to match facing dir
 	return Vector3(movement_input.x, 0, movement_input.y).rotated(

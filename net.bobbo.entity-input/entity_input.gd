@@ -77,8 +77,8 @@ func is_action_just_released(action_name: String) -> bool:
 ## Args:
 ##	`action_name`: The name of the analog input to read.
 ## Returns:
-##	A value between 0 and 1. If the action can't be found, this will always be
-##	0.
+##	A value between 0 and Infinity. If the action can't be found, this
+## will always be 0.
 func get_analog(action_name: String) -> float:
 	return _analog_inputs.get(action_name, 0)
 
@@ -87,7 +87,7 @@ func get_analog(action_name: String) -> float:
 ## Args:
 ##	`axis`: The definition of the axis to read
 ## Returns:
-##  A value from -1 to 1, inclusive.
+##  A value from -Infinity to Infinity, inclusive.
 func read_axis_1d(axis: InputAxis1d) -> float:
 	return (
 		get_analog(axis.positive_action_name)
@@ -99,9 +99,9 @@ func read_axis_1d(axis: InputAxis1d) -> float:
 ## Args:
 ##	`axis`: The definition of the axis to read
 ## Returns:
-##  A normalized Vector2.
+##  A Vector2.
 func read_axis_2d(axis: InputAxis2d) -> Vector2:
-	return Vector2(read_axis_1d(axis.x), read_axis_1d(axis.y)).normalized()
+	return Vector2(read_axis_1d(axis.x), read_axis_1d(axis.y))
 
 
 #

@@ -124,8 +124,8 @@ func simulate_analog(action_name: String, strength: float) -> void:
 ## Simulate some 1d analog axis.
 ## Args:
 ##	`axis`: The axis to simulate an input for.
-##	`value`: The value to assign to the axis. Should be between -1 and 1
-##		inclusive.
+##	`value`: The value to assign to the axis. Should be between -Infinity and
+##		Infinity.
 func simulate_axis_1d(axis: InputAxis1d, value: float) -> void:
 	if value > 0:
 		simulate_analog(axis.positive_action_name, value)
@@ -138,7 +138,7 @@ func simulate_axis_1d(axis: InputAxis1d, value: float) -> void:
 ## Simulate some 2d analog axis.
 ## Args:
 ##	`axis`: The axis to simulate and input for.
-##	`value`: The ablue to assign to the axis. It should be normalized.
+##	`value`: The ablue to assign to the axis.
 func simulate_axis_2d(axis: InputAxis2d, value: Vector2) -> void:
 	simulate_axis_1d(axis.x, value.x)
 	simulate_axis_1d(axis.y, value.y)
