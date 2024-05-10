@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://b4nwduau6uxjr"]
+[gd_scene load_steps=22 format=3 uid="uid://b4nwduau6uxjr"]
 
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.character/character_agent_3d.gd" id="1_f5l1k"]
 [ext_resource type="PackedScene" uid="uid://cki8segkyvq7t" path="res://addons/netengine5/net.bobbo.character/agent_scripts/gravity_default.tscn" id="2_atrpy"]
@@ -14,9 +14,10 @@
 [ext_resource type="PackedScene" uid="uid://bfwsj3q80wj8q" path="res://addons/netengine5/net.bobbo.character/agent_scripts/item_selector_default.tscn" id="10_yrp2c"]
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.item/item_inventory.gd" id="11_bf8wo"]
 [ext_resource type="PackedScene" uid="uid://40a8nwm87ybx" path="res://addons/netengine5/net.bobbo.character/agent_scripts/item_user_default.tscn" id="11_weqc3"]
-[ext_resource type="PackedScene" path="res://addons/netengine5/net.bobbo.character/agent_scripts/mouse_look.tscn" id="12_m6trc"]
+[ext_resource type="PackedScene" uid="uid://x62vcgjprloq" path="res://addons/netengine5/net.bobbo.character/agent_scripts/mouse_look.tscn" id="12_m6trc"]
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.virtual-camera/virtual_camera_3d.gd" id="14_inmo7"]
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.entity-input/player_input.gd" id="17_1081f"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.entity-input/player_input_mouse.gd" id="18_gyc1i"]
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.entity-input/player_input_action.gd" id="18_k6u20"]
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.entity-input/player_input_analog.gd" id="19_20juw"]
 
@@ -54,6 +55,9 @@ script = ExtResource("11_bf8wo")
 
 [node name="PlayerInput" type="Node" parent="."]
 script = ExtResource("17_1081f")
+
+[node name="player_look" type="Node" parent="PlayerInput"]
+script = ExtResource("18_gyc1i")
 
 [node name="player_move" type="Node" parent="PlayerInput"]
 

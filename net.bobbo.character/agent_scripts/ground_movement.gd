@@ -23,7 +23,10 @@ const CROUCH_ACTION: String = "player_crouch"
 #
 
 ## An input wrapper to make getting the movement axis easier
-var _move_axis: InputAxis2d = null
+var _move_axis: InputAxis2d = InputAxis2d.new(
+	InputAxis1d.new("player_move_left", "player_move_right"),
+	InputAxis1d.new("player_move_forward", "player_move_back")
+)
 
 ## Is the entity trying to crouch right now?
 var _should_crouch: bool = false
@@ -34,13 +37,6 @@ var _should_run: bool = false
 #
 #	Functions
 #
-
-
-func character_agent_ready() -> void:
-	_move_axis = InputAxis2d.new(
-		InputAxis1d.new("player_move_left", "player_move_right"),
-		InputAxis1d.new("player_move_forward", "player_move_back")
-	)
 
 
 func character_agent_physics_process(delta: float) -> void:

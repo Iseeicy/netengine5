@@ -1,12 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://cs7520w6fdog0"]
+[gd_scene load_steps=2 format=3 uid="uid://x62vcgjprloq"]
 
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.character/agent_scripts/mouse_look.gd" id="1_bqoj8"]
-[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.mouse-look-3d/mouse_look_3d.gd" id="2_w8rr6"]
 
 [node name="MouseLook" type="Node"]
 script = ExtResource("1_bqoj8")
-
-[node name="MouseLook3D" type="Node" parent="."]
-script = ExtResource("2_w8rr6")
-sensitivity_x = 0.25
-sensitivity_y = 0.25

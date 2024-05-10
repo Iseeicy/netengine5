@@ -80,7 +80,7 @@ func is_action_just_released(action_name: String) -> bool:
 ##	A value between 0 and Infinity. If the action can't be found, this
 ## will always be 0.
 func get_analog(action_name: String) -> float:
-	return _analog_inputs.get(action_name, 0)
+	return _analog_inputs.get(action_name, 0.0)
 
 
 ## Reads the value of some 1D axis.
