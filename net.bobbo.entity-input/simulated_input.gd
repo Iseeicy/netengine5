@@ -121,22 +121,27 @@ func simulate_analog(action_name: String, strength: float) -> void:
 		)
 
 
-## Simulate some analog axis.
+## Simulate some 1d analog axis.
 ## Args:
-##	`negative_action_name`: The action that, when pressed all the way, pulls
-##		this axis as far negative as possible.
-##	`positive_action_name`: The action that, when pressed all the way, pushes
-##		this axis as far positive as possible.
-##	`value`: The value to assign to the axis. Should be between -1 and 1 inclusive.
-func simulate_axis(
-	negative_action_name: String, positive_action_name: String, value: float
-) -> void:
+##	`axis`: The axis to simulate an input for.
+##	`value`: The value to assign to the axis. Should be between -1 and 1
+##		inclusive.
+func simulate_axis_1d(axis: InputAxis1d, value: float) -> void:
 	if value > 0:
-		simulate_analog(positive_action_name, value)
-		simulate_analog(negative_action_name, 0)
+		simulate_analog(axis.positive_action_name, value)
+		simulate_analog(axis.negative_action_name, 0)
 	else:
-		simulate_analog(positive_action_name, 0)
-		simulate_analog(negative_action_name, value)
+		simulate_analog(axis.positive_action_name, 0)
+		simulate_analog(axis.negative_action_name, -value)
+
+
+## Simulate some 2d analog axis.
+## Args:
+##	`axis`: The axis to simulate and input for.
+##	`value`: The ablue to assign to the axis. It should be normalized.
+func simulate_axis_2d(axis: InputAxis2d, value: Vector2) -> void:
+	simulate_axis_1d(axis.x, value.x)
+	simulate_axis_1d(axis.y, value.y)
 
 
 #

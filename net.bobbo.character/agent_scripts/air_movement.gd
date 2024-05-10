@@ -23,7 +23,7 @@ var _move_axis: InputAxis2d = null
 func character_agent_ready() -> void:
 	_move_axis = InputAxis2d.new(
 		InputAxis1d.new("player_move_left", "player_move_right"),
-		InputAxis1d.new("player_move_back", "player_move_forward")
+		InputAxis1d.new("player_move_forward", "player_move_back")
 	)
 
 
@@ -52,7 +52,7 @@ func _get_rotated_movement_dir() -> Vector3:
 	var movement_input = agent_3d.input.read_axis_2d(_move_axis)
 
 	# Rotate the input to match facing dir
-	return Vector3(movement_input.x, 0, -movement_input.y).rotated(
+	return Vector3(movement_input.x, 0, movement_input.y).rotated(
 		Vector3.UP, agent_3d.playermodel_pivot.rotation.y
 	)
 
