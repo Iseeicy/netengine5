@@ -1,23 +1,24 @@
-[gd_scene load_steps=20 format=3 uid="uid://b4nwduau6uxjr"]
+[gd_scene load_steps=21 format=3 uid="uid://b4nwduau6uxjr"]
 
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.character/character_agent_3d.gd" id="1_f5l1k"]
 [ext_resource type="PackedScene" uid="uid://cki8segkyvq7t" path="res://addons/netengine5/net.bobbo.character/agent_scripts/gravity_default.tscn" id="2_atrpy"]
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.player-model/player_model.gd" id="2_re4ek"]
 [ext_resource type="PackedScene" uid="uid://buiywmcmet4ip" path="res://addons/netengine5/net.bobbo.player-model/default_player_model.tscn" id="2_vu5bp"]
 [ext_resource type="PackedScene" uid="uid://bvg5g5iuv5gvc" path="res://addons/netengine5/net.bobbo.character/agent_scripts/ground_movement_default.tscn" id="3_7xwkj"]
-[ext_resource type="PackedScene" uid="uid://d2ya4ybiuosav" path="res://addons/netengine5/net.bobbo.character/agent_scripts/crouch_default.tscn" id="4_4k5y0"]
+[ext_resource type="PackedScene" path="res://addons/netengine5/net.bobbo.character/agent_scripts/crouch_default.tscn" id="4_4k5y0"]
 [ext_resource type="PackedScene" uid="uid://bysmgnirlwse2" path="res://addons/netengine5/net.bobbo.character/agent_scripts/air_movement_default.tscn" id="5_cvtin"]
 [ext_resource type="PackedScene" uid="uid://bpiel1qntfmyh" path="res://addons/netengine5/net.bobbo.character/agent_scripts/jump_default.tscn" id="6_mrnam"]
-[ext_resource type="PackedScene" uid="uid://dnqijjhfxppc2" path="res://addons/netengine5/net.bobbo.character/agent_scripts/interactable_user_default.tscn" id="7_bugfh"]
+[ext_resource type="PackedScene" path="res://addons/netengine5/net.bobbo.character/agent_scripts/interactable_user_default.tscn" id="7_bugfh"]
 [ext_resource type="PackedScene" uid="uid://8g4l55gdq7tl" path="res://addons/netengine5/net.bobbo.character/agent_scripts/item_drop_default.tscn" id="8_rnc0p"]
 [ext_resource type="PackedScene" uid="uid://dan8wk0ijijys" path="res://addons/netengine5/net.bobbo.character/agent_scripts/item_pickup_default.tscn" id="9_4kan1"]
 [ext_resource type="PackedScene" uid="uid://bfwsj3q80wj8q" path="res://addons/netengine5/net.bobbo.character/agent_scripts/item_selector_default.tscn" id="10_yrp2c"]
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.item/item_inventory.gd" id="11_bf8wo"]
 [ext_resource type="PackedScene" uid="uid://40a8nwm87ybx" path="res://addons/netengine5/net.bobbo.character/agent_scripts/item_user_default.tscn" id="11_weqc3"]
-[ext_resource type="PackedScene" uid="uid://cs7520w6fdog0" path="res://addons/netengine5/net.bobbo.character/agent_scripts/mouse_look.tscn" id="12_m6trc"]
+[ext_resource type="PackedScene" path="res://addons/netengine5/net.bobbo.character/agent_scripts/mouse_look.tscn" id="12_m6trc"]
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.virtual-camera/virtual_camera_3d.gd" id="14_inmo7"]
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.entity-input/player_input.gd" id="17_1081f"]
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.entity-input/player_input_action.gd" id="18_k6u20"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.entity-input/player_input_analog.gd" id="19_20juw"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_i5qqf"]
 
@@ -57,16 +58,16 @@ script = ExtResource("17_1081f")
 [node name="player_move" type="Node" parent="PlayerInput"]
 
 [node name="player_move_forward" type="Node" parent="PlayerInput/player_move"]
-script = ExtResource("18_k6u20")
+script = ExtResource("19_20juw")
 
 [node name="player_move_back" type="Node" parent="PlayerInput/player_move"]
-script = ExtResource("18_k6u20")
+script = ExtResource("19_20juw")
 
 [node name="player_move_left" type="Node" parent="PlayerInput/player_move"]
-script = ExtResource("18_k6u20")
+script = ExtResource("19_20juw")
 
 [node name="player_move_right" type="Node" parent="PlayerInput/player_move"]
-script = ExtResource("18_k6u20")
+script = ExtResource("19_20juw")
 
 [node name="player_should_run" type="Node" parent="PlayerInput"]
 script = ExtResource("18_k6u20")

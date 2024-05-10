@@ -28,6 +28,10 @@ enum TickType { PROCESS, PROCESS_PHYSICS }
 ## The inputs that this entity is providing on the current frame.
 var _inputs: Dictionary = {}
 
+## Dictionary<String, float>
+## The analog inputs that this entity is providing on the current frame.
+var _analog_inputs: Dictionary = {}
+
 #
 #	Public Functions
 #
@@ -69,6 +73,37 @@ func is_action_just_released(action_name: String) -> bool:
 	return (state & InputState.JUST_UP) != InputState.NONE
 
 
+## Get the value of some analog input on this frame.
+## Args:
+##	`action_name`: The name of the analog input to read.
+## Returns:
+##	A value between 0 and 1. If the action can't be found, this will always be
+##	0.
+func get_analog(action_name: String) -> float:
+	return _analog_inputs.get(action_name, 0)
+
+
+## Reads the value of some 1D axis.
+## Args:
+##	`axis`: The definition of the axis to read
+## Returns:
+##  A value from -1 to 1, inclusive.
+func read_axis_1d(axis: InputAxis1d) -> float:
+	return (
+		get_analog(axis.positive_action_name)
+		- get_analog(axis.negative_action_name)
+	)
+
+
+## Reads the value of some 2D axis.
+## Args:
+##	`axis`: The definition of the axis to read
+## Returns:
+##  A normalized Vector2.
+func read_axis_2d(axis: InputAxis2d) -> Vector2:
+	return Vector2(read_axis_1d(axis.x), read_axis_1d(axis.y)).normalized()
+
+
 #
 #   Virtual Functions
 #
@@ -83,22 +118,12 @@ func gather_inputs(_tick: TickType) -> void:
 	# This should be implemented by child classes!
 
 
-## Returns the direction that this entity wants to try and move in. This
-## value is local to the entity's assumed facing direction, NOT a global
-## direction. Example - if the entity wants to move forward, then this
-## will be Vector3.FORWARD. Should be normalized.
-## Returns:
-##  `Vector3` - the target local movement direction.
-func get_local_movement_dir() -> Vector3:
-	return Vector3.ZERO
-
-
 #
 #	Private Functions
 #
 
 
-## Marks that an input event of some kind has happened on this frame.
+## Marks that an button input event of some kind has happened on this frame.
 ## Args:
 ##	`action_name`: The name of the action to store an input for.
 ##	`state_flag`: The bitflag values of the input state to set for the
@@ -110,8 +135,17 @@ func _register_input(action_name: String, state_flag: InputState) -> void:
 	_inputs[action_name] = state | state_flag
 
 
+## Marks that an analog input event of some kind has happened on this frame.
+## Args:
+##	`action_name`: The name of the analog action to store a strength for.
+##	`strength`: The strength of the given input.
+func _register_analog_input(action_name: String, strength: float) -> void:
+	_analog_inputs[action_name] = strength
+
+
 ## Removes all saved input events from this frame. This should be
 ## performed at the end of each frame / tick to ensure that multiple
 ## inputs don't build up between frames.
 func _sweep_inputs() -> void:
 	_inputs.clear()
+	_analog_inputs.clear()
