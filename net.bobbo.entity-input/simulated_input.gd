@@ -37,6 +37,19 @@ var _current_states_by_tick_type: Dictionary = {
 	EntityInput.TickType.PROCESS: {}, EntityInput.TickType.PROCESS_PHYSICS: {}
 }
 
+## Dictionary<
+##	EntityInput.TickType,
+##	Dictionary<
+##		String,
+##		float>>
+## A dictionary that stores the current state of ANALOG input values to supply
+## when gather_inputs is called, by the tick type that they belong to. We store
+## these by tick type, because then we can suppport using this across the
+## update tick AND the physics tick.
+var _current_analog_by_tick_type: Dictionary = {
+	EntityInput.TickType.PROCESS: {}, EntityInput.TickType.PROCESS_PHYSICS: {}
+}
+
 #
 #   Entity Input Functions
 #
@@ -59,6 +72,11 @@ func gather_inputs(tick: EntityInput.TickType) -> void:
 	for action_name in _current_states_by_tick_type[tick].keys():
 		var state = _current_states_by_tick_type[tick][action_name]
 		_register_input(action_name, state)
+
+	# Register our analog values
+	for action_name in _current_analog_by_tick_type[tick].keys():
+		var value = _current_analog_by_tick_type[tick][action_name]
+		_register_analog_input(action_name, value)
 
 
 #
@@ -88,6 +106,37 @@ func simulate_action(action_name: String, is_down: bool) -> void:
 		_simulate_action(
 			_queued_raw_states_by_tick_type[tick_type], action_name, is_down
 		)
+
+
+## Simulate some analog input's strength.
+## Args:
+##	`action_name`: The name of the Input Action to simulate analog values for.
+##	`strength`: The strength of analog force to simulate. Should be between 0
+##		and 1 inclusive.
+func simulate_analog(action_name: String, strength: float) -> void:
+	# Simulate the analog force for all tick types
+	for tick_type in EntityInput.TickType.values():
+		_simulate_analog(
+			_current_analog_by_tick_type[tick_type], action_name, strength
+		)
+
+
+## Simulate some analog axis.
+## Args:
+##	`negative_action_name`: The action that, when pressed all the way, pulls
+##		this axis as far negative as possible.
+##	`positive_action_name`: The action that, when pressed all the way, pushes
+##		this axis as far positive as possible.
+##	`value`: The value to assign to the axis. Should be between -1 and 1 inclusive.
+func simulate_axis(
+	negative_action_name: String, positive_action_name: String, value: float
+) -> void:
+	if value > 0:
+		simulate_analog(positive_action_name, value)
+		simulate_analog(negative_action_name, 0)
+	else:
+		simulate_analog(positive_action_name, 0)
+		simulate_analog(negative_action_name, value)
 
 
 #
@@ -120,8 +169,15 @@ func _simulate_action(
 	if raw_state_queue.size() < 1:
 		raw_state_queue.push_back({})
 
-	# Int he next tick, queue our action
+	# In the next tick, queue our action
 	raw_state_queue[0][action_name] = is_down
+
+
+## Queue agnostic implementation of simulate_analog
+func _simulate_analog(
+	raw_analog_values: Dictionary, action_name: String, strength: float
+) -> void:
+	raw_analog_values[action_name] = strength
 
 
 ## Go through a dictionary of states and progress inputs in the

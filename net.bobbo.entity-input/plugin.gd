@@ -28,12 +28,6 @@ func _enter_tree():
 		preload("icons/player_input_analog.png")
 	)
 	add_custom_type(
-		"PlayerInputAxis",
-		"Node",
-		preload("player_input_axis.gd"),
-		preload("icons/player_input_axis.png")
-	)
-	add_custom_type(
 		"SimulatedInput",
 		"Node",
 		preload("simulated_input.gd"),
@@ -43,7 +37,6 @@ func _enter_tree():
 
 func _exit_tree():
 	remove_custom_type("SimulatedInput")
-	remove_custom_type("PlayerInputAxis")
 	remove_custom_type("PlayerInputAnalog")
 	remove_custom_type("PlayerInputAction")
 	remove_custom_type("PlayerInput")

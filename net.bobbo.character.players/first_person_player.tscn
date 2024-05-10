@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://b4nwduau6uxjr"]
+[gd_scene load_steps=21 format=3 uid="uid://b4nwduau6uxjr"]
 
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.character/character_agent_3d.gd" id="1_f5l1k"]
 [ext_resource type="PackedScene" uid="uid://cki8segkyvq7t" path="res://addons/netengine5/net.bobbo.character/agent_scripts/gravity_default.tscn" id="2_atrpy"]
@@ -17,7 +17,6 @@
 [ext_resource type="PackedScene" path="res://addons/netengine5/net.bobbo.character/agent_scripts/mouse_look.tscn" id="12_m6trc"]
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.virtual-camera/virtual_camera_3d.gd" id="14_inmo7"]
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.entity-input/player_input.gd" id="17_1081f"]
-[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.entity-input/player_input_axis.gd" id="18_cev0x"]
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.entity-input/player_input_action.gd" id="18_k6u20"]
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.entity-input/player_input_analog.gd" id="19_20juw"]
 
@@ -56,26 +55,18 @@ script = ExtResource("11_bf8wo")
 [node name="PlayerInput" type="Node" parent="."]
 script = ExtResource("17_1081f")
 
-[node name="player_move_y" type="Node" parent="PlayerInput" node_paths=PackedStringArray("positive_action", "negative_action")]
-script = ExtResource("18_cev0x")
-positive_action = NodePath("player_move_forward")
-negative_action = NodePath("player_move_back")
+[node name="player_move" type="Node" parent="PlayerInput"]
 
-[node name="player_move_forward" type="Node" parent="PlayerInput/player_move_y"]
+[node name="player_move_forward" type="Node" parent="PlayerInput/player_move"]
 script = ExtResource("19_20juw")
 
-[node name="player_move_back" type="Node" parent="PlayerInput/player_move_y"]
+[node name="player_move_back" type="Node" parent="PlayerInput/player_move"]
 script = ExtResource("19_20juw")
 
-[node name="player_move_x" type="Node" parent="PlayerInput" node_paths=PackedStringArray("positive_action", "negative_action")]
-script = ExtResource("18_cev0x")
-positive_action = NodePath("player_move_right")
-negative_action = NodePath("player_move_left")
-
-[node name="player_move_left" type="Node" parent="PlayerInput/player_move_x"]
+[node name="player_move_left" type="Node" parent="PlayerInput/player_move"]
 script = ExtResource("19_20juw")
 
-[node name="player_move_right" type="Node" parent="PlayerInput/player_move_x"]
+[node name="player_move_right" type="Node" parent="PlayerInput/player_move"]
 script = ExtResource("19_20juw")
 
 [node name="player_should_run" type="Node" parent="PlayerInput"]

@@ -11,9 +11,6 @@ var _input_actions: Array[PlayerInputAction] = []
 ## All known analog inputs underneath us
 var _input_analog: Array[PlayerInputAnalog] = []
 
-## All known analog axis underneath us
-var _input_axis: Array[PlayerInputAxis] = []
-
 #
 #	Godot Functions
 #
@@ -21,7 +18,7 @@ var _input_axis: Array[PlayerInputAxis] = []
 
 func _ready():
 	# Get all of our input actions
-	_find_all_inputs(self, _input_actions, _input_analog, _input_axis)
+	_find_all_inputs(self, _input_actions, _input_analog)
 
 
 #
@@ -43,11 +40,6 @@ func gather_inputs(tick: EntityInput.TickType) -> void:
 	for analog in _input_analog:
 		_register_analog_input(analog.name, analog.get_analog_strength())
 
-	for axis in _input_axis:
-		_register_axis(
-			axis.name, axis.negative_action.name, axis.positive_action.name
-		)
-
 
 #
 #	Private Functions
@@ -58,14 +50,11 @@ func _find_all_inputs(
 	starting_node: Node,
 	found_actions: Array[PlayerInputAction],
 	found_analog: Array[PlayerInputAnalog],
-	found_axis: Array[PlayerInputAxis]
 ) -> void:
 	if starting_node is PlayerInputAction:
 		found_actions.append(starting_node)
 	if starting_node is PlayerInputAnalog:
 		found_analog.append(starting_node)
-	if starting_node is PlayerInputAxis:
-		found_axis.append(starting_node)
 
 	for child in starting_node.get_children():
-		_find_all_inputs(child, found_actions, found_analog, found_axis)
+		_find_all_inputs(child, found_actions, found_analog)
