@@ -37,10 +37,6 @@ var _current_states_by_tick_type: Dictionary = {
 	EntityInput.TickType.PROCESS: {}, EntityInput.TickType.PROCESS_PHYSICS: {}
 }
 
-## The currently simulated movement direction relative to the agent's facing
-## direction.
-var _local_movement_direction: Vector3 = Vector3.ZERO
-
 #
 #   Entity Input Functions
 #
@@ -63,11 +59,6 @@ func gather_inputs(tick: EntityInput.TickType) -> void:
 	for action_name in _current_states_by_tick_type[tick].keys():
 		var state = _current_states_by_tick_type[tick][action_name]
 		_register_input(action_name, state)
-
-
-func get_local_movement_dir() -> Vector3:
-	super()
-	return _local_movement_direction
 
 
 #
@@ -97,14 +88,6 @@ func simulate_action(action_name: String, is_down: bool) -> void:
 		_simulate_action(
 			_queued_raw_states_by_tick_type[tick_type], action_name, is_down
 		)
-
-
-## Simulate providing movement direction input, relative to the facing
-## direction of the agent.
-## Args:
-##	`direction`: The local movement direction to simulate.
-func simulate_local_movement_dir(direction: Vector3) -> void:
-	_local_movement_direction = direction
 
 
 #
