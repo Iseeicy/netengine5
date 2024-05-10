@@ -22,15 +22,29 @@ func _enter_tree():
 		preload("icons/player_input.png")
 	)
 	add_custom_type(
+		"PlayerInputAnalog",
+		"Node",
+		preload("player_input_analog.gd"),
+		preload("icons/player_input_analog.png")
+	)
+	add_custom_type(
+		"PlayerInputAxis",
+		"Node",
+		preload("player_input_axis.gd"),
+		preload("icons/player_input_axis.png")
+	)
+	add_custom_type(
 		"SimulatedInput",
 		"Node",
 		preload("simulated_input.gd"),
-		preload("icons/entity_input.png")
+		preload("icons/simulated_input.png")
 	)
 
 
 func _exit_tree():
 	remove_custom_type("SimulatedInput")
+	remove_custom_type("PlayerInputAxis")
+	remove_custom_type("PlayerInputAnalog")
 	remove_custom_type("PlayerInputAction")
 	remove_custom_type("PlayerInput")
 	remove_custom_type("EntityInput")

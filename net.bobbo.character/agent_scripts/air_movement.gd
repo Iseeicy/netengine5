@@ -17,7 +17,10 @@ func character_agent_physics_process(delta: float) -> void:
 	if agent_3d.is_on_floor():
 		return
 
-	if agent_3d.input.get_local_movement_dir() == Vector3.ZERO:
+	if (
+		agent_3d.input.get_axis_2d("player_move_x", "player_move_y")
+		== Vector2.ZERO
+	):
 		return
 
 	var target_vel = (
@@ -35,8 +38,12 @@ func character_agent_physics_process(delta: float) -> void:
 
 
 func _get_rotated_movement_dir() -> Vector3:
+	var movement_input = agent_3d.input.get_axis_2d(
+		"player_move_x", "player_move_y"
+	)
+
 	# Rotate the input to match facing dir
-	return agent_3d.input.get_local_movement_dir().rotated(
+	return Vector3(movement_input.x, 0, -movement_input.y).rotated(
 		Vector3.UP, agent_3d.playermodel_pivot.rotation.y
 	)
 
