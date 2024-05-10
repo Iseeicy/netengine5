@@ -11,13 +11,12 @@ extends PlayerInputAction
 #   Public Functions
 #
 
+
 ## Get the analog strength for this input.
 ## Returns:
 ##	A value between 0 and 1, inclusive.
-func get_analog_strength() -> float:
+func get_analog_strength(_tick_type: EntityInput.TickType) -> float:
 	if not InputMap.has_action(name):
 		return 0
 
 	return Input.get_action_strength(name)
-
-
