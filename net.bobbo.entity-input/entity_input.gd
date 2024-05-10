@@ -17,6 +17,9 @@ enum InputState {
 	PRESSED_OR_JUST_DOWN = 1 << 1 | 1 << 0
 }
 
+## What kind of tick to reference.
+enum TickType { PROCESS, PROCESS_PHYSICS }
+
 #
 #	Private Variables
 #
@@ -75,7 +78,7 @@ func is_action_just_released(action_name: String) -> bool:
 ## gathered inputs. This should be called on the beginning of each
 ## _process tick & _physics_process tick by the node that uses this
 ## class.
-func gather_inputs() -> void:
+func gather_inputs(_tick: TickType) -> void:
 	_sweep_inputs()
 	# This should be implemented by child classes!
 

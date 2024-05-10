@@ -27,8 +27,8 @@ func _ready():
 #
 
 
-func gather_inputs() -> void:
-	super()
+func gather_inputs(tick: EntityInput.TickType) -> void:
+	super(tick)
 
 	# Go through all of the inputs stored in `_input_actions` and
 	# register them as our `EntityInput` inputs.
