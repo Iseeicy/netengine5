@@ -2,11 +2,17 @@
 extends CharacterAgentScript
 
 #
+#	Constants
+#
+
+const DEGRESS_PER_UNIT: float = 0.001
+
+#
 #	Exports
 #
 
-@export var sensitivity_x: float = 0.25
-@export var sensitivity_y: float = 0.25
+@export var sensitivity_x: float = 250
+@export var sensitivity_y: float = 250
 
 #
 #   Private Variables
@@ -27,6 +33,7 @@ func character_agent_process(_delta: float) -> void:
 	var look_movement := (
 		agent_3d.input.read_axis_2d(_look_axis)
 		* Vector2(sensitivity_x, sensitivity_y)
+		* DEGRESS_PER_UNIT
 	)
 
 	# Calculate the rotation amount then apply
