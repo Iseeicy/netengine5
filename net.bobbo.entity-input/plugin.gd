@@ -40,8 +40,12 @@ func _enter_tree():
 		preload("icons/simulated_input.png")
 	)
 
+	BobboInputs.add_to_input_map()
+
 
 func _exit_tree():
+	BobboInputs.remove_from_input_map()
+
 	remove_custom_type("SimulatedInput")
 	remove_custom_type("PlayerInputMouse")
 	remove_custom_type("PlayerInputAnalog")

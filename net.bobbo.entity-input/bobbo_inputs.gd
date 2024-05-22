@@ -40,3 +40,17 @@ class Player:
 	const JUMP := "player_jump"
 	const CROUCH := "player_crouch"
 	const INTERACT := "player_interact"
+
+
+## Adds all applicable keys from this static class to the InputMap, so
+## that player input can be read. This is intended to be called by the
+## plugin setup process.
+static func add_to_input_map() -> void:
+	return
+
+
+## Removes all applicable keys of this static class from the InputMap,
+## so that player input is no longer being read. This is intended to be
+## called by the plugin teardown process.
+static func remove_from_input_map() -> void:
+	return
