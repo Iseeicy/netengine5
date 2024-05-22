@@ -2,12 +2,6 @@
 extends CharacterAgentScript
 
 #
-#	Constant
-#
-
-const JUMP_ACTION: String = "player_jump"
-
-#
 #	Exported
 #
 
@@ -33,7 +27,9 @@ func character_agent_physics_process(_delta) -> void:
 
 
 func calc_ground_jump_velocity() -> Vector3:
-	var should_jump = agent_3d.input.is_action_just_pressed(JUMP_ACTION)
+	var should_jump = agent_3d.input.is_action_just_pressed(
+		BobboInputs.Player.JUMP
+	)
 	if not agent_3d.is_on_floor() or not should_jump:
 		return Vector3.ZERO
 
@@ -41,7 +37,9 @@ func calc_ground_jump_velocity() -> Vector3:
 
 
 func calc_wall_jump_velocity() -> Vector3:
-	var should_jump = agent_3d.input.is_action_just_pressed(JUMP_ACTION)
+	var should_jump = agent_3d.input.is_action_just_pressed(
+		BobboInputs.Player.JUMP
+	)
 	if not agent_3d.is_on_wall() or not should_jump:
 		return Vector3.ZERO
 

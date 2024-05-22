@@ -2,27 +2,21 @@
 extends CharacterAgentScript
 
 #
-#	Constants
-#
-
-## The key for "scroll to the next item" action
-const SCROLL_ITEM_FORWARD_ACTION: String = "player_scroll_item_forward"
-
-## The key for "scroll to the previous item" action
-const SCROLL_ITEM_BACK_ACTION: String = "player_scroll_item_back"
-
-#
 #	Player Functions
 #
 
 
 func character_agent_process(_delta: float):
 	# Run the logic for selecting the next item
-	if agent_3d.input.is_action_just_pressed(SCROLL_ITEM_FORWARD_ACTION):
+	if agent_3d.input.is_action_just_pressed(
+		BobboInputs.Player.Item.Scroll.FORWARD
+	):
 		select_next_item()
 
 	# Run the logic for selecting the previous item
-	if agent_3d.input.is_action_just_pressed(SCROLL_ITEM_BACK_ACTION):
+	if agent_3d.input.is_action_just_pressed(
+		BobboInputs.Player.Item.Scroll.BACKWARD
+	):
 		select_previous_item()
 
 

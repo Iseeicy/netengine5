@@ -15,16 +15,16 @@ extends Node
 #
 
 ## The name of the analog action to use when looking up
-@export var up_action_name: String = "player_look_up"
+@export var up_action_name: String = BobboInputs.Player.Look.UP
 
 ## The name of the analog action to use when looking down
-@export var down_action_name: String = "player_look_down"
+@export var down_action_name: String = BobboInputs.Player.Look.DOWN
 
 ## The name of the analog action to use when looking left
-@export var left_action_name: String = "player_look_left"
+@export var left_action_name: String = BobboInputs.Player.Look.LEFT
 
 ## The name of the analog action to use when looking right
-@export var right_action_name: String = "player_look_right"
+@export var right_action_name: String = BobboInputs.Player.Look.RIGHT
 
 ## Should we ignore mouse events if the mouse is not captured by the window?
 @export var ignore_when_uncaptured := true
