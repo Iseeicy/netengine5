@@ -2,16 +2,6 @@
 extends CharacterAgentScript
 
 #
-#	Constants
-#
-
-## The name of the primary "use item" action. Typically left mouse.
-const USE_0_ACTION: String = "player_use_item_0"
-
-## The name of the primary "use item" action. Typically right mouse.
-const USE_1_ACTION: String = "player_use_item_1"
-
-#
 #	Player Functions
 #
 
@@ -27,8 +17,12 @@ func character_agent_process(_delta: float) -> void:
 		return
 
 	# Populate the values for this items input
-	_process_item_input(USE_0_ACTION, item_script.use_0_input)
-	_process_item_input(USE_1_ACTION, item_script.use_1_input)
+	_process_item_input(
+		BobboInputs.Player.Item.Use.PRIMARY, item_script.use_0_input
+	)
+	_process_item_input(
+		BobboInputs.Player.Item.Use.SECONDARY, item_script.use_1_input
+	)
 
 
 #

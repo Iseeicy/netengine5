@@ -15,23 +15,13 @@ const DEGRESS_PER_UNIT: float = 0.001
 @export var sensitivity_y: float = 250
 
 #
-#   Private Variables
-#
-
-## An input wrapper to make getting mouse movement easier
-var _look_axis: InputAxis2d = InputAxis2d.new(
-	InputAxis1d.new("player_look_left", "player_look_right"),
-	InputAxis1d.new("player_look_down", "player_look_up")
-)
-
-#
 #   Agent Functions
 #
 
 
 func character_agent_process(_delta: float) -> void:
 	var look_movement := (
-		agent_3d.input.read_axis_2d(_look_axis)
+		agent_3d.input.read_axis_2d(BobboInputs.Player.Look.axis)
 		* Vector2(sensitivity_x, sensitivity_y)
 		* DEGRESS_PER_UNIT
 	)

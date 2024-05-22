@@ -2,12 +2,6 @@
 extends CharacterAgentScript
 
 #
-#	Constants
-#
-
-const CROUCH_ACTION: String = "player_crouch"
-
-#
 #	Exported
 #
 
@@ -29,7 +23,7 @@ func character_agent_physics_process(delta: float):
 	if not _supports_collider():
 		return
 
-	if agent_3d.input.is_action_pressed(CROUCH_ACTION):
+	if agent_3d.input.is_action_pressed(BobboInputs.Player.CROUCH):
 		crouch_target = 0.5
 	else:
 		crouch_target = 1

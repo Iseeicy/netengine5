@@ -3,13 +3,6 @@
 extends CharacterAgentScript
 
 #
-#	Constants
-#
-
-## The name of the "use interactable" action. Typically the E key.
-const USE_ACTION: String = "player_interact"
-
-#
 #	Private Variables
 #
 
@@ -35,11 +28,11 @@ func character_agent_process(_delta: float) -> void:
 
 	# If we're just now pressing the use key, call all of the use start
 	## funcs.
-	if agent_3d.input.is_action_just_pressed(USE_ACTION):
+	if agent_3d.input.is_action_just_pressed(BobboInputs.Player.INTERACT):
 		for inter in interactables:
 			inter.call_use_start()
 	# If we're just now releasing the use key, call all of the use stop
 	## funcs.
-	if agent_3d.input.is_action_just_released(USE_ACTION):
+	if agent_3d.input.is_action_just_released(BobboInputs.Player.INTERACT):
 		for inter in interactables:
 			inter.call_use_stop()
