@@ -51,7 +51,7 @@ func look_in_direction(direction: Vector3) -> void:
 
 	var x = _angle_around_axis(-direction, head_direction, up_direction)
 	var y = _angle_around_axis(
-		direction, head_direction, up_direction.cross(-head_direction)
+		-direction, head_direction, up_direction.cross(-head_direction)
 	)
 
 	sim_input.simulate_axis_2d(BobboInputs.Player.Look.axis, Vector2(x, y))
