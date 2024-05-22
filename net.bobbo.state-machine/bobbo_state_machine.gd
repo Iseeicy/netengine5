@@ -1,3 +1,4 @@
+@tool
 class_name BobboStateMachine
 extends Node
 
@@ -8,7 +9,18 @@ extends Node
 signal transitioned(state: BobboState, path: String)
 signal active_changed(is_active: bool)
 
-@export var initial_state: NodePath
+@export var initial_state: NodePath:
+	get:
+		return initial_state
+	set(value):
+		initial_state = value
+		update_configuration_warnings()
+
+#
+#	Public Variables
+#
+
+var state: BobboState = null
 
 #
 #	Private Variables
@@ -17,10 +29,51 @@ signal active_changed(is_active: bool)
 var _is_active: bool = true
 
 #
-#	Public Onready Variables
+#	Godot Functions
 #
 
-@onready var state: BobboState = get_node(initial_state) as BobboState
+
+func _ready():
+	if Engine.is_editor_hint():
+		return
+
+	# Populate the initial state
+	assert(initial_state != null)
+	state = get_node(initial_state) as BobboState
+
+	# Enter the inital state
+	active_changed.emit(true)
+	state.state_enter()
+	transitioned.emit(state, state.get_state_path())
+
+
+func _get_configuration_warnings():
+	var warnings: Array[String] = []
+	if not initial_state:
+		warnings.append("Initial State must be assigned.")
+	return warnings
+
+
+# Delegate input to the currently active state
+func _unhandled_input(event):
+	if not state:
+		return
+	state.state_unhandled_input(event)
+
+
+# Delegate an update to the currently active state
+func _process(delta):
+	if not state:
+		return
+	state.state_process(delta)
+
+
+# Delegate a physics update to the currently active state
+func _physics_process(delta):
+	if not state:
+		return
+	state.state_physics_process(delta)
+
 
 #
 #	Public Functions
@@ -56,32 +109,3 @@ func set_is_active(should_be_active: bool) -> void:
 
 func get_is_active() -> bool:
 	return _is_active
-
-
-#
-#	Private Functions
-#
-
-
-func _ready():
-	assert(initial_state != null)
-
-	# Enter the inital state
-	active_changed.emit(true)
-	state.state_enter()
-	transitioned.emit(state, state.get_state_path())
-
-
-# Delegate input to the currently active state
-func _unhandled_input(event):
-	state.state_unhandled_input(event)
-
-
-# Delegate an update to the currently active state
-func _process(delta):
-	state.state_process(delta)
-
-
-# Delegate a physics update to the currently active state
-func _physics_process(delta):
-	state.state_physics_process(delta)
