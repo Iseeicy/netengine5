@@ -60,30 +60,18 @@ func state_physics_process(_delta: float) -> void:
 		not agent_3d.nav_agent.is_navigation_finished()
 		and agent_3d.nav_agent.distance_to_target() > min_distance
 	):
-		_move_towards_nav_target()
+		agent_3d.move_towards_nav_target()
 	else:
-		_dont_move()
+		agent_3d.dont_move()
+
+	agent_3d.look_in_direction(
+		agent_3d.global_position.direction_to(target.global_position)
+	)
 
 
 #
 #   Private Functions
 #
-
-
-func _move_towards_nav_target() -> void:
-	_move_in_direction(
-		agent_3d.global_position.direction_to(
-			agent_3d.nav_agent.get_next_path_position()
-		)
-	)
-
-
-func _move_in_direction(direction: Vector3) -> void:
-	input.simulate_axis_2d(_move_axis, Vector2(direction.x, direction.z))
-
-
-func _dont_move() -> void:
-	input.simulate_axis_2d(_move_axis, Vector2.ZERO)
 
 
 func _distance_to_target() -> float:
