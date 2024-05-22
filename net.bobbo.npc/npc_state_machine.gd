@@ -4,14 +4,6 @@ class_name NPCStateMachine
 extends BobboStateMachine
 
 #
-#   Exports
-#
-
-## The input simulator to use when trying to control the character agent
-## that this belongs to.
-@export var input: SimulatedInput = null
-
-#
 #   Public Variables
 #
 
@@ -32,6 +24,15 @@ var agent_3d: NPCAgent3D:
 # TODO - add agent 2d
 var agent_2d = null
 
+## The input simulator to use when trying to control the character agent
+## that this belongs to. Assumes that the input on our agent is a
+## simulated input - and if it's not, returns null.
+var input: SimulatedInput:
+	get:
+		if input == null:
+			input = agent.input as SimulatedInput
+		return input
+
 #
 #   Godot Functions
 #
@@ -39,6 +40,11 @@ var agent_2d = null
 
 func _get_configuration_warnings():
 	var warnings: Array[String] = []
-	if get_parent() != NPCAgent3D:
+
+	# TODO - update to use agent 2d
+	if get_parent() is NPCAgent3D:
+		if not (get_parent().input is SimulatedInput):
+			warnings.push_back("Parent agent's input is not a SimulatedInput")
+	else:
 		warnings.push_back("Parent node must be a NPCAgent3D or NPCAgent2D")
 	return warnings
