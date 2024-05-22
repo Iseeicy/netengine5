@@ -1,4 +1,5 @@
 ## The brain of an NPCAgent3D or NPCAgent2D.
+@tool
 class_name NPCStateMachine
 extends BobboStateMachine
 
@@ -24,7 +25,7 @@ var agent: Variant:
 var agent_3d: NPCAgent3D:
 	get:
 		if agent_3d == null:
-			agent_3d = owner as NPCAgent3D
+			agent_3d = get_parent() as NPCAgent3D
 		return agent_3d
 
 ## The 2D agent that we belong to, if there is one.
@@ -36,5 +37,8 @@ var agent_2d = null
 #
 
 
-func _init():
-	pass
+func _get_configuration_warnings():
+	var warnings: Array[String] = []
+	if get_parent() != NPCAgent3D:
+		warnings.push_back("Parent node must be a NPCAgent3D or NPCAgent2D")
+	return warnings
