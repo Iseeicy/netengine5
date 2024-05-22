@@ -1,7 +1,7 @@
 ## A helper class that assists with programatically adding new inputs
 ## and events to the InputMap
 @tool
-class_name ProjectInput
+class_name ProjectInputBinder
 extends RefCounted
 
 #
@@ -47,7 +47,7 @@ static func get_setting_name(action_name: String) -> String:
 
 func bind_keycode(
 	physical_keycode: int, options: Dictionary = {}
-) -> ProjectInput:
+) -> ProjectInputBinder:
 	# Create the event that corresponds to the given keycode
 	var key = InputEventKey.new()
 	key.physical_keycode = physical_keycode
@@ -61,7 +61,7 @@ func bind_keycode(
 	return self
 
 
-func bind_mouse_button(button_index: MouseButton) -> ProjectInput:
+func bind_mouse_button(button_index: MouseButton) -> ProjectInputBinder:
 	# Create the event that corresponds to the given mouse button
 	var key = InputEventMouseButton.new()
 	key.button_index = button_index

@@ -19,16 +19,16 @@ class Player:
 		)
 
 		static func register_inputs() -> void:
-			ProjectInput.new(FORWARD).bind_keycode(KEY_W)
-			ProjectInput.new(BACKWARD).bind_keycode(KEY_S)
-			ProjectInput.new(LEFT).bind_keycode(KEY_A)
-			ProjectInput.new(RIGHT).bind_keycode(KEY_D)
+			ProjectInputBinder.new(FORWARD).bind_keycode(KEY_W)
+			ProjectInputBinder.new(BACKWARD).bind_keycode(KEY_S)
+			ProjectInputBinder.new(LEFT).bind_keycode(KEY_A)
+			ProjectInputBinder.new(RIGHT).bind_keycode(KEY_D)
 
 		static func unregister_inputs() -> void:
-			ProjectInput.remove(FORWARD)
-			ProjectInput.remove(BACKWARD)
-			ProjectInput.remove(LEFT)
-			ProjectInput.remove(RIGHT)
+			ProjectInputBinder.remove(FORWARD)
+			ProjectInputBinder.remove(BACKWARD)
+			ProjectInputBinder.remove(LEFT)
+			ProjectInputBinder.remove(RIGHT)
 
 	class Look:
 		const UP := "player_look_up"
@@ -52,44 +52,46 @@ class Player:
 			const SINGLE := "player_drop_item_single"
 
 			static func register_inputs() -> void:
-				ProjectInput.new(STACK).bind_keycode(
+				ProjectInputBinder.new(STACK).bind_keycode(
 					KEY_W, {"shift_pressed": true}
 				)
-				ProjectInput.new(SINGLE).bind_keycode(KEY_Q)
+				ProjectInputBinder.new(SINGLE).bind_keycode(KEY_Q)
 
 			static func unregister_inputs() -> void:
-				ProjectInput.remove(STACK)
-				ProjectInput.remove(SINGLE)
+				ProjectInputBinder.remove(STACK)
+				ProjectInputBinder.remove(SINGLE)
 
 		class Scroll:
 			const FORWARD := "player_scroll_item_forward"
 			const BACKWARD := "player_scroll_item_back"
 
 			static func register_inputs() -> void:
-				ProjectInput.new(FORWARD).bind_mouse_button(
+				ProjectInputBinder.new(FORWARD).bind_mouse_button(
 					MOUSE_BUTTON_WHEEL_DOWN
 				)
-				ProjectInput.new(BACKWARD).bind_mouse_button(
+				ProjectInputBinder.new(BACKWARD).bind_mouse_button(
 					MOUSE_BUTTON_WHEEL_UP
 				)
 
 			static func unregister_inputs() -> void:
-				ProjectInput.remove(FORWARD)
-				ProjectInput.remove(BACKWARD)
+				ProjectInputBinder.remove(FORWARD)
+				ProjectInputBinder.remove(BACKWARD)
 
 		class Use:
 			const PRIMARY := "player_use_item_0"
 			const SECONDARY := "player_use_item_1"
 
 			static func register_inputs() -> void:
-				ProjectInput.new(PRIMARY).bind_mouse_button(MOUSE_BUTTON_LEFT)
-				ProjectInput.new(SECONDARY).bind_mouse_button(
+				ProjectInputBinder.new(PRIMARY).bind_mouse_button(
+					MOUSE_BUTTON_LEFT
+				)
+				ProjectInputBinder.new(SECONDARY).bind_mouse_button(
 					MOUSE_BUTTON_RIGHT
 				)
 
 			static func unregister_inputs() -> void:
-				ProjectInput.remove(PRIMARY)
-				ProjectInput.remove(SECONDARY)
+				ProjectInputBinder.remove(PRIMARY)
+				ProjectInputBinder.remove(SECONDARY)
 
 		static func register_inputs() -> void:
 			Drop.register_inputs()
@@ -111,20 +113,20 @@ class Player:
 		Look.register_inputs()
 		Item.register_inputs()
 
-		ProjectInput.new(SPRINT).bind_keycode(KEY_SHIFT)
-		ProjectInput.new(JUMP).bind_keycode(KEY_SPACE)
-		ProjectInput.new(CROUCH).bind_keycode(KEY_CTRL)
-		ProjectInput.new(INTERACT).bind_keycode(KEY_E)
+		ProjectInputBinder.new(SPRINT).bind_keycode(KEY_SHIFT)
+		ProjectInputBinder.new(JUMP).bind_keycode(KEY_SPACE)
+		ProjectInputBinder.new(CROUCH).bind_keycode(KEY_CTRL)
+		ProjectInputBinder.new(INTERACT).bind_keycode(KEY_E)
 
 	static func unregister_inputs() -> void:
 		Move.unregister_inputs()
 		Look.unregister_inputs()
 		Item.unregister_inputs()
 
-		ProjectInput.remove(SPRINT)
-		ProjectInput.remove(JUMP)
-		ProjectInput.remove(CROUCH)
-		ProjectInput.remove(INTERACT)
+		ProjectInputBinder.remove(SPRINT)
+		ProjectInputBinder.remove(JUMP)
+		ProjectInputBinder.remove(CROUCH)
+		ProjectInputBinder.remove(INTERACT)
 
 
 #
