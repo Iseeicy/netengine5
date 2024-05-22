@@ -1,5 +1,6 @@
 ## A helper class that assists with programatically adding new inputs
 ## and events to the InputMap
+@tool
 class_name InputMapper
 extends RefCounted
 
@@ -18,9 +19,11 @@ var action_name: String
 func _init(action_name: String):
 	self.action_name = action_name
 
-	if not InputMap.has_action(action_name):
-		InputMap.add_action(action_name)
-	print("Mapping %s" % action_name)
+	# If we don't have this input in the project settings yet, add it!
+	if not ProjectSettings.has_setting(get_setting_name(action_name)):
+		ProjectSettings.set_setting(
+			get_setting_name(action_name), {"deadzone": 0.5, "events": []}
+		)
 
 
 #
@@ -29,8 +32,12 @@ func _init(action_name: String):
 
 
 static func remove(action_name: String) -> void:
-	if InputMap.has_action(action_name):
-		InputMap.erase_action(action_name)
+	if ProjectSettings.has_setting(get_setting_name(action_name)):
+		ProjectSettings.set_setting(get_setting_name(action_name), null)
+
+
+static func get_setting_name(action_name: String) -> String:
+	return "input/%s" % action_name
 
 
 #
@@ -50,7 +57,7 @@ func bind_keycode(
 	key.meta_pressed = options.get("meta_pressed", false)
 
 	# Add to map
-	InputMap.action_add_event(action_name, key)
+	_add_event_to_settings(key)
 	return self
 
 
@@ -60,5 +67,20 @@ func bind_mouse_button(button_index: MouseButton) -> InputMapper:
 	key.button_index = button_index
 
 	# Add to map
-	InputMap.action_add_event(action_name, key)
+	_add_event_to_settings(key)
 	return self
+
+
+#
+#	Private Functions
+#
+
+
+func _add_event_to_settings(event: InputEvent) -> void:
+	# Get the events array for this setting
+	var events: Array = (
+		ProjectSettings.get_setting(get_setting_name(action_name)).events
+	)
+
+	# Add the event
+	events.push_back(event)

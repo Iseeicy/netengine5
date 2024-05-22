@@ -1,3 +1,4 @@
+@tool
 class_name BobboInputs
 extends RefCounted
 
@@ -136,6 +137,7 @@ class Player:
 ## plugin setup process.
 static func add_to_input_map() -> void:
 	Player.register_inputs()
+	ProjectSettings.save()
 
 
 ## Removes all applicable keys of this static class from the InputMap,
@@ -143,3 +145,4 @@ static func add_to_input_map() -> void:
 ## called by the plugin teardown process.
 static func remove_from_input_map() -> void:
 	Player.unregister_inputs()
+	ProjectSettings.save()
