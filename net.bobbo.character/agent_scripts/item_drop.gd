@@ -2,16 +2,6 @@
 extends CharacterAgentScript
 
 #
-#	Constants
-#
-
-## The key for the "drop a single item" action
-const DROP_ITEM_SINGLE_ACTION: String = "player_drop_item_single"
-
-## The key for the "drop a whole item stack" action
-const DROP_ITEM_STACK_ACTION: String = "player_drop_item_stack"
-
-#
 #	Exported
 #
 
@@ -25,11 +15,15 @@ const DROP_ITEM_STACK_ACTION: String = "player_drop_item_stack"
 
 func character_agent_process(_delta: float):
 	# Run logic for dropping a single item
-	if agent_3d.input.is_action_just_pressed(DROP_ITEM_SINGLE_ACTION):
+	if agent_3d.input.is_action_just_pressed(
+		BobboInputs.Player.Item.Drop.SINGLE
+	):
 		drop_item(agent_3d.item_interactor.selected_slot, 1)
 
 	# Run logic for dropping a whole stack
-	if agent_3d.input.is_action_just_pressed(DROP_ITEM_STACK_ACTION):
+	if agent_3d.input.is_action_just_pressed(
+		BobboInputs.Player.Item.Drop.STACK
+	):
 		drop_item(agent_3d.item_interactor.selected_slot)
 
 
