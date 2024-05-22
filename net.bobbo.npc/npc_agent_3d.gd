@@ -48,15 +48,31 @@ func move_in_direction(direction: Vector3) -> void:
 ## direction.
 func look_in_direction(direction: Vector3) -> void:
 	var head_direction: Vector3 = -head_node.global_transform.basis.z
-	var delta_rotation := Quaternion(head_direction, direction)
-	var flattened_rotation := delta_rotation.get_euler(EULER_ORDER_XYZ)
 
-	sim_input.simulate_axis_2d(
-		BobboInputs.Player.Look.axis,
-		Vector2(flattened_rotation.x, flattened_rotation.y)
+	var x = _angle_around_axis(-direction, head_direction, up_direction)
+	var y = _angle_around_axis(
+		direction, head_direction, up_direction.cross(-head_direction)
 	)
+
+	sim_input.simulate_axis_2d(BobboInputs.Player.Look.axis, Vector2(x, y))
 
 
 ## Simulates stopping to move our NPC.
 func dont_move() -> void:
 	sim_input.simulate_axis_2d(BobboInputs.Player.Move.axis, Vector2.ZERO)
+
+
+#
+#	Private Functions
+#
+
+
+## Find the angle of some direction, given the context of what's considered forward.
+## Thank you to lordofduct at
+## https://forum.unity.com/threads/get-rotation-around-transform-up.248924/
+func _angle_around_axis(
+	direction: Vector3, forward: Vector3, axis: Vector3
+) -> float:
+	var right_axis = axis.cross(forward)
+	var forward_axis = right_axis.cross(axis)
+	return atan2(direction.dot(right_axis), direction.dot(forward_axis))
