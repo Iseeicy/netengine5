@@ -31,16 +31,27 @@ var sim_input: SimulatedInput:
 ## Simulates input that moves our NPC towards wherever the naviation
 ## agent is pointing it.
 func move_towards_nav_target() -> void:
-	move_in_dir_relative(
+	move_in_dir_global(
 		global_position.direction_to(nav_agent.get_next_path_position())
 	)
 
 
 ## Simulates input that moves our NPC towards a certain 3D direction,
-## ignoring height.
+## ignoring height, RELATIVE to where the agent's head is facing.
+## For example: If the given direction is `Vector3.FORWARD`, this will
+## always move the agent towards the direction that they're facing.
 func move_in_dir_relative(direction: Vector3) -> void:
 	sim_input.simulate_axis_2d(
 		BobboInputs.Player.Move.axis, Vector2(direction.x, direction.z)
+	)
+
+
+## Simulates input that moves our NPC towards a certain 3D direction,
+## ignoring height.
+func move_in_dir_global(direction: Vector3) -> void:
+	# Thanks to https://www.reddit.com/r/godot/comments/tw78dr/comment/jib4fwg/
+	move_in_dir_relative(
+		head_node.global_transform.basis.inverse() * direction
 	)
 
 
