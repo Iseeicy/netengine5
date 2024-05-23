@@ -31,14 +31,14 @@ var sim_input: SimulatedInput:
 ## Simulates input that moves our NPC towards wherever the naviation
 ## agent is pointing it.
 func move_towards_nav_target() -> void:
-	move_in_direction(
+	move_in_dir_relative(
 		global_position.direction_to(nav_agent.get_next_path_position())
 	)
 
 
 ## Simulates input that moves our NPC towards a certain 3D direction,
 ## ignoring height.
-func move_in_direction(direction: Vector3) -> void:
+func move_in_dir_relative(direction: Vector3) -> void:
 	sim_input.simulate_axis_2d(
 		BobboInputs.Player.Move.axis, Vector2(direction.x, direction.z)
 	)
@@ -46,7 +46,7 @@ func move_in_direction(direction: Vector3) -> void:
 
 ## Simulates input that makes our NPC look towards a certain 3D
 ## direction.
-func look_in_direction(direction: Vector3) -> void:
+func look_in_dir(direction: Vector3) -> void:
 	var head_direction: Vector3 = -head_node.global_transform.basis.z
 
 	# Take our input direction, and use that to calculate the x/y mouse
