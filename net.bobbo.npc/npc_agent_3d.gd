@@ -49,12 +49,18 @@ func move_in_direction(direction: Vector3) -> void:
 func look_in_direction(direction: Vector3) -> void:
 	var head_direction: Vector3 = -head_node.global_transform.basis.z
 
-	var x = _angle_around_axis(-direction, head_direction, up_direction)
-	var y = _angle_around_axis(
-		-direction, head_direction, up_direction.cross(-head_direction)
+	# Take our input direction, and use that to calculate the x/y mouse
+	# movement that would be required to have the agent look to that
+	# specific direction from their current look direction.
+	var x = -_angle_around_axis(direction, head_direction, up_direction)
+	var y = -_angle_around_axis(
+		direction, head_direction, up_direction.cross(-head_direction)
 	)
 
-	sim_input.simulate_axis_2d(BobboInputs.Player.Look.axis, Vector2(x, y))
+	# The mouselook player script is using degrees, so don't forget to convert!
+	sim_input.simulate_axis_2d(
+		BobboInputs.Player.Look.axis, Vector2(rad_to_deg(x), rad_to_deg(y))
+	)
 
 
 ## Simulates stopping to move our NPC.
@@ -68,6 +74,7 @@ func dont_move() -> void:
 
 
 ## Find the angle of some direction, given the context of what's considered forward.
+## Return is in radians!
 ## Thank you to lordofduct at
 ## https://forum.unity.com/threads/get-rotation-around-transform-up.248924/
 func _angle_around_axis(

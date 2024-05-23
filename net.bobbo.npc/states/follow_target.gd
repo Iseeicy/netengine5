@@ -65,7 +65,7 @@ func state_physics_process(_delta: float) -> void:
 		agent_3d.dont_move()
 
 	agent_3d.look_in_direction(
-		agent_3d.global_position.direction_to(target.global_position)
+		agent_3d.head_node.global_position.direction_to(target.global_position)
 	)
 
 
