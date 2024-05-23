@@ -30,10 +30,10 @@ var sim_input: SimulatedInput:
 
 ## Simulates input that moves our NPC towards wherever the naviation
 ## agent is pointing it.
-func move_towards_nav_target() -> void:
-	move_in_dir_global(
-		global_position.direction_to(nav_agent.get_next_path_position())
-	)
+func move_towards_nav_target() -> Vector3:
+	var next_position := nav_agent.get_next_path_position()
+	move_in_dir_global(global_position.direction_to(next_position))
+	return next_position
 
 
 ## Simulates input that moves our NPC towards a certain 3D direction,
@@ -72,6 +72,12 @@ func look_in_dir(direction: Vector3) -> void:
 	sim_input.simulate_axis_2d(
 		BobboInputs.Player.Look.axis, Vector2(rad_to_deg(x), rad_to_deg(y))
 	)
+
+
+## Simlates input that makes our NPC look towards a certain point in 3D
+## space.
+func look_at_point(point: Vector3) -> void:
+	look_in_dir(head_node.global_position.direction_to(point))
 
 
 ## Simulates stopping to move our NPC.
