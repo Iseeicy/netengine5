@@ -59,14 +59,10 @@ func state_physics_process(_delta: float) -> void:
 		# Face the path
 		var look_pos = next_pos
 		look_pos.y = agent_3d.head_node.global_position.y
-		# agent_3d.look_at_point(look_pos)
+		agent_3d.look_at_point(look_pos)
 	else:
 		# Face the target
 		agent_3d.look_at_point(target.global_position)
-		# agent_3d.dont_look()
-
-		TODO - make mouse movement not persist!
-		agent_3d.dont_move()
 
 
 #
