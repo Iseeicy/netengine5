@@ -15,12 +15,6 @@ extends NPCState
 ## player again.
 @export var max_distance: float = 5
 
-@export_group("Catchup")
-## If we are struggling to catch up to the target (it's moving faster
-## than us), then this is how long we'll wait until we start trying to
-## run.
-@export var time_until_try_catchup: float = 2
-
 #
 #	Priate Variables
 #
@@ -51,8 +45,8 @@ func state_physics_process(_delta: float) -> void:
 	)
 
 	# If our distance to the target is more than our desired max...
-	# ... try to repath to the target postion
 	if further_than_max_distance:
+		# Try to repath to the target postion
 		agent_3d.nav_agent.target_position = target.global_position
 
 	# If our navigation isn't finished and we're not as close as we wanna be...
@@ -60,13 +54,19 @@ func state_physics_process(_delta: float) -> void:
 		not agent_3d.nav_agent.is_navigation_finished()
 		and agent_3d.nav_agent.distance_to_target() > min_distance
 	):
-		agent_3d.move_towards_nav_target()
-	else:
-		agent_3d.dont_move()
+		var next_pos = agent_3d.move_towards_nav_target()
 
-	agent_3d.look_in_dir(
-		agent_3d.head_node.global_position.direction_to(target.global_position)
-	)
+		# Face the path
+		var look_pos = next_pos
+		look_pos.y = agent_3d.head_node.global_position.y
+		# agent_3d.look_at_point(look_pos)
+	else:
+		# Face the target
+		agent_3d.look_at_point(target.global_position)
+		# agent_3d.dont_look()
+
+		TODO - make mouse movement not persist!
+		agent_3d.dont_move()
 
 
 #

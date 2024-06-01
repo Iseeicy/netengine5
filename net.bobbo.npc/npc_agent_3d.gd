@@ -80,6 +80,11 @@ func look_at_point(point: Vector3) -> void:
 	look_in_dir(head_node.global_position.direction_to(point))
 
 
+## Simulates stopping mouselook on our NPC.
+func dont_look() -> void:
+	sim_input.simulate_axis_2d(BobboInputs.Player.Look.axis, Vector2.ZERO)
+
+
 ## Simulates stopping to move our NPC.
 func dont_move() -> void:
 	sim_input.simulate_axis_2d(BobboInputs.Player.Move.axis, Vector2.ZERO)
