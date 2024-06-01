@@ -77,6 +77,9 @@ func gather_inputs(tick: EntityInput.TickType) -> void:
 	for action_name in _current_analog_by_tick_type[tick].keys():
 		var value = _current_analog_by_tick_type[tick][action_name]
 		_register_analog_input(action_name, value)
+	# ...then clean up the analog values. These should not persist between
+	# ticks.
+	_current_analog_by_tick_type[tick].clear()
 
 
 #
