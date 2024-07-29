@@ -28,7 +28,7 @@ func character_agent_process(_delta: float) -> void:
 
 	# Calculate the rotation amount then apply
 	var new_rotation: Vector3 = agent_3d.head_node.rotation_degrees
-	new_rotation.x = clampf(new_rotation.x - look_movement.y, -90.0, 90.0)
+	new_rotation.x = clampf(new_rotation.x - look_movement.y, -89.9, 89.9)
 	new_rotation.y -= look_movement.x
 	agent_3d.head_node.rotation_degrees = new_rotation
 	agent_3d.head_node.orthonormalize()
