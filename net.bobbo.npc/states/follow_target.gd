@@ -30,10 +30,6 @@ func state_enter(_message: Dictionary = {}) -> void:
 	_pathing.how_close = max_distance
 	_pathing.repath_rate = repath_rate
 	_pathing.continuous = true
-	_pathing.look_while_pathing = NPCPathingLogic.PathingLookMode.TOWARDS_PATH
-	_pathing.look_after_pathing = (
-		NPCPathingLogic.PathCompleteLookMode.TOWARDS_TARGET
-	)
 	_pathing.set_target(target)
 	_pathing.start_logic(self)
 

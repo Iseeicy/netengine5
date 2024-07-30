@@ -67,10 +67,10 @@ var repath_rate := 0.0
 var continuous := false
 
 ## While pathing, where should the NPC look?
-var look_while_pathing := PathingLookMode.NONE
+var look_while_pathing := PathingLookMode.TOWARDS_PATH
 
 ## After pathing is complete, where should the NPC look?
-var look_after_pathing := PathCompleteLookMode.NONE
+var look_after_pathing := PathCompleteLookMode.TOWARDS_TARGET
 
 #
 #   Private Variables
