@@ -5,10 +5,11 @@ extends Node
 #	Private Variables
 #
 
+var _is_active: bool = true
+
 @onready var _parent_state: BobboState = _get_parent_state()
 @onready var _state_machine: BobboStateMachine = _get_state_machine(self)
 @onready var _state_path: String = _get_state_path(self)
-var _is_active: bool = true
 
 #
 #	Public Functions
@@ -64,16 +65,15 @@ func _get_parent_state() -> BobboState:
 func _get_state_machine(node: Node) -> Node:
 	if node == null or node is BobboStateMachine:
 		return node
-	else:
-		return _get_state_machine(node.get_parent())
+	return _get_state_machine(node.get_parent())
 
 
 func _get_state_path(node: Node) -> String:
 	if node == null or node is BobboStateMachine:
 		return ""
-	else:
-		var rest_of_path = _get_state_path(node.get_parent())
-		if rest_of_path == "":
-			return node.name
-		else:
-			return rest_of_path + "/" + node.name
+
+	var rest_of_path = _get_state_path(node.get_parent())
+	if rest_of_path == "":
+		return node.name
+
+	return rest_of_path + "/" + node.name
