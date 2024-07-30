@@ -42,17 +42,28 @@ var _is_active: bool = true
 ##		this state machine.
 ##	`message`: OPTIONAL - a dictionary to pass to the new state, when
 ##		`state_enter()` is called.
+##	`on_complete_callback`: OPTIONAL - a callback that is invoked when the
+##		state that we are transitoning to signals that it is complete. Not all
+##		states may call this!
+##	`on_cancelled_callback`: OPTIONAL - a callback that is invoked when the
+##		state that we are transitioning to signals that it is canceled for some
+##		reason. Not all states may call this!
 func transition_to(
-	target_state_path: String, message: Dictionary = {}
+	target_state_path: String,
+	message: Dictionary = {},
+	on_complete_callback: Callable = Callable(),
+	on_cancelled_callback: Callable = Callable()
 ) -> void:
 	# Convert the state path to an actual state. If there's no valid state there, EXIT
 	var target_state = get_node_or_null(target_state_path) as BobboState
 	if target_state == null:
 		return
 
-	state.state_exit()  # Exit the current state
+	state.state_machine_call_state_exit()  # Exit the current state
 	state = target_state  # Set the state w/ setter, to be safe
-	state.state_enter(message)  # Enter the new state
+	state.state_machine_call_state_enter(
+		message, on_complete_callback, on_cancelled_callback  # Enter the new state
+	)
 	transitioned.emit(state, target_state_path)  # ...and tell us about it!
 
 
@@ -89,7 +100,7 @@ func _ready():
 
 	# Enter the inital state
 	active_changed.emit(true)
-	state.state_enter()
+	state.state_machine_call_state_enter()
 	transitioned.emit(state, state.get_state_path())
 
 
