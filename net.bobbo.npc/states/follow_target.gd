@@ -16,20 +16,6 @@ extends NPCState
 @export var max_distance: float = 5
 
 #
-#	Priate Variables
-#
-
-var _move_axis := InputAxis2d.new(
-	InputAxis1d.new("player_move_left", "player_move_right"),
-	InputAxis1d.new("player_move_forward", "player_move_back")
-)
-
-var _look_axis: InputAxis2d = InputAxis2d.new(
-	InputAxis1d.new("player_look_left", "player_look_right"),
-	InputAxis1d.new("player_look_down", "player_look_up")
-)
-
-#
 #   State Machine Functions
 #
 
@@ -59,7 +45,7 @@ func state_physics_process(_delta: float) -> void:
 		# Face the path
 		var look_pos = next_pos
 		look_pos.y = agent_3d.head_node.global_position.y
-		# agent_3d.look_at_point(look_pos)
+		agent_3d.look_at_point(look_pos)
 	else:
 		# Face the target
 		agent_3d.look_at_point(target.global_position)
