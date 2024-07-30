@@ -5,11 +5,6 @@ extends Node
 #
 #	Exports
 #
-extends Node
-
-#
-#	Exports
-#
 
 ## Emitted when this state machine transitions to a new state.
 signal transitioned(state: BobboState, path: String)
@@ -53,7 +48,7 @@ func _ready():
 
 	# Enter the inital state
 	active_changed.emit(true)
-	state.state_enter()
+	state.state_machine_call_state_enter()
 	transitioned.emit(state, state.get_state_path())
 
 
@@ -144,33 +139,3 @@ func set_is_active(should_be_active: bool) -> void:
 ## Is this state machine and its states active, or inactive?
 func get_is_active() -> bool:
 	return _is_active
-
-
-#
-#	Private Functions
-#
-
-
-func _ready():
-	assert(initial_state != null)
-	state = get_node(initial_state) as BobboState
-
-	# Enter the inital state
-	active_changed.emit(true)
-	state.state_machine_call_state_enter()
-	transitioned.emit(state, state.get_state_path())
-
-
-# Delegate input to the currently active state
-func _unhandled_input(event):
-	state.state_unhandled_input(event)
-
-
-# Delegate an update to the currently active state
-func _process(delta):
-	state.state_process(delta)
-
-
-# Delegate a physics update to the currently active state
-func _physics_process(delta):
-	state.state_physics_process(delta)
