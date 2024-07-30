@@ -1,5 +1,9 @@
-extends Node
 class_name BobboState
+extends Node
+
+#
+#	Private Variables
+#
 
 @onready var _parent_state: BobboState = _get_parent_state()
 @onready var _state_machine: BobboStateMachine = _get_state_machine(self)
