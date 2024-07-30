@@ -13,6 +13,24 @@ enum TargetType {
 	POSITION
 }
 
+## Determines where the NPC should look while actively pathing
+enum PathingLookMode {
+	## Do not control where the NPC looks
+	NONE,
+	## Look in the direction that the NPC is pathing
+	TOWARDS_PATH,
+	## Look in the direction of the end target
+	TOWARDS_TARGET
+}
+
+## Determines where the NPC should look once they complete their path
+enum PathCompleteLookMode {
+	## Do not control where the NPC looks
+	NONE,
+	## Look in the direction of the end target
+	TOWARDS_TARGET
+}
+
 #
 #   Public Variables
 #
@@ -47,6 +65,12 @@ var repath_rate := 0.0
 ## Should we continuously path? If not, once we reach our destination we will
 ## not try to path back to it.
 var continuous := false
+
+## While pathing, where should the NPC look?
+var look_while_pathing := PathingLookMode.NONE
+
+## After pathing is complete, where should the NPC look?
+var look_after_pathing := PathCompleteLookMode.NONE
 
 #
 #   Private Variables
@@ -84,9 +108,13 @@ func process_logic() -> void:
 	if not is_setup:
 		return
 
-	# Check to see if we need to re-start pathing
-	if not _actively_pathing and continuous and not _within_target_distance():
-		_actively_pathing = true
+	if not _actively_pathing and continuous:
+		# Check to see if we need to re-start pathing
+		if not _within_target_distance():
+			_actively_pathing = true
+		else:
+			if look_after_pathing == PathCompleteLookMode.TOWARDS_TARGET:
+				_state.agent_3d.look_at_point(_get_target_position())
 
 	# If we're not pathing... exit early
 	if not _actively_pathing:
@@ -97,18 +125,24 @@ func process_logic() -> void:
 		# Mark that we should no longer be pathing
 		_actively_pathing = false
 
-		# Face the target, and mark that this routine is complete
-		_state.agent_3d.look_at_point(_get_target_position())
+		# Handle controlling where the NPC should look
+		if look_after_pathing == PathCompleteLookMode.TOWARDS_TARGET:
+			_state.agent_3d.look_at_point(_get_target_position())
+
+		# Mark that the logic is complete
 		_is_complete = true
 		return
 
 	# Path towards the target
 	var next_pos = _state.agent_3d.move_towards_nav_target()
 
-	# Face the path
-	var look_pos = next_pos
-	look_pos.y = _state.agent_3d.head_node.global_position.y
-	_state.agent_3d.look_at_point(look_pos)
+	# Handle controlling where the NPC should look
+	if look_while_pathing == PathingLookMode.TOWARDS_PATH:
+		var look_pos = next_pos
+		look_pos.y = _state.agent_3d.head_node.global_position.y
+		_state.agent_3d.look_at_point(look_pos)
+	elif look_while_pathing == PathingLookMode.TOWARDS_TARGET:
+		_state.agent_3d.look_at_point(_get_target_position())
 
 
 func stop_logic() -> void:
