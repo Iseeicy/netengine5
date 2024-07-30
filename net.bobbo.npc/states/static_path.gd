@@ -1,4 +1,4 @@
-class_name NPCStateGoToPosition
+class_name NPCStateStaticPath
 extends NPCState
 
 #
