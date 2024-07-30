@@ -44,6 +44,10 @@ var how_close := 3.0
 ## position on state entry.
 var repath_rate := 0.0
 
+## Should we continuously path? If not, once we reach our destination we will
+## not try to path back to it.
+var continuous := false
+
 #
 #   Private Variables
 #
@@ -79,11 +83,17 @@ func start_logic(state: NPCState) -> void:
 func process_logic() -> void:
 	if not is_setup:
 		return
+
+	# Check to see if we need to re-start pathing
+	if not _actively_pathing and continuous and not _within_target_distance():
+		_actively_pathing = true
+
+	# If we're not pathing... exit early
 	if not _actively_pathing:
 		return
 
 	# If we're pathing and we're now within range of the target...
-	if _state.agent_3d.nav_agent.distance_to_target() <= how_close:
+	if _within_target_distance():
 		# Mark that we should no longer be pathing
 		_actively_pathing = false
 
@@ -149,6 +159,10 @@ func _get_target_position() -> Vector3:
 
 	printerr("Unhandled target type %s" % target_type)
 	return Vector3.ZERO
+
+
+func _within_target_distance() -> bool:
+	return _state.agent_3d.nav_agent.distance_to_target() <= how_close
 
 
 func _apply_nav_target() -> void:
