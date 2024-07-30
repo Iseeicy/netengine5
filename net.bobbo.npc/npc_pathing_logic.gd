@@ -1,5 +1,5 @@
 class_name NPCPathingLogic
-extends Resource
+extends RefCounted
 
 #
 #	Enums
@@ -14,27 +14,6 @@ enum TargetType {
 }
 
 #
-#	Exports
-#
-
-## What should we path to? See `TargetType` for details.
-@export var target_type := TargetType.POSITION
-
-## The node to path to.
-@export var target_node: Node3D = null
-
-## The global position to path to.
-@export var target_position := Vector3.ZERO
-
-## When calculating a new path, we try to get this close to the target.
-@export var how_close := 3.0
-
-## How often should we update the nav agent's target position, in seconds?
-## Setting this at or below zero will make it so this only updates the target
-## position on state entry.
-@export var repath_rate := 0.0
-
-#
 #   Public Variables
 #
 
@@ -47,6 +26,23 @@ var is_complete:
 var is_setup:
 	get:
 		return _is_setup
+
+## What should we path to? See `TargetType` for details.
+var target_type := TargetType.POSITION
+
+## The node to path to.
+var target_node: Node3D = null
+
+## The global position to path to.
+var target_position := Vector3.ZERO
+
+## When calculating a new path, we try to get this close to the target.
+var how_close := 3.0
+
+## How often should we update the nav agent's target position, in seconds?
+## Setting this at or below zero will make it so this only updates the target
+## position on state entry.
+var repath_rate := 0.0
 
 #
 #   Private Variables
