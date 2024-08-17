@@ -6,7 +6,6 @@ extends RefCounted
 #	Exports
 #
 
-signal private_amount_updated
 signal private_key_added(knowledge: Knowledge)
 signal private_key_removed(knowledge: Knowledge)
 
@@ -14,20 +13,18 @@ signal private_key_removed(knowledge: Knowledge)
 #	Static Variables
 #
 
-static var singleton := KnowledgeDB.new()
-static var _knowledge_data: Dictionary = {}  # Knowledge Resource -> Value
-
-static var amount_updated: Signal:
-	get:
-		return singleton.private_amount_updated
-
+## Emitted when a new key is added to the Knowledge Database
 static var key_added: Signal:
 	get:
-		return singleton.private_key_added
+		return _singleton.private_key_added
 
+## Emitted when an existing key is removed from the  Knowledge Database
 static var key_removed: Signal:
 	get:
-		return singleton.private_key_removed
+		return _singleton.private_key_removed
+
+static var _singleton := KnowledgeDB.new()
+static var _knowledge_data: Dictionary = {}  # Knowledge Resource -> Value
 
 #
 #	Public Functions
@@ -37,19 +34,19 @@ static var key_removed: Signal:
 static func connect_updated_value(knowledge: Knowledge, callable: Callable):
 	var signal_key = _get_value_updated_signal_key(knowledge)
 
-	if not singleton.has_user_signal(signal_key):
-		singleton.add_user_signal(signal_key, [{"name": "new_value"}])
+	if not _singleton.has_user_signal(signal_key):
+		_singleton.add_user_signal(signal_key, [{"name": "new_value"}])
 
-	singleton.connect(signal_key, callable)
+	_singleton.connect(signal_key, callable)
 
 
 static func disconnect_updated_value(knowledge: Knowledge, callable: Callable):
 	var signal_key = _get_value_updated_signal_key(knowledge)
 
-	if not singleton.has_user_signal(signal_key):
+	if not _singleton.has_user_signal(signal_key):
 		return
 
-	singleton.disconnect(signal_key, callable)
+	_singleton.disconnect(signal_key, callable)
 
 
 static func get_knowledge_value(knowledge: Knowledge):
@@ -115,12 +112,11 @@ static func _set_value(knowledge: Knowledge, new_value):
 
 	_knowledge_data[knowledge] = new_value
 	key_added.emit(knowledge)
-	amount_updated.emit()
 
 	# Call the dynamic signal if relevant
 	var signal_key = _get_value_updated_signal_key(knowledge)
-	if singleton.has_user_signal(signal_key):
-		singleton.emit_signal(signal_key, new_value)
+	if _singleton.has_user_signal(signal_key):
+		_singleton.emit_signal(signal_key, new_value)
 
 
 static func _set_entire_data(new_knowledge_data: Dictionary):
@@ -133,8 +129,8 @@ static func _set_entire_data(new_knowledge_data: Dictionary):
 		if new_key in old_data:
 			if new_knowledge_data[new_key] != old_data[new_key]:
 				var signal_key = _get_value_updated_signal_key(new_key)
-				if singleton.has_user_signal(signal_key):
-					singleton.emit_signal(
+				if _singleton.has_user_signal(signal_key):
+					_singleton.emit_signal(
 						signal_key, new_knowledge_data[new_key]
 					)
 

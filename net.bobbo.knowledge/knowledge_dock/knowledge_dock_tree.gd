@@ -6,11 +6,13 @@ extends Tree
 
 
 func _enter_tree():
-	KnowledgeDB.amount_updated.connect(_update_tree.bind())
+	KnowledgeDB.key_added.connect(_update_tree.bind())
+	KnowledgeDB.key_removed.connect(_update_tree.bind())
 
 
 func _exit_tree():
-	KnowledgeDB.amount_updated.disconnect(_update_tree.bind())
+	KnowledgeDB.key_removed.disconnect(_update_tree.bind())
+	KnowledgeDB.key_added.disconnect(_update_tree.bind())
 
 
 #
