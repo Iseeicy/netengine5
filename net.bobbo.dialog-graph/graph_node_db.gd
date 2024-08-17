@@ -5,18 +5,19 @@ class_name GraphNodeDB
 extends RefCounted
 
 #
-#	Static Variables
+#	Private Variables
 #
 
-## A list of descriptors that represent what kind of dialog nodes exist.
-## TODO - convert to maybe DialogGraphNodeDescriptor adding itself via a static
-## constructor?
-static var descriptors: Array[DialogGraphNodeDescriptor] = [
+var _descriptors: Array[DialogGraphNodeDescriptor] = [
 	preload("nodes/entry/entry_desc.tres"),
 	preload("nodes/dialog_text/dialog_text_desc.tres"),
 	preload("nodes/choice_prompt/choice_prompt_desc.tres"),
 	preload("nodes/forwarder/forwarder_desc.tres"),
 ]
+
+#
+#	Static Variables
+#
 
 ## By extending RefCounted and creating a new instance of ourselves in a static
 ## variable, we can emulate a real singleton structure. This is better than
@@ -24,6 +25,13 @@ static var descriptors: Array[DialogGraphNodeDescriptor] = [
 ## singleton can exist without the user needing to enable the plugin, reducing
 ## parse errors.
 static var _singleton := GraphNodeDB.new()
+
+## A list of descriptors that represent what kind of dialog nodes exist.
+## TODO - convert to maybe DialogGraphNodeDescriptor adding itself via a static
+## constructor?
+static var descriptors: Array[DialogGraphNodeDescriptor]:
+	get:
+		return _singleton._descriptors
 
 #
 #	Public Funcitons
