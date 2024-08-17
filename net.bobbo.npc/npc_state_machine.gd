@@ -32,6 +32,9 @@ var input: SimulatedInput:
 		if input == null:
 			input = agent.input as SimulatedInput
 		return input
+	set(value):
+		input = value
+		update_configuration_warnings()
 
 #
 #   Godot Functions
@@ -42,9 +45,6 @@ func _get_configuration_warnings():
 	var warnings: Array[String] = super()
 
 	# TODO - update to use agent 2d
-	if get_parent() is NPCAgent3D:
-		if not (get_parent().input is SimulatedInput):
-			warnings.push_back("Parent agent's input is not a SimulatedInput")
-	else:
+	if not get_parent() is NPCAgent3D:
 		warnings.push_back("Parent node must be a NPCAgent3D or NPCAgent2D")
 	return warnings
