@@ -1,6 +1,6 @@
 @tool
-extends Knowledge
 class_name KnowledgeBool
+extends Knowledge
 
 #
 #	Exports
@@ -11,14 +11,14 @@ class_name KnowledgeBool
 	get:
 		if _default_value == null:
 			return false
-		else:
-			return _default_value
+		return _default_value
 	set(new_value):
 		_default_value = new_value
 
 #
 #	Public Functions
 #
+
 
 func get_default_value() -> bool:
 	return default_value
