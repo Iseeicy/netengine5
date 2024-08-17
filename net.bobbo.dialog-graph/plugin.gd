@@ -110,9 +110,6 @@ func _enter_tree():
 		DIALOG_RUNNER_STATE_ICON
 	)
 
-	# Add the autoload
-	add_autoload_singleton("GraphNodeDB", "autoload/graph_node_db.tscn")
-
 	# Spawn the graph editor
 	_graph_editor_instance = GRAPH_EDITOR_SCENE.instantiate()
 	get_editor_interface().get_editor_main_screen().add_child(
@@ -181,9 +178,6 @@ func _exit_tree():
 		remove_control_from_bottom_panel(_dialog_preview_instance)
 		_dialog_preview_instance.queue_free()
 		_dialog_preview_instance = null
-
-	# Remove the autoload
-	remove_autoload_singleton("GraphNodeDB")
 
 	# Remove types
 	remove_custom_type("DialogRunnerActiveUnknownHandlerState")
