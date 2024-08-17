@@ -111,7 +111,8 @@ static func _set_value(knowledge: Knowledge, new_value):
 	var is_new = knowledge in _knowledge_data.keys()
 
 	_knowledge_data[knowledge] = new_value
-	key_added.emit(knowledge)
+	if is_new:
+		key_added.emit(knowledge)
 
 	# Call the dynamic signal if relevant
 	var signal_key = _get_value_updated_signal_key(knowledge)
