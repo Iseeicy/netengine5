@@ -111,7 +111,8 @@ func transition_to(
 	if target_state == null:
 		return
 
-	state.state_machine_call_state_exit()  # Exit the current state
+	if state:
+		state.state_machine_call_state_exit()  # Exit the current state
 	state = target_state  # Set the state w/ setter, to be safe
 	state.state_machine_call_state_enter(
 		message, on_complete_callback, on_cancelled_callback  # Enter the new state
