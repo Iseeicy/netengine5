@@ -6,11 +6,13 @@ extends Tree
 
 
 func _enter_tree():
-	KnowledgeDB.amount_updated.connect(_update_tree.bind())
+	KnowledgeDB.key_added.connect(_on_knowledge_key_added.bind())
+	KnowledgeDB.key_removed.connect(_on_knowledge_key_removed.bind())
 
 
 func _exit_tree():
-	KnowledgeDB.amount_updated.disconnect(_update_tree.bind())
+	KnowledgeDB.key_removed.disconnect(_on_knowledge_key_removed.bind())
+	KnowledgeDB.key_added.disconnect(_on_knowledge_key_added.bind())
 
 
 #
@@ -77,3 +79,11 @@ func _create_tree_branch(
 
 		new_node.set_text(0, end_of_path)
 		parent_node = new_node
+
+
+func _on_knowledge_key_removed(_knowledge):
+	_update_tree()
+
+
+func _on_knowledge_key_added(_knowledge):
+	_update_tree()

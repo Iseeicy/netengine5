@@ -5,9 +5,6 @@ const KNOWLEDGE_ICON: Texture2D = preload("icons/knowledge_icon.png")
 
 
 func _enter_tree():
-	# Add the autoload
-	add_autoload_singleton("KnowledgeDB", "autoload/knowledge_db.tscn")
-
 	add_custom_type(
 		"KnowledgeAgent", "Node", preload("knowledge_agent.gd"), KNOWLEDGE_ICON
 	)
@@ -57,6 +54,3 @@ func _exit_tree():
 	remove_custom_type("KnowledgeInteger")
 	remove_custom_type("KnowledgeOperatorCondition")
 	remove_custom_type("KnowledgeString")
-
-	# Remove the autoload
-	remove_autoload_singleton("KnowledgeDB")
