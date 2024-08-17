@@ -1,4 +1,3 @@
 @tool
-extends GraphNodeData
 class_name EntryNodeData
-
+extends GraphNodeData

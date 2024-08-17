@@ -1,6 +1,6 @@
 @tool
-extends Resource
 class_name PackedDialogGraph
+extends Resource
 
 #
 #	Exports
@@ -9,8 +9,10 @@ class_name PackedDialogGraph
 ## All of the nodes in the graph. Elements are shallow copies of the dict that
 ## GraphNodeData is backed by.
 @export var nodes: Array[Dictionary] = []
+
 ## A list of connections between the nodes in the graph. Elements are dicts in
-## the format of { "from_id": int, "from_port": int, "to_id": int, "to_port": int }
+## the format of 
+## { "from_id": int, "from_port": int, "to_id": int, "to_port": int }
 @export var connections: Array[Dictionary] = []
 
 #

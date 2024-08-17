@@ -19,6 +19,7 @@ extends Node
 #	Public Funcitons
 #
 
+
 ## Given the name of a dialog node type, create a new instance of it's data
 ## object. Returns null if there is no node by `node_name` found.
 func create_data(node_name: String) -> GraphNodeData:
@@ -26,6 +27,7 @@ func create_data(node_name: String) -> GraphNodeData:
 	if desc == null:
 		return null
 	return desc.instantiate_data()
+
 
 ## Given the name of a dialog node type, find the `DialogGraphNodeDescriptor`
 ## that it belongs to. Returns null if there is no node by `node_name` found.
@@ -35,13 +37,19 @@ func find_descriptor_by_name(node_name: String) -> DialogGraphNodeDescriptor:
 			return desc
 	return null
 
+
 ## Given some data script, find the descriptor that it belongs to.
-func find_descriptor_for_data_script(data_script: Script) -> DialogGraphNodeDescriptor:
+func find_descriptor_for_data_script(
+	data_script: Script
+) -> DialogGraphNodeDescriptor:
 	for desc in descriptors:
 		if desc.data_script == data_script:
 			return desc
 	return null
 
+
 ## Given some node data, find the descriptor that it belongs to.
-func find_descriptor_for_data(data: GraphNodeData) -> DialogGraphNodeDescriptor:
+func find_descriptor_for_data(
+	data: GraphNodeData
+) -> DialogGraphNodeDescriptor:
 	return find_descriptor_for_data_script(data.get_script())
