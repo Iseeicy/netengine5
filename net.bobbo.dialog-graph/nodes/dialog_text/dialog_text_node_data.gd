@@ -1,6 +1,6 @@
 @tool
-extends GraphNodeData
 class_name DialogTextNodeData
+extends GraphNodeData
 
 const TEXT_KEY: String = "t"
 
@@ -10,4 +10,3 @@ var text: Array[String] = []:
 		return _get_internal_data(TEXT_KEY, [] as Array[String])
 	set(new_texts):
 		_set_internal_data(TEXT_KEY, new_texts)
-

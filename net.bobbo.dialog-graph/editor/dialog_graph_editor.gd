@@ -1,7 +1,7 @@
 ## A control that allows for creating and editing DialogGraphs.
 @tool
-extends Control
 class_name DialogGraphEditor
+extends Control
 
 #
 #	Exports

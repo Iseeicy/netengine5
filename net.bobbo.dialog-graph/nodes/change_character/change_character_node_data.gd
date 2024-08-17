@@ -1,6 +1,6 @@
 @tool
-extends GraphNodeData
 class_name ChangeCharacterNodeData
+extends GraphNodeData
 
 const CHARACTER_DEFINITION_KEY: String = "cdef"
 

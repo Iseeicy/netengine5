@@ -1,6 +1,6 @@
 @tool
-extends GraphNodeData
 class_name ChoicePromptNodeData
+extends GraphNodeData
 
 const TEXT_KEY: String = "t"
 const OPTIONS_KEY: String = "o"

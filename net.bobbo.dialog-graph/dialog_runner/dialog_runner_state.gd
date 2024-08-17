@@ -1,8 +1,8 @@
 ## The base node that every state belonging to a DialogRunner should extend
 ## from. Acts as a utility to access a handful of properties with easier syntax.
 @tool
-extends BobboState
 class_name DialogRunnerState
+extends BobboState
 
 #
 #	Variables
