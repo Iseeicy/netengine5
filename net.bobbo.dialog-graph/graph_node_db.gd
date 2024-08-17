@@ -12,10 +12,10 @@ extends RefCounted
 ## TODO - convert to maybe DialogGraphNodeDescriptor adding itself via a static
 ## constructor?
 static var descriptors: Array[DialogGraphNodeDescriptor] = [
-	preload("../nodes/entry/entry_desc.tres"),
-	preload("../nodes/dialog_text/dialog_text_desc.tres"),
-	preload("../nodes/choice_prompt/choice_prompt_desc.tres"),
-	preload("../nodes/forwarder/forwarder_desc.tres"),
+	preload("nodes/entry/entry_desc.tres"),
+	preload("nodes/dialog_text/dialog_text_desc.tres"),
+	preload("nodes/choice_prompt/choice_prompt_desc.tres"),
+	preload("nodes/forwarder/forwarder_desc.tres"),
 ]
 
 ## By extending RefCounted and creating a new instance of ourselves in a static
