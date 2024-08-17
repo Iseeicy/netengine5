@@ -21,7 +21,15 @@ var sim_input: SimulatedInput:
 #   Godot Functions
 #
 
-# TODO - setup config error if input isn't sim
+
+func _get_configuration_warnings():
+	var warnings: Array[String] = super()
+
+	if not input is SimulatedInput:
+		warnings.push_back("NPCAgent input must be SimulatedInput")
+
+	return warnings
+
 
 #
 #   Public Functions
