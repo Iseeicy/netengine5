@@ -108,7 +108,7 @@ static func load_state(path: String) -> bool:
 
 
 static func _set_value(knowledge: Knowledge, new_value):
-	var is_new = knowledge in _knowledge_data.keys()
+	var is_new := knowledge in _knowledge_data.keys()
 
 	_knowledge_data[knowledge] = new_value
 	if is_new:
