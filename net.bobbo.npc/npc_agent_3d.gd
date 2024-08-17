@@ -59,7 +59,7 @@ func move_in_dir_global(direction: Vector3) -> void:
 ## direction.
 func look_in_dir(direction: Vector3) -> void:
 	var head_direction: Vector3 = -head_node.global_transform.basis.z
-	
+
 	# Take our input direction and use that to calculate the x mouse movement
 	# that would be required to have the agent look to that specific direction.
 	var x = -_angle_around_axis(direction, head_direction, up_direction)
