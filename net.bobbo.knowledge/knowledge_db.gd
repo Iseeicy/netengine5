@@ -1,44 +1,58 @@
 @tool
-extends Node
+class_name KnowledgeDB
+extends RefCounted
 
 #
 #	Exports
 #
 
-signal amount_updated
-signal key_added(knowledge: Knowledge)
-signal key_removed(knowledge: Knowledge)
+signal private_amount_updated
+signal private_key_added(knowledge: Knowledge)
+signal private_key_removed(knowledge: Knowledge)
 
 #
-#	Variables
+#	Static Variables
 #
 
-var _knowledge_data: Dictionary = {}  # Knowledge Resource -> Value
+static var singleton := KnowledgeDB.new()
+static var _knowledge_data: Dictionary = {}  # Knowledge Resource -> Value
+
+static var amount_updated: Signal:
+	get:
+		return singleton.private_amount_updated
+
+static var key_added: Signal:
+	get:
+		return singleton.private_key_added
+
+static var key_removed: Signal:
+	get:
+		return singleton.private_key_removed
 
 #
 #	Public Functions
 #
 
 
-func connect_updated_value(knowledge: Knowledge, callable: Callable):
+static func connect_updated_value(knowledge: Knowledge, callable: Callable):
 	var signal_key = _get_value_updated_signal_key(knowledge)
 
-	if not has_user_signal(signal_key):
-		add_user_signal(signal_key, [{"name": "new_value"}])
+	if not singleton.has_user_signal(signal_key):
+		singleton.add_user_signal(signal_key, [{"name": "new_value"}])
 
-	connect(signal_key, callable)
+	singleton.connect(signal_key, callable)
 
 
-func disconnect_updated_value(knowledge: Knowledge, callable: Callable):
+static func disconnect_updated_value(knowledge: Knowledge, callable: Callable):
 	var signal_key = _get_value_updated_signal_key(knowledge)
 
-	if not has_user_signal(signal_key):
+	if not singleton.has_user_signal(signal_key):
 		return
 
-	disconnect(signal_key, callable)
+	singleton.disconnect(signal_key, callable)
 
 
-func get_knowledge_value(knowledge: Knowledge):
+static func get_knowledge_value(knowledge: Knowledge):
 	## If we don't have this knowledge, try to load it's default
 	if not knowledge in _knowledge_data.keys():
 		_set_value(knowledge, knowledge.get_default_value())
@@ -46,15 +60,15 @@ func get_knowledge_value(knowledge: Knowledge):
 	return _knowledge_data[knowledge]
 
 
-func set_knowledge_value(knowledge: Knowledge, value):
+static func set_knowledge_value(knowledge: Knowledge, value):
 	_set_value(knowledge, value)
 
 
-func get_all() -> Dictionary:
+static func get_all() -> Dictionary:
 	return _knowledge_data
 
 
-func save_state(path: String) -> void:
+static func save_state(path: String) -> void:
 	var save_file = FileAccess.open(path, FileAccess.WRITE)
 
 	for knowledge in _knowledge_data:
@@ -62,7 +76,7 @@ func save_state(path: String) -> void:
 		save_file.store_var(_knowledge_data[knowledge])
 
 
-func load_state(path: String) -> bool:
+static func load_state(path: String) -> bool:
 	if not FileAccess.file_exists(path):
 		return false  # Error! We don't have a save to load.
 
@@ -96,7 +110,7 @@ func load_state(path: String) -> bool:
 #
 
 
-func _set_value(knowledge: Knowledge, new_value):
+static func _set_value(knowledge: Knowledge, new_value):
 	var is_new = knowledge in _knowledge_data.keys()
 
 	_knowledge_data[knowledge] = new_value
@@ -105,11 +119,11 @@ func _set_value(knowledge: Knowledge, new_value):
 
 	# Call the dynamic signal if relevant
 	var signal_key = _get_value_updated_signal_key(knowledge)
-	if has_user_signal(signal_key):
-		emit_signal(signal_key, new_value)
+	if singleton.has_user_signal(signal_key):
+		singleton.emit_signal(signal_key, new_value)
 
 
-func _set_entire_data(new_knowledge_data: Dictionary):
+static func _set_entire_data(new_knowledge_data: Dictionary):
 	var old_data = _knowledge_data
 	_knowledge_data = new_knowledge_data
 
@@ -119,15 +133,17 @@ func _set_entire_data(new_knowledge_data: Dictionary):
 		if new_key in old_data:
 			if new_knowledge_data[new_key] != old_data[new_key]:
 				var signal_key = _get_value_updated_signal_key(new_key)
-				if has_user_signal(signal_key):
-					emit_signal(signal_key, new_knowledge_data[new_key])
+				if singleton.has_user_signal(signal_key):
+					singleton.emit_signal(
+						signal_key, new_knowledge_data[new_key]
+					)
 
 
-func _get_value_updated_signal_key(knowledge: Knowledge) -> String:
+static func _get_value_updated_signal_key(knowledge: Knowledge) -> String:
 	return "updated_%s" % knowledge.get_instance_id()
 
 
-func _get_default(resource_path: String):
+static func _get_default(resource_path: String):
 	if not ResourceLoader.exists(resource_path):
 		return null
 
