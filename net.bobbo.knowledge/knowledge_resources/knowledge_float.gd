@@ -1,6 +1,6 @@
 @tool
-extends Knowledge
 class_name KnowledgeFloat
+extends Knowledge
 
 #
 #	Exports
@@ -11,14 +11,14 @@ class_name KnowledgeFloat
 	get:
 		if _default_value == null:
 			return 0
-		else:
-			return _default_value
+		return _default_value
 	set(new_value):
 		_default_value = new_value
 
 #
 #	Public Functions
 #
+
 
 func get_default_value() -> float:
 	return default_value
