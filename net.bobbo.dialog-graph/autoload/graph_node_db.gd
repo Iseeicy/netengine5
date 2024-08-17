@@ -1,19 +1,29 @@
-## An autoload class that acts as reference for what kinds of dialog nodes
+## A singleton class that acts as reference for what kinds of dialog nodes
 ## exist, and how to work with them.
 @tool
-extends Node
+class_name GraphNodeDB
+extends RefCounted
 
 #
-#	Exports
+#	Static Variables
 #
 
 ## A list of descriptors that represent what kind of dialog nodes exist.
-@export var descriptors: Array[DialogGraphNodeDescriptor] = [
+## TODO - convert to maybe DialogGraphNodeDescriptor adding itself via a static
+## constructor?
+static var descriptors: Array[DialogGraphNodeDescriptor] = [
 	preload("../nodes/entry/entry_desc.tres"),
 	preload("../nodes/dialog_text/dialog_text_desc.tres"),
 	preload("../nodes/choice_prompt/choice_prompt_desc.tres"),
 	preload("../nodes/forwarder/forwarder_desc.tres"),
 ]
+
+## By extending RefCounted and creating a new instance of ourselves in a static
+## variable, we can emulate a real singleton structure. This is better than
+## using an autoload because we don't need access to the SceneTree and the
+## singleton can exist without the user needing to enable the plugin, reducing
+## parse errors.
+static var _singleton := GraphNodeDB.new()
 
 #
 #	Public Funcitons
