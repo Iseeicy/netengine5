@@ -61,6 +61,11 @@ static func get_descriptors() -> Array[DialogGraphNodeDescriptor]:
 ## will ensure that the property is displayed correctly in the GUI, and ensure
 ## that a default value is set correctly.
 static func _setup_descriptors_property() -> void:
+	if not ProjectSettings.has_setting(DESCRIPTORS_SETTINGS_KEY):
+		ProjectSettings.set_setting(
+			DESCRIPTORS_SETTINGS_KEY, DEFAULT_DESCRIPTORS
+		)
+
 	ProjectSettings.add_property_info(
 		{
 			name = DESCRIPTORS_SETTINGS_KEY,
@@ -74,8 +79,3 @@ static func _setup_descriptors_property() -> void:
 	ProjectSettings.set_initial_value(
 		DESCRIPTORS_SETTINGS_KEY, DEFAULT_DESCRIPTORS
 	)
-
-	if not ProjectSettings.has_setting(DESCRIPTORS_SETTINGS_KEY):
-		ProjectSettings.set_setting(
-			DESCRIPTORS_SETTINGS_KEY, DEFAULT_DESCRIPTORS
-		)
