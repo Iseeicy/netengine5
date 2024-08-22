@@ -22,8 +22,6 @@ var _descriptors: Array[DialogGraphNodeDescriptor]
 static var _singleton := GraphNodeDB.new()
 
 ## A list of descriptors that represent what kind of dialog nodes exist.
-## TODO - convert to maybe DialogGraphNodeDescriptor adding itself via a static
-## constructor?
 static var descriptors: Array[DialogGraphNodeDescriptor]:
 	get:
 		return _singleton._descriptors
@@ -35,9 +33,7 @@ static var descriptors: Array[DialogGraphNodeDescriptor]:
 
 func _init():
 	# Read the descriptors from the project settings
-	var found_descriptors = DialogGraphProjectSettings.get_descriptors()
-	_descriptors = []
-	_descriptors.assign(found_descriptors)
+	_descriptors = DialogGraphProjectSettings.get_descriptors()
 
 
 #
