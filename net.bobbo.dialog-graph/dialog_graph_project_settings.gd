@@ -10,10 +10,10 @@ extends RefCounted
 const DESCRIPTORS_SETTINGS_KEY := "netengine5/dialog_graph/descriptors"
 
 const DEFAULT_DESCRIPTORS := [
-	preload("nodes/entry/entry_desc.tres"),
-	preload("nodes/dialog_text/dialog_text_desc.tres"),
-	preload("nodes/choice_prompt/choice_prompt_desc.tres"),
-	preload("nodes/forwarder/forwarder_desc.tres"),
+	preload("nodes/entry/entry_desc.tres").resource_path,
+	preload("nodes/dialog_text/dialog_text_desc.tres").resource_path,
+	preload("nodes/choice_prompt/choice_prompt_desc.tres").resource_path,
+	preload("nodes/forwarder/forwarder_desc.tres").resource_path,
 ]
 
 #
@@ -28,11 +28,7 @@ static func internal_setup() -> void:
 			name = DESCRIPTORS_SETTINGS_KEY,
 			type = TYPE_ARRAY,
 			hint = PROPERTY_HINT_TYPE_STRING,
-			hint_string =
-			(
-				"%d/%d:DialogGraphNodeDescriptor"
-				% [TYPE_OBJECT, PROPERTY_HINT_RESOURCE_TYPE]
-			)
+			hint_string = "%d/%d:*.tres" % [TYPE_STRING, PROPERTY_HINT_FILE]
 		}
 	)
 	ProjectSettings.set_as_basic(DESCRIPTORS_SETTINGS_KEY, true)
@@ -40,17 +36,29 @@ static func internal_setup() -> void:
 	ProjectSettings.set_initial_value(
 		DESCRIPTORS_SETTINGS_KEY, DEFAULT_DESCRIPTORS
 	)
-	ProjectSettings.set_setting(DESCRIPTORS_SETTINGS_KEY, DEFAULT_DESCRIPTORS)
+
+	if not ProjectSettings.has_setting(DESCRIPTORS_SETTINGS_KEY):
+		ProjectSettings.set_setting(
+			DESCRIPTORS_SETTINGS_KEY, DEFAULT_DESCRIPTORS
+		)
 
 	# Save our changes
 	ProjectSettings.save()
 
 
-static func get_descriptors() -> Array:
-	return ProjectSettings.get_setting(
+static func get_descriptors() -> Array[DialogGraphNodeDescriptor]:
+	var descriptor_paths: Array = ProjectSettings.get_setting(
 		DESCRIPTORS_SETTINGS_KEY, DEFAULT_DESCRIPTORS
 	)
 
+	# Load all DialogGraphNodeDescriptors from our settings
+	var descriptors: Array[DialogGraphNodeDescriptor] = []
+	for path in descriptor_paths:
+		if not path:
+			continue
 
-static func set_descriptors(new_descriptors: Array) -> void:
-	ProjectSettings.set_setting(DESCRIPTORS_SETTINGS_KEY, new_descriptors)
+		var loaded_resource = load(path)
+		if loaded_resource is DialogGraphNodeDescriptor:
+			descriptors.append(loaded_resource)
+
+	return descriptors
