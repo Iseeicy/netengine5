@@ -8,12 +8,7 @@ extends RefCounted
 #	Private Variables
 #
 
-var _descriptors: Array[DialogGraphNodeDescriptor] = [
-	preload("nodes/entry/entry_desc.tres"),
-	preload("nodes/dialog_text/dialog_text_desc.tres"),
-	preload("nodes/choice_prompt/choice_prompt_desc.tres"),
-	preload("nodes/forwarder/forwarder_desc.tres"),
-]
+var _descriptors: Array[DialogGraphNodeDescriptor]
 
 #
 #	Static Variables
@@ -27,14 +22,22 @@ var _descriptors: Array[DialogGraphNodeDescriptor] = [
 static var _singleton := GraphNodeDB.new()
 
 ## A list of descriptors that represent what kind of dialog nodes exist.
-## TODO - convert to maybe DialogGraphNodeDescriptor adding itself via a static
-## constructor?
 static var descriptors: Array[DialogGraphNodeDescriptor]:
 	get:
 		return _singleton._descriptors
 
 #
-#	Public Funcitons
+#	Godot Functions
+#
+
+
+func _init():
+	# Read the descriptors from the project settings
+	_descriptors = DialogGraphProjectSettings.get_descriptors()
+
+
+#
+#	Static Funcitons
 #
 
 
