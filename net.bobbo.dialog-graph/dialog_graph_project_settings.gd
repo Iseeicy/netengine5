@@ -27,8 +27,12 @@ static func internal_setup() -> void:
 		{
 			name = DESCRIPTORS_SETTINGS_KEY,
 			type = TYPE_ARRAY,
-			hint = PROPERTY_HINT_RESOURCE_TYPE,
-			hint_string = "DialogGraphNodeDescriptor"
+			hint = PROPERTY_HINT_TYPE_STRING,
+			hint_string =
+			(
+				"%d/%d:DialogGraphNodeDescriptor"
+				% [TYPE_OBJECT, PROPERTY_HINT_RESOURCE_TYPE]
+			)
 		}
 	)
 	ProjectSettings.set_as_basic(DESCRIPTORS_SETTINGS_KEY, true)
@@ -36,6 +40,7 @@ static func internal_setup() -> void:
 	ProjectSettings.set_initial_value(
 		DESCRIPTORS_SETTINGS_KEY, DEFAULT_DESCRIPTORS
 	)
+	ProjectSettings.set_setting(DESCRIPTORS_SETTINGS_KEY, DEFAULT_DESCRIPTORS)
 
 	# Save our changes
 	ProjectSettings.save()
