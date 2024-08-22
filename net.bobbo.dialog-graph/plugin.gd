@@ -110,6 +110,9 @@ func _enter_tree():
 		DIALOG_RUNNER_STATE_ICON
 	)
 
+	# Setup the project settings
+	DialogGraphProjectSettings.internal_setup()
+
 	# Spawn the graph editor
 	_graph_editor_instance = GRAPH_EDITOR_SCENE.instantiate()
 	get_editor_interface().get_editor_main_screen().add_child(

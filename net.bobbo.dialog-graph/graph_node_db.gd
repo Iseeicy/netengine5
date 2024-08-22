@@ -8,12 +8,7 @@ extends RefCounted
 #	Private Variables
 #
 
-var _descriptors: Array[DialogGraphNodeDescriptor] = [
-	preload("nodes/entry/entry_desc.tres"),
-	preload("nodes/dialog_text/dialog_text_desc.tres"),
-	preload("nodes/choice_prompt/choice_prompt_desc.tres"),
-	preload("nodes/forwarder/forwarder_desc.tres"),
-]
+var _descriptors: Array[DialogGraphNodeDescriptor]
 
 #
 #	Static Variables
@@ -34,7 +29,19 @@ static var descriptors: Array[DialogGraphNodeDescriptor]:
 		return _singleton._descriptors
 
 #
-#	Public Funcitons
+#	Godot Functions
+#
+
+
+func _init():
+	# Read the descriptors from the project settings
+	var found_descriptors = DialogGraphProjectSettings.get_descriptors()
+	_descriptors = []
+	_descriptors.assign(found_descriptors)
+
+
+#
+#	Static Funcitons
 #
 
 
