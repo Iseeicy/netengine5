@@ -1,13 +1,18 @@
-[gd_scene load_steps=3 format=3 uid="uid://buiywmcmet4ip"]
+[gd_scene load_steps=4 format=3 uid="uid://buiywmcmet4ip"]
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_hw63d"]
+[ext_resource type="Script" path="res://addons/netengine5/net.bobbo.player-model/player_model_3d.gd" id="1_m0q0y"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_kou38"]
 size = Vector3(1, 0.25, 0.5)
 
-[node name="DefaultPlayerModel" type="MeshInstance3D"]
-mesh = SubResource("CapsuleMesh_hw63d")
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_whvgk"]
+
+[node name="DefaultPlayerModel" type="Node3D"]
+script = ExtResource("1_m0q0y")
 
 [node name="Visor" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -0.25)
 mesh = SubResource("BoxMesh_kou38")
+
+[node name="Capsule" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_whvgk")
