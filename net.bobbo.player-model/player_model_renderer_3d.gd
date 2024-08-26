@@ -14,7 +14,9 @@ signal changed(spawned_model: PlayerModel3D, source_scene: PackedScene)
 #
 
 ## The internal model to use if none is provided
-const DEFAULT_MODEL_SCENE: PackedScene = preload("default_player_model.tscn")
+const DEFAULT_MODEL_SCENE: PackedScene = preload(
+	"default_player_model_3d.tscn"
+)
 
 #
 #	Exports
