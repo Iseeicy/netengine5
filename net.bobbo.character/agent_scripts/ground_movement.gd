@@ -27,6 +27,16 @@ var _should_run: bool = false
 
 
 func character_agent_physics_process(delta: float) -> void:
+	var movement_rel_to_input = (
+		agent_3d
+		. velocity
+		. rotated(Vector3.UP, -agent_3d.playermodel_pivot.rotation.y)
+		. limit_length(1)
+	)
+	agent_3d.playermodel.set_movement_vector(
+		Vector2(movement_rel_to_input.x, movement_rel_to_input.z)
+	)
+
 	if not agent_3d.is_on_floor():
 		return
 
