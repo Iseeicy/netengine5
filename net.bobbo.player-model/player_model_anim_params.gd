@@ -22,9 +22,8 @@ const MOVEMENT_STATE_TRANSITION_KEY := "parameters/movement/state/transition_req
 static func set_anim_param(
 	animation_tree: AnimationTree, param: String, value: Variant
 ) -> void:
-	if not animation_tree:
-		return
-	animation_tree.set(param, value)
+	if animation_tree:
+		animation_tree.set(param, value)
 
 
 ## Assigns the value of an AnimationTree's main_state transition.
