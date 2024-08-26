@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.character/character_agent_3d.gd" id="1_f5l1k"]
 [ext_resource type="PackedScene" uid="uid://cki8segkyvq7t" path="res://addons/netengine5/net.bobbo.character/agent_scripts/gravity_default.tscn" id="2_atrpy"]
 [ext_resource type="Script" path="res://addons/netengine5/net.bobbo.player-model/player_model_renderer_3d.gd" id="2_re4ek"]
-[ext_resource type="PackedScene" uid="uid://buiywmcmet4ip" path="res://addons/netengine5/net.bobbo.player-model/default_player_model.tscn" id="2_vu5bp"]
+[ext_resource type="PackedScene" uid="uid://buiywmcmet4ip" path="res://addons/netengine5/net.bobbo.player-model/default_player_model_3d.tscn" id="2_vu5bp"]
 [ext_resource type="PackedScene" uid="uid://bvg5g5iuv5gvc" path="res://addons/netengine5/net.bobbo.character/agent_scripts/ground_movement_default.tscn" id="3_7xwkj"]
 [ext_resource type="PackedScene" uid="uid://d2ya4ybiuosav" path="res://addons/netengine5/net.bobbo.character/agent_scripts/crouch_default.tscn" id="4_4k5y0"]
 [ext_resource type="PackedScene" uid="uid://bysmgnirlwse2" path="res://addons/netengine5/net.bobbo.character/agent_scripts/air_movement_default.tscn" id="5_cvtin"]
