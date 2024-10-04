@@ -1,3 +1,7 @@
+## A static class that unifies the AnimationTree manipulation between
+## PlayerModel2D and PlayerModel3D. The core functionality of setting
+## animation parameters is implemented here, so that these
+## implementations can be re-used across PlayerModel nodes.
 class_name PlayerModelAnimParams
 extends RefCounted
 
@@ -5,8 +9,18 @@ extends RefCounted
 #   Constants
 #
 
+## The property path of the main AnimationTree state. This points to a
+## Transition node with the name `current_state`.
 const MAIN_STATE_KEY := "parameters/main_state/current_state"
+
+## The property path of the AnimationTree's ground movement blendspace.
+## This points to a BlendSpace2D node with the name `ground`, underneath
+## a BlendTree named `movement`.
 const GROUND_MOVEMENT_BLEND_KEY := "parameters/movement/ground/blend_position"
+
+## The property path of the AnimationTree's movement state. This points
+## to a Transition node with the name `state`, underneath a BlendTree
+## named `movement`.
 const MOVEMENT_STATE_TRANSITION_KEY := "parameters/movement/state/transition_request"
 
 #
