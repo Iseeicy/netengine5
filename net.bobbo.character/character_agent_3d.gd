@@ -29,8 +29,8 @@ extends CharacterBody3D
 ## The inventory of this agent.
 @export var inventory: ItemInventory = null
 
-## The node that displays this agent's PlayerModel.
-@export var playermodel: PlayerModel = null
+## The node that displays this agent's PlayerModelRenderer3D.
+@export var playermodel: PlayerModelRenderer3D = null
 
 ## The node that `playermodel` is underneath. This will be rotated on
 ## the y-axis in order to rotate the playermodel.
@@ -76,7 +76,7 @@ func _ready():
 	if Engine.is_editor_hint():
 		return
 
-	# Setup our PlayerModel
+	# Setup our PlayerModelRenderer3D
 	if initial_playermodel != null:
 		playermodel.set_model(initial_playermodel)
 
