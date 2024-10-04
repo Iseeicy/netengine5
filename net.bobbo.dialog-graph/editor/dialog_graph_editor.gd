@@ -36,14 +36,20 @@ func delete_node(node: GraphNode) -> void:
 	_on_graph_edit_node_deselected(node)
 	
 	# Save all connections that reference this node. conn is in the form of
-	# { from_port: 0, from: "GraphNode name 0", to_port: 1, to: "GraphNode name 1" }.
+	# Get connections in the form of:
+	# { 
+	#	from_port: 0, 
+	#	from_node: "GraphNode name 0", 
+	#	to_port: 1, 
+	#	to_node: "GraphNode name 1" 
+	# }
 	for conn in $GraphEdit.get_connection_list():
-		if conn.from == node.name or conn.to == node.name:
+		if conn.from_node == node.name or conn.to_node == node.name:
 			connections_to_remove.push_back(conn)
 			
 	# Actually remove all of those saved connections
 	for conn in connections_to_remove:
-		$GraphEdit.disconnect_node(conn.from, conn.from_port, conn.to, conn.to_port)
+		$GraphEdit.disconnect_node(conn.from_node, conn.from_port, conn.to_node, conn.to_port)
 	
 	node.queue_free()
 
@@ -89,7 +95,12 @@ func save_to_resource(packed_graph: PackedDialogGraph) -> void:
 	packed_graph.ensure_entry_node()
 	
 	# Get connections in the form of:
-	# { from_port: 0, from: "graphname 0", to_port: 1, to: "Graphname 1" }
+	# { 
+	#	from_port: 0, 
+	#	from_node: "GraphNode name 0", 
+	#	to_port: 1, 
+	#	to_node: "GraphNode name 1" 
+	# }
 	var current_connections: Array[Dictionary] = $GraphEdit.get_connection_list()
 	
 	# Go through each connection and translate it to use the new set of IDs
@@ -97,9 +108,9 @@ func save_to_resource(packed_graph: PackedDialogGraph) -> void:
 	var translated_connections: Array[Dictionary] = []
 	for conn in current_connections:
 		translated_connections.push_back({
-			"from_id": data_to_index_map[data_to_add_by_name[conn["from"]]],
+			"from_id": data_to_index_map[data_to_add_by_name[conn["from_node"]]],
 			"from_port": conn["from_port"],
-			"to_id": data_to_index_map[data_to_add_by_name[conn["to"]]],
+			"to_id": data_to_index_map[data_to_add_by_name[conn["to_node"]]],
 			"to_port": conn["to_port"]
 		})
 	
@@ -165,12 +176,16 @@ func load_from_resource(packed_graph: PackedDialogGraph) -> void:
 ## to another node?
 func _is_node_port_connected(node_name: String, port: int) -> bool:
 	# Get connections in the form of:
-	# { from_port: 0, from: "GraphNode name 0", to_port: 1, 
-	# to: "GraphNode name 1" }
+	# { 
+	#	from_port: 0, 
+	#	from_node: "GraphNode name 0", 
+	#	to_port: 1, 
+	#	to_node: "GraphNode name 1" 
+	# }
 	for connection in $GraphEdit.get_connection_list():
 		if connection.from_port != port:
 			continue
-		if connection.from != node_name:
+		if connection.from_node != node_name:
 			continue
 		
 		# If this connection uses the requested port on the requested node,
@@ -189,7 +204,7 @@ func _spawn_node(desc: DialogGraphNodeDescriptor) -> DialogGraphNode:
 	# to be removed.
 	var close_this_node = func():
 		delete_node(new_node)
-	new_node.close_request.connect(close_this_node.bind())
+	new_node.delete_request.connect(close_this_node.bind())
 	
 	# Tell the node to call our class's function when the node has
 	# it's data updated, so that we may react to this change
@@ -270,18 +285,18 @@ func _on_node_remove_connections_request(node_name: String, side: int, slot: int
 	# Save all connections that reference this node. conn is in the form of
 	# { 
 	#	from_port: 0, 
-	#	from: "GraphNode name 0", 
+	#	from_node: "GraphNode name 0", 
 	#	to_port: 1, 
-	#	to: "GraphNode name 1" 
+	#	to_node: "GraphNode name 1" 
 	# }
 	var connections_to_remove = []
 	for conn in $GraphEdit.get_connection_list():
-		if side == -1 and conn.to_port == slot and conn.to == node_name:
+		if side == -1 and conn.to_port == slot and conn.to_node == node_name:
 			connections_to_remove.push_back(conn)
-		elif side == 1 and conn.from_port == slot and conn.from == node_name:
+		elif side == 1 and conn.from_port == slot and conn.from_node == node_name:
 			connections_to_remove.push_back(conn)
 			
 	# Actually remove all of those saved connections
 	for conn in connections_to_remove:
-		$GraphEdit.disconnect_node(conn.from, conn.from_port, conn.to, conn.to_port)
+		$GraphEdit.disconnect_node(conn.from_node, conn.from_port, conn.to_node, conn.to_port)
 	
