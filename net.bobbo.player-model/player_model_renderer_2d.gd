@@ -73,7 +73,7 @@ func set_model(new_model_scene: PackedScene) -> void:
 	var old_model_scene := _current_model_scene
 
 	# If we have a model already, despawn it
-	if _current_model == null:
+	if _current_model != null:
 		_current_model.queue_free()
 		_current_model = null
 		_current_model_scene = null
