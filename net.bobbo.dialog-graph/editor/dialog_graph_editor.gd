@@ -36,7 +36,13 @@ func delete_node(node: GraphNode) -> void:
 	_on_graph_edit_node_deselected(node)
 	
 	# Save all connections that reference this node. conn is in the form of
-	# { from_port: 0, from: "GraphNode name 0", to_port: 1, to: "GraphNode name 1" }.
+	# Get connections in the form of:
+	# { 
+	#	from_port: 0, 
+	#	from_node: "GraphNode name 0", 
+	#	to_port: 1, 
+	#	to_node: "GraphNode name 1" 
+	# }
 	for conn in $GraphEdit.get_connection_list():
 		if conn.from_node == node.name or conn.to_node == node.name:
 			connections_to_remove.push_back(conn)
