@@ -135,3 +135,11 @@ func set_movement_state(value: String) -> void:
 func set_movement_vector(input_movement: Vector2) -> void:
 	if _current_model:
 		_current_model.set_movement_vector(input_movement)
+
+
+## Fires a oneshot animation node.
+## Args:
+## 	`param`: The key of the oneshot node's request parameter.
+func fire_oneshot(param: String) -> void:
+	if _current_model:
+		_current_model.fire_oneshot(param)

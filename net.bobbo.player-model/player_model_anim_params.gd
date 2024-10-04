@@ -57,3 +57,12 @@ static func set_movement_vector(
 	animation_tree: AnimationTree, input_movement: Vector2
 ) -> void:
 	set_anim_param(animation_tree, GROUND_MOVEMENT_BLEND_KEY, input_movement)
+
+
+## Fires a oneshot animation node.
+## Args:
+## 	`animation_tree`: The AnimationTree to work with. If null, does nothing.
+## 	`param`: The key of the oneshot node's request parameter.
+static func fire_oneshot(animation_tree: AnimationTree, param: String) -> void:
+	if animation_tree:
+		animation_tree.set(param, AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)

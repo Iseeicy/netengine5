@@ -27,3 +27,7 @@ func set_movement_state(value: String) -> void:
 
 func set_movement_vector(input_movement: Vector2) -> void:
 	PlayerModelAnimParams.set_movement_vector(animation_tree, input_movement)
+
+
+func fire_oneshot(param: String) -> void:
+	PlayerModelAnimParams.fire_oneshot(animation_tree, param)
