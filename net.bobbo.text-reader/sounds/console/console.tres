@@ -8,34 +8,29 @@
 [ext_resource type="AudioStream" uid="uid://cngfuhcqm4ky4" path="res://addons/netengine5/net.bobbo.text-reader/sounds/console/question.ogg" id="5_yfgh8"]
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_04u1v"]
-streams_count = 1
 random_pitch = 1.2
+streams_count = 1
 stream_0/stream = ExtResource("1_jc65d")
-stream_0/weight = 1.0
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_fslry"]
-streams_count = 1
 random_pitch = 1.2
+streams_count = 1
 stream_0/stream = ExtResource("2_cbgkg")
-stream_0/weight = 1.0
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_sfqaj"]
-streams_count = 1
 random_pitch = 1.2
+streams_count = 1
 stream_0/stream = ExtResource("3_vndge")
-stream_0/weight = 1.0
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_bs1vk"]
-streams_count = 1
 random_pitch = 1.2
+streams_count = 1
 stream_0/stream = ExtResource("4_oexu4")
-stream_0/weight = 1.0
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_oxxo7"]
-streams_count = 1
 random_pitch = 1.2
+streams_count = 1
 stream_0/stream = ExtResource("5_yfgh8")
-stream_0/weight = 1.0
 
 [resource]
 script = ExtResource("1_mtm2t")

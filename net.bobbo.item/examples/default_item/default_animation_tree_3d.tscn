@@ -18,7 +18,7 @@ nodes/StartDisplay/position = Vector2(-80, 260)
 nodes/item_ready/node = SubResource("AnimationNodeOneShot_j26k5")
 nodes/item_ready/position = Vector2(160, 100)
 nodes/output/position = Vector2(380, 80)
-node_connections = [&"output", 0, &"item_ready", &"item_ready", 0, &"Idle", &"item_ready", 1, &"StartDisplay"]
+node_connections = [&"item_ready", 0, &"Idle", &"item_ready", 1, &"StartDisplay", &"output", 0, &"item_ready"]
 
 [sub_resource type="Animation" id="Animation_xdwdw"]
 length = 0.001
